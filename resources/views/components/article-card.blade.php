@@ -1,7 +1,7 @@
-<div class="bg-white rounded-lg shadow-md overflow-hidden border">
+<div class="bg-white rounded-lg shadow-md overflow-hidden">
   <img src="{{ $image }}" alt="Thumbnail" class="w-full h-48 object-cover">
   <div class="p-4">
-    <span class="text-sm font-semibold text-blue-600">{{ $category ?? 'Kategori' }}</span>
+    <span class="text-sm font-semibold text-white bg-[#1B3A6D] px-[8px] py-[6px] rounded-3xl">{{ $category ?? 'Kategori' }}</span>
     <h3 class="mt-2 font-bold text-md">{{ $title ?? 'judul' }}</h3>
     <p class="text-sm text-gray-600 mt-1">{{ $excerpt ?? 'sampul' }}</p>
     <div class="mt-3 text-xs text-gray-500 flex items-center gap-1">
