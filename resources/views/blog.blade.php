@@ -12,7 +12,7 @@
 
   {{-- Filter & Search --}}
   <section class="py-10 px-6 max-w-7xl mx-auto">
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+    <div class="flex flex-row md:flex-row md:items-center justify-between gap-4 mb-8">
       <input type="text" placeholder="Cari" class="w-full md:w-1/3 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
       <div class="flex flex-wrap gap-2">
         <button class="px-4 py-2 rounded-full bg-blue-600 text-white text-sm">Semua</button>
@@ -26,13 +26,15 @@
     {{-- Articles Grid --}}
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
       @for ($i = 0; $i < 12; $i++)
-        @include('components.article-card', [
-          'title' => 'Asal–Usul Nama dan Sejarah Berdirinya Desa Ngebruk',
-          'date' => '8 Juli 2025',
-          'category' => 'Sejarah',
-          'excerpt' => 'Menelusuri jejak masa lalu dan cerita para leluhur yang membangun Desa Ngebruk hingga menjadi seperti sekarang',
-          'image' => '/assets/img/blogthumb.png'
-        ])
+        <a href="{{ route('article') }}" class="block">
+          @include('components.article-card', [
+            'title' => 'Asal–Usul Nama dan Sejarah Berdirinya Desa Ngebruk',
+            'date' => '8 Juli 2025',
+            'category' => 'Sejarah',
+            'excerpt' => 'Menelusuri jejak masa lalu dan cerita para leluhur yang membangun Desa Ngebruk hingga menjadi seperti sekarang',
+            'image' => '/assets/img/blogthumb.png'
+          ])
+        </a>
       @endfor
     </div>
 
