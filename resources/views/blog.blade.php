@@ -25,17 +25,17 @@
 
     {{-- Articles Grid --}}
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-      @for ($i = 0; $i < 12; $i++)
-        <a href="{{ route('article') }}" class="block">
+      @foreach ($blogs as $blog)
+        <a href="{{ route('article', ['id'=>$blog['id']]) }}" class="block">
           @include('components.article-card', [
-            'title' => 'Asal–Usul Nama dan Sejarah Berdirinya Desa Ngebruk',
-            'date' => '8 Juli 2025',
+            'title' => $blog['blog_name'] ?? 'Judul tidak tersedia',
+            'date' => \Carbon\Carbon::parse($blog['blog_date'])->translatedFormat('d F Y'),
             'category' => 'Sejarah',
-            'excerpt' => 'Menelusuri jejak masa lalu dan cerita para leluhur yang membangun Desa Ngebruk hingga menjadi seperti sekarang',
+            'excerpt' => \Illuminate\Support\Str::limit($blog['blog_description'], 100),
             'image' => '/assets/img/blogthumb.png'
           ])
         </a>
-      @endfor
+      @endforeach
     </div>
 
     {{-- Pagination --}}

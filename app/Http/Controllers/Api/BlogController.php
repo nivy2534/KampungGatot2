@@ -3,11 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Event;
-use GuzzleHttp\Psr7\Response;
 use Illuminate\Http\Request;
 use App\Models\Blog;
-use function PHPUnit\Framework\returnArgument;
 
 class BlogController extends Controller
 {

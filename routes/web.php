@@ -1,14 +1,13 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\BlogPageController;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/blog', function () {
-    return view('blog');
-})->name('blog');
+Route::get('/blog', [BlogPageController::class, 'index'])->name('blog');
 
 Route::get('/galeri', function () {
     return view('galeri');
