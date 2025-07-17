@@ -6,8 +6,8 @@
 
   {{-- Article Header --}}
   <section class="text-center py-16 px-4 max-w-4xl mx-auto">
-    <span class="inline-block px-4 py-1 bg-blue-100 text-blue-600 rounded-full text-sm font-semibold mb-4">Sejarah</span>
-    <h1 class="text-3xl md:text-4xl font-bold leading-tight mb-2">Asal–Usul Nama dan Sejarah Berdirinya Desa Ngebruk</h1>
+    <span class="text-sm font-semibold text-white bg-[#1B3A6D] px-[8px] py-[6px] rounded-3xl">Sejarah</span>
+    <h1 class="text-3xl md:text-4xl font-bold leading-tight mb-2 mt-4 ">Asal–Usul Nama dan Sejarah Berdirinya Desa Ngebruk</h1>
     <p class="text-gray-500 text-sm">8 Juli 2025</p>
   </section>
 

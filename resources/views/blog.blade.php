@@ -12,8 +12,8 @@
 
   {{-- Filter & Search --}}
   <section class="py-10 px-6 max-w-7xl mx-auto">
-    <div class="flex flex-row md:flex-row md:items-center justify-between gap-4 mb-8">
-      <input type="text" placeholder="Cari" class="w-full md:w-1/3 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+    <div class="flex flex-col md:flex-col md:items-center justify-between gap-4 mb-8">
+      <input type="text" placeholder="Cari" class="w-[700px] px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
       <div class="flex flex-wrap gap-2">
         <button class="px-4 py-2 rounded-full bg-blue-600 text-white text-sm">Semua</button>
         <button class="px-4 py-2 rounded-full border text-sm">Sejarah</button>

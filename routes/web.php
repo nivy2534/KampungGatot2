@@ -22,6 +22,14 @@ Route::get('/belanja', function () {
     return view('shop');
 })->name('shop');
 
+Route::get('/login', function () {
+    return view('auth.login');
+})->name('login');
+
+Route::get('/register', function () {
+    return view('auth.register');
+})->name('register');
+
 // Dummy single product page for all links
 Route::get('/produk-detail', function () {
     return view('product');
