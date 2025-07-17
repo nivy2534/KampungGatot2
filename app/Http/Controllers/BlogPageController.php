@@ -2,19 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Blog;
 use Illuminate\Support\Facades\Http;
+use Log;
 
 class BlogPageController extends Controller
 {
     public function index(){
-        $response = Http::get(url('/api/blogs'));
-
-        if(!$response->successful()){
-            return view('blog', ['blogs' => [], 'error' => 'Gagal mengambil data']);
-        }
-
-        $blogs = $response->json();
+        $blogs = Blog::all();
 
         return view('blog',['blogs'=>$blogs]);
     }
