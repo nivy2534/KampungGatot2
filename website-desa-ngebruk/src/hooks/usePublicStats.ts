@@ -1,8 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { collection, getCountFromServer, query, where } from "firebase/firestore";
-import { db } from "@/lib/firebase";
 
 export const usePublicStats = () => {
   const [totalArticles, setTotalArticles] = useState(0);
@@ -16,7 +14,24 @@ export const usePublicStats = () => {
       try {
         setLoading(true);
 
-        const articlesQuery = query(collection(db, "articles"), where("status", "==", "published"));
+        const blogRes = await fetch('http://127.0.0.1:8000/api/blogs');
+        const blog = await blogRes.json();
+        setTotalArticles(blog.length||0);
+
+        const announceRes = await fetch('http://127.0.0.1:8000/api/events');
+        const event = await announceRes.json();
+        setTotalAnnouncements(event.length||0);
+
+        const now = new Date();
+        const today = now.toISOString().split("T")[0];
+        const activeCount = event.filter(
+          (event: any) =>
+            event.start_date<= today && event.end_date >= today
+        ).length;
+        setActiveAnnouncements(activeCount);
+
+        setError(null);
+        /*const articlesQuery = query(collection(db, "articles"), where("status", "==", "published"));
         const articlesSnapshot = await getCountFromServer(articlesQuery);
         const articlesCount = articlesSnapshot.data().count;
         setTotalArticles(articlesCount);
@@ -32,7 +47,7 @@ export const usePublicStats = () => {
         const activeCount = activeSnapshot.data().count;
         setActiveAnnouncements(activeCount);
 
-        setError(null);
+        setError(null);*/
       } catch (err) {
         console.error("Error fetching public stats:", err);
         setError("Gagal memuat statistik");

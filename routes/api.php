@@ -35,6 +35,9 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::post('/products', [ProductController::class, 'store']);
     Route::put('/products/{id}', [ProductController::class, 'update']);
     Route::delete('/products/{id}', [ProductController::class, 'destroy']);
+
+    //CRUD uploadImg
+    Route::post('/articles/upload-image', [BlogController::class, 'uploadImage']);
 });
 
 Route::get('/photos', [PhotoController::class, 'index']);
@@ -49,6 +52,10 @@ Route::get('/events/{id}', [EventController::class, 'show']);
 
 Route::get('/blogs',[BlogController::class, 'index']);
 Route::get('/blogs/{id}', [BlogController::class, 'show']);
+Route::get('/blogs/slug/{slug}', [BlogController::class, 'showBySlug']);
+Route::get('/blogs/search',[BlogController::class, 'search']);
+Route::get('/blogs/published', [BlogController::class, 'getPublished']);
+Route::get('/blogs/count', [BlogController::class, 'countByStatus']);
 
 
 Route::get('/produtcs',[ProductController::class, 'index']);
