@@ -23,8 +23,8 @@
   <div class="w-full md:w-1/2 flex items-center justify-center px-6 py-12">
     <div class="w-full max-w-md">
       <div class="mb-6">
-        <h2 class="text-2xl font-semibold">Masuk</h2>
-        <p class="text-gray-600">Masuk ke akun Anda untuk melanjutkan</p>
+        <h2 class="text-3xl font-semibold">Daftar</h2>
+        <p class="text-gray-600">Daftarkan akun untuk mengakses website</p>
       </div>
       <form method="POST" action="{{ route('login') }}">
         @csrf
@@ -65,11 +65,21 @@
           />
         </div>
 
-        <div class="text-sm text-gray-500 mb-4">
-          Dilindungi dan bagian dari
-          <a href="#" class="text-blue-600">Kebijakan Privasi</a> dan
-          <a href="#" class="text-blue-600">Ketentuan Penggunaan</a>
-        </div>
+        <div class="mb-4 flex items-start gap-2">
+            <input
+              id="terms"
+              name="terms"
+              type="checkbox"
+              required
+              class="mt-1 h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+            />
+            <label for="terms" class="text-sm text-gray-700">
+              Dengan membuat akun, saya setuju dengan
+              <a href="#" class="text-blue-600 underline">Ketentuan Penggunaan</a>
+              dan
+              <a href="#" class="text-blue-600 underline">Kebijakan Privasi</a>.
+            </label>
+          </div>
 
         <div class="mb-4">
           <button
@@ -81,8 +91,8 @@
         </div>
 
         <div class="text-sm">
-          Belum punya akun?
-          <a href="{{ route('register') }}" class="text-blue-600">Daftar</a>
+          Sudah punya akun?
+          <a href="{{ route('login') }}" class="text-blue-600">Masuk</a>
         </div>
       </form>
     </div>
