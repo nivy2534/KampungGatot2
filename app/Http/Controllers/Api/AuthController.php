@@ -53,8 +53,8 @@ class AuthController extends Controller
         ]);
     }
 
-    public function logout(Response $request){
-        $request->user()->tokens()->delete();
+    public function logout(Response $response){
+        $response->user()->tokens()->delete();
 
         return response()->json([
             'message' => 'Logout berhasil',

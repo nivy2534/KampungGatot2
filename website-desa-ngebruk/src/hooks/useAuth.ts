@@ -54,6 +54,7 @@ export const useAuthActions = () => {
       return { success: true };
     } catch (error) {
       const errorMessage = "Terjadi kesalahan saat mendaftar";
+      console.error("Register Error Stack:",error);
       setError(errorMessage);
       return { success: false, error: errorMessage };
     } finally {
