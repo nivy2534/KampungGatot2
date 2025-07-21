@@ -1,4 +1,4 @@
-import { ref, listAll, getMetadata } from "firebase/storage";
+import api from "./api";
 
 export interface StorageStats {
   totalSize: number;
@@ -34,39 +34,20 @@ export const getStorageStats = async (): Promise<StorageStats> => {
   }
 };
 
-const calculateFolderSize = async (folderPath: string): Promise<{ totalSize: number; fileCount: number }> => {
+export const calculateFolderSize = async (
+  folderPath: string
+): Promise<{ totalSize: number; fileCount: number }> => {
   try {
-    const folderRef = ref(storage, folderPath);
-    const listResult = await listAll(folderRef);
-
-    let totalSize = 0;
-    let fileCount = 0;
-
-    const filePromises = listResult.items.map(async (itemRef) => {
-      try {
-        const metadata = await getMetadata(itemRef);
-        return metadata.size || 0;
-      } catch (error) {
-        console.warn(`Failed to get metadata for ${itemRef.fullPath}:`, error);
-        return 0;
-      }
+    const response = await api.get<StorageStats>("/api/storage/folder-stats", {
+      params: {
+        path: folderPath,
+      },
     });
 
-    const fileSizes = await Promise.all(filePromises);
-    totalSize += fileSizes.reduce((sum, size) => sum + size, 0);
-    fileCount += listResult.items.length;
-
-    const subfolderPromises = listResult.prefixes.map(async (prefixRef) => {
-      return calculateFolderSize(prefixRef.fullPath);
-    });
-
-    const subfolderStats = await Promise.all(subfolderPromises);
-    for (const stats of subfolderStats) {
-      totalSize += stats.totalSize;
-      fileCount += stats.fileCount;
-    }
-
-    return { totalSize, fileCount };
+    return {
+      totalSize: response.data.totalSize,
+      fileCount: response.data.fileCount,
+    };
   } catch (error) {
     console.error(`Error calculating folder size for ${folderPath}:`, error);
     return { totalSize: 0, fileCount: 0 };

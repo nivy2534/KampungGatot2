@@ -21,6 +21,7 @@ return new class extends Migration
             $table->unsignedBigInteger('product_id')->nullable();
             $table->unsignedBigInteger('blog_id')->nullable();
             $table->timestamps();
+            $table->boolean('is_active')->default(true);
 
             $table->foreign('event_id')->references('id')->on('events')->onDelete('cascade');
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');

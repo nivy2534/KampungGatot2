@@ -45,6 +45,8 @@ Route::get('/photos/{id}',[PhotoController::class, 'show']);
 Route::get('/photos/ping',function(){
     return response()->json(['message' => 'photo working!']);
 });
+Route::get('/photos/count', [PhotoController::class, 'count']);
+
 
 Route::get('/events',[EventController::class, 'index']);
 Route::get('/events/{id}', [EventController::class, 'show']);

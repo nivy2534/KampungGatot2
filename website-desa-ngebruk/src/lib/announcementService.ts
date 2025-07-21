@@ -1,5 +1,3 @@
-import { collection, addDoc, getDocs, doc, getDoc, updateDoc, deleteDoc, query, orderBy, limit, startAfter, where, serverTimestamp, QueryDocumentSnapshot, DocumentData, Timestamp } from "firebase/firestore";
-
 export interface Announcement {
   id: string;
   title: string;
@@ -10,8 +8,6 @@ export interface Announcement {
   status: "active" | "inactive" | "expired";
   authorId: string;
   authorName: string;
-  createdAt: Timestamp;
-  updatedAt: Timestamp;
   slug: string;
 }
 

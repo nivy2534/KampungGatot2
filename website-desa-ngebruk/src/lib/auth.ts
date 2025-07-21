@@ -1,4 +1,4 @@
-
+import api from "./api";
 
 export interface UserProfile {
   uid: string;
@@ -93,6 +93,16 @@ export const signInWithEmail = async (email: string, password: string) => {
   }
 };
 
+export const onAuthStateChange = async (callback: (user: any | null) => void) => {
+  try {
+    const response = await api.get<UserProfile>("/api/user"); // withCredentials sudah disetel
+    callback(response.data);
+  } catch {
+    callback(null);
+  }
+};
+
+
 export const signOutUser = async () => {
   try {
     await fetch("http://localhost:8000/api/logout", {
@@ -140,15 +150,13 @@ export const resetPassword = async (email: string) => {
 
 export const getUserProfile = async (uid: string): Promise<UserProfile | null> => {
   try {
-    const response = await fetch('http://localhost:8000/api/user',{
-      method:"POST",
-      credentials:"include",
+    const token = localStorage.getItem("auth_token");
+    const response = await api.get<UserProfile>(`/api/users/${uid}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
-
-    if(!response.ok) throw new Error("Gagal mengambil profil");
-
-    const data = await response.json();
-    return data.user as UserProfile;
+    return response.data;
   } catch (error) {
     return null;
   }

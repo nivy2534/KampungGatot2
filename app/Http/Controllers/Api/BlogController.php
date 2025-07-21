@@ -120,7 +120,7 @@ class BlogController extends Controller
         $blog = Blog::where('title', 'LIKE', "%{$query}%")
             ->orWhere('content', 'LIKE', "%{$query}%")
             ->orWhere('excerpt','LIKE',"%{$query}%")
-            ->oderBy('created_at','desc')
+            ->orderBy('created_at','desc')
             ->get();
         return response()->json($blog);
     }
