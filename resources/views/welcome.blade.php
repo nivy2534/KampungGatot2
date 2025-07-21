@@ -5,7 +5,7 @@
   @include('components.hero')
   @include('components.umkm')
   @include('components.event-section')
-  @include('components.umkm-card')
+  <!-- @include('components.umkm-card') -->
 
   {{-- Artikel Terbaru --}}
   <section class="py-12 px-6">

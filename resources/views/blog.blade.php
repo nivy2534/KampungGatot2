@@ -11,7 +11,7 @@
   </section>
 
   {{-- Filter & Search --}}
-  <section class="py-10 px-6 max-w-7xl mx-auto">
+  <section class="py-10 px-[200px] w-full mx-auto">
     <div class="flex flex-col md:flex-col md:items-center justify-between gap-4 mb-8">
       <input type="text" placeholder="Cari" class="w-[700px] px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
       <div class="flex flex-wrap gap-2">

@@ -29,6 +29,10 @@ Route::get('/register', function () {
     return view('auth.register');
 })->name('register');
 
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->name('dashboard');
+
 // Dummy single product page for all links
 Route::get('/produk-detail', function () {
     return view('product');

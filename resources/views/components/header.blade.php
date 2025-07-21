@@ -16,16 +16,20 @@
     <div class="w-[878px] flex justify-between items-center">
         {{-- Nav links --}}
         <nav class="w-[465px] flex justify-center items-center gap-[52px]">
-            <a href="/" class="border-b-2 border-[#1B3A6D] text-black text-[20px] leading-[28px] font-semibold font-['Plus Jakarta Sans']">
+            <a href="{{ url('/') }}"
+               class="{{ Request::is('/') ? 'border-b-2 border-[#1B3A6D] font-semibold' : 'font-medium' }} text-black text-[20px] leading-[28px] font-['Plus Jakarta Sans']">
                 Home
             </a>
-            <a href="{{ route('blog') }}" class="text-black text-[20px] leading-[28px] font-medium font-['Plus Jakarta Sans']">
+            <a href="{{ route('blog') }}"
+               class="{{ Request::is('blog') ? 'border-b-2 border-[#1B3A6D] font-semibold' : 'font-medium' }} text-black text-[20px] leading-[28px] font-['Plus Jakarta Sans']">
                 Blog
             </a>
-            <a href="/galeri" class="text-black text-[20px] leading-[28px] font-medium font-['Plus Jakarta Sans']">
+            <a href="{{ url('/galeri') }}"
+               class="{{ Request::is('galeri') ? 'border-b-2 border-[#1B3A6D] font-semibold' : 'font-medium' }} text-black text-[20px] leading-[28px] font-['Plus Jakarta Sans']">
                 Galeri
             </a>
-            <a href="/belanja" class="text-black text-[20px] leading-[28px] font-medium font-['Plus Jakarta Sans']">
+            <a href="{{ url('/belanja') }}"
+               class="{{ Request::is('belanja') ? 'border-b-2 border-[#1B3A6D] font-semibold' : 'font-medium' }} text-black text-[20px] leading-[28px] font-['Plus Jakarta Sans']">
                 Belanja
             </a>
         </nav>

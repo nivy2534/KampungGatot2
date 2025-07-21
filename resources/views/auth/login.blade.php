@@ -23,7 +23,7 @@
   <div class="w-full md:w-1/2 flex items-center justify-center px-6 py-12">
     <div class="w-full max-w-md">
       <div class="mb-6">
-        <h2 class="text-2xl font-semibold">Masuk</h2>
+        <h2 class="text-3xl font-semibold">Masuk</h2>
         <p class="text-gray-600">Masuk ke akun Anda untuk melanjutkan</p>
       </div>
       <form method="POST" action="{{ route('login') }}">
