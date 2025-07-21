@@ -58,6 +58,7 @@
                 <!-- Form -->
                 <div class="bg-white rounded-2xl">
                     <form class="space-y-6" action="#" method="POST">
+                        @csrf
                         <!-- Email Field -->
                         <div>
                             <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
@@ -101,8 +102,7 @@
                             <div class="flex items-center justify-between mb-4">
                                 <div class="flex items-start">
                                     <input id="agree" name="agree" type="checkbox"
-                                        class="h-4 w-4 mt-1 text-blue-600 focus:ring-blue-500 border-gray-300 rounded transition duration-200"
-                                        onchange="toggleButton(this)">
+                                        class="h-4 w-4 mt-1 text-blue-600 focus:ring-blue-500 border-gray-300 rounded transition duration-200">
                                     <label for="agree" class="ml-2 block text-sm text-gray-700">
                                         Dengan membuat akun, saya setuju dengan Ketentuan Penggunaan dan Kebijakan Privasi
                                     </label>
@@ -183,17 +183,17 @@
             });
 
             // ==========================================================
-            // BAGIAN YANG DIUBAH: Form Submission dengan Axios
+            // BAGIAN YANG DIUBAH: Form Submission dengan Ajax
             // ==========================================================
             $('form').on('submit', function(e) {
                 e.preventDefault();
 
-                // 1. Ambil data dari form
+                // 1. Ambil data dari form (tidak berubah)
                 const name = $('#name').val();
                 const email = $('#email').val();
                 const password = $('#password').val();
 
-                // Validasi sederhana di sisi client
+                // Validasi sederhana di sisi client (tidak berubah)
                 if (!email || !password) {
                     alert('Mohon isi semua field yang diperlukan!');
                     return;
@@ -203,35 +203,41 @@
                     return;
                 }
 
-                // 2. Ubah tampilan tombol menjadi loading
+                // 2. Ubah tampilan tombol menjadi loading (tidak berubah)
                 const $button = $('#submitBtn');
                 $button.html('<i class="fas fa-spinner fa-spin mr-2"></i>Proses daftar ...').prop(
                     'disabled', true);
 
-                // 3. Kirim data menggunakan Axios
-                axios.post('/register', { // <-- GANTI '/register' DENGAN URL API ANDA
+                // ==========================================================
+                // BAGIAN YANG DIUBAH: Kirim data menggunakan $.ajax()
+                // ==========================================================
+                $.ajax({
+                    url: '/register', // <-- GANTI DENGAN URL API ANDA
+                    method: 'POST',
+                    data: {
                         name: name,
                         email: email,
                         password: password,
-                    })
-                    .then(function(response) {
+                    },
+                    success: function(response) {
                         // 4. Handle jika request SUKSES
                         alert('Pendaftaran berhasil! Anda akan dialihkan ke halaman login.');
                         // Arahkan ke halaman login atau dashboard
-                        window.location.href = '/login'; // <-- Ganti '/login' sesuai kebutuhan
-                    })
-                    .catch(function(error) {
+                        window.location.href = '/login'; // <-- Ganti sesuai kebutuhan
+                    },
+                    error: function(jqXHR) {
                         // 5. Handle jika request GAGAL
-                        console.error('Terjadi error:', error.response);
+                        console.error('Terjadi error:', jqXHR.responseJSON);
 
                         // Tampilkan pesan error dari server jika ada, jika tidak, tampilkan pesan umum
-                        const errorMessage = error.response?.data?.message ||
+                        const errorMessage = jqXHR.responseJSON?.message ||
                             'Pendaftaran gagal, coba lagi.';
                         alert(errorMessage);
 
                         // Kembalikan tombol ke keadaan semula agar user bisa mencoba lagi
                         $button.html('Daftar').prop('disabled', false);
-                    });
+                    }
+                });
             });
         });
     </script>

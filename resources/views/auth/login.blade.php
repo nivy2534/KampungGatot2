@@ -79,7 +79,7 @@
                                     class="block w-full pl-3 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 placeholder-gray-400"
                                     placeholder="Masukkan kata sandi...">
                                 <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
-                                    <button type="button" onclick="togglePassword()"
+                                    <button id="togglePassword" type="button"
                                         class="text-gray-400 hover:text-gray-600 transition duration-200">
                                         <i id="toggleIcon" class="fas fa-eye"></i>
                                     </button>
@@ -97,12 +97,10 @@
                         </div>
 
                         <!-- Submit Button -->
-                        <div>
-                            <button type="submit"
-                                class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-200 transform hover:scale-[1.02] active:scale-[0.98] shadow-lg">
-                                Masuk
-                            </button>
-                        </div>
+                        <button id="submitBtn" type="submit"
+                            class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-200 transform hover:scale-[1.02] active:scale-[0.98] shadow-lg">
+                            Masuk
+                        </button>
                     </form>
                     <!-- Register Link -->
                     <div class="mt-4 text-left">
@@ -148,49 +146,60 @@
             });
 
             // ==========================================================
-            // BAGIAN YANG DIUBAH: Form Submission dengan Axios
+            // BAGIAN YANG DIUBAH: Form Submission dengan Ajax
             // ==========================================================
             $('form').on('submit', function(e) {
                 e.preventDefault();
 
-                // 1. Ambil data dari form
+                // 1. Ambil data dari form (tidak berubah)
                 const email = $('#email').val();
                 const password = $('#password').val();
 
-                // Validasi sederhana di sisi client
+                // Validasi sederhana di sisi client (tidak berubah)
                 if (!email || !password) {
                     alert('Mohon isi semua field yang diperlukan!');
                     return;
                 }
 
-                // 2. Ubah tampilan tombol menjadi loading
+                // 2. Ubah tampilan tombol menjadi loading (tidak berubah)
                 const $button = $('#submitBtn');
                 $button.html('<i class="fas fa-spinner fa-spin mr-2"></i>Proses masuk ...').prop(
                     'disabled', true);
 
-                // 3. Kirim data menggunakan Axios
-                axios.post('/login', { // <-- GANTI '/register' DENGAN URL API ANDA
+                // ==========================================================
+                // BAGIAN YANG DIUBAH: Kirim data menggunakan $.ajax()
+                // ==========================================================
+                $.ajax({
+                    url: '/login-post', // <-- GANTI DENGAN URL API ANDA
+                    method: 'POST',
+                    data: {
                         email: email,
                         password: password,
-                    })
-                    .then(function(response) {
-                        // 4. Handle jika request SUKSES
-                        alert('Login berhasil! Anda akan dialihkan ke halaman dashboard.');
-                        // Arahkan ke halaman login atau dashboard
-                        window.location.href = '/dashboard'; // <-- Ganti '/login' sesuai kebutuhan
-                    })
-                    .catch(function(error) {
+                    },
+                    success: function(response) {
+
+                        if (response.success) {
+                            // Arahkan ke halaman login atau dashboard
+                            window.location.href = '/dashboard'; // <-- Ganti sesuai kebutuhan
+                        } else {
+                            alert(
+                                'Login gagal, coba lagi.'
+                            ); // ganti menggunakan sweetalert lebih bagus
+                        }
+                    },
+                    error: function(jqXHR) {
                         // 5. Handle jika request GAGAL
-                        console.error('Terjadi error:', error.response);
+                        console.error('Terjadi error:', jqXHR.responseJSON);
 
                         // Tampilkan pesan error dari server jika ada, jika tidak, tampilkan pesan umum
-                        const errorMessage = error.response?.data?.message ||
-                            'masuk ke aplikasi gagal, coba lagi.';
+                        const errorMessage = jqXHR.responseJSON?.message ||
+                            'Login gagal, coba lagi.';
                         alert(errorMessage);
 
                         // Kembalikan tombol ke keadaan semula agar user bisa mencoba lagi
                         $button.html('Masuk').prop('disabled', false);
-                    });
+                    }
+                });
             });
         });
     </script>

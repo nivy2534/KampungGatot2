@@ -236,6 +236,14 @@ npm run dev
 
 ## 🌐 Akses Website
 
+```bash
+docker compose exec app bash
+```
+
+```bash
+php artisan serve
+```
+
 - Laravel: <http://localhost:8888>
 - PHP: port `9000`
 - MySQL: port `3311`

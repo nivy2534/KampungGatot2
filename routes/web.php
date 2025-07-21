@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BlogPageController;
 use App\Http\Controllers\EventPageController;
@@ -23,19 +24,31 @@ Route::get('/event', function () {
 
 Route::get('/event', [EventPageController::class, 'index'])->name('event');
 
+
+
 Route::get('/login', function () {
     return view('auth.login');
 })->name('login');
+
+Route::post('/login-post', [AuthController::class, 'login']);
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/logout', [AuthController::class, 'logout']);
 
 Route::get('/register', function () {
     return view('auth.register');
 })->name('register');
 
-Route::get('/dashboard', function () {
-    return view('cms.dashboard');
-})->name('dashboard');
+
 
 // Dummy single product page for all links
 Route::get('/produk-detail', function () {
     return view('product');
 })->name('product');
+
+Route::middleware(['auth'])->group(
+    function () {
+        Route::get('/dashboard', function () {
+            return view('cms.dashboard');
+        })->name('dashboard');
+    }
+);

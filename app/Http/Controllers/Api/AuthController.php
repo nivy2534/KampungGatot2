@@ -3,63 +3,106 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\RegisterRequest;
+use App\Services\AuthService;
 use Illuminate\Http\Request;
-use App\Models\User;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
-    public function register(Request $request){
-        $data= $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|unique:users',
-            'password' => 'required|string|min:6',
-        ]);
+    protected $authService;
 
-        $user = User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
-
-        $token = $user->createToken('auth_token')->plainTextToken;
-
-        return response()->json([
-            'user' => $user,
-            'token' => $token,
-        ], 201);
+    public function __construct(AuthService $authService)
+    {
+        $this->authService = $authService;
     }
 
-    public function login(Request $request){
-        $data = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required|password',
+    /**
+     * @group Auth
+     *
+     * Login user
+     * @header Cookie XSRF-TOKEN
+     * @header Content-Type application/json
+     * @header Accept application/json
+     *
+     * Endpoint ini digunakan untuk login user dan mengembalikan data user dalam bentuk json.
+     *
+     * @bodyParam email string required Email user. Example: admin@gmail.com
+     * @bodyParam password string required Password user. Example: 123123
+     *
+     * @response 200 {
+     *   "status": sucecss,
+     *   "message": "Login berhasil"
+     *   "data": {
+     *        "id": 1,
+     *        "name": "Admin Desa",
+     *        "email": "admin@gmail.com",
+     *    }
+     * }
+     *
+     */
+    public function login(Request $request)
+    {
+        $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required'],
         ]);
 
-        $user = User::where('email', $data['email'])->first();
-
-        if (!$user || !Hash::check($data['password'], $user->password)){
-            throw ValidationException::withMessages([
-                'email'=> ['Email atau password salah.'],
-            ]);
-        }
-
-        $token = $user-> createToken('auth_token')->plainTextToken;
-
-        return response()->json([
-            'user' => $user,
-            'token' => $token,
-        ]);
+        return $this->authService->login($request);
     }
 
-    public function logout(Response $response){
-        $response->user()->tokens()->delete();
+    public function register(RegisterRequest $request)
+    {
+        $user = $this->authService->register($request->validated());
 
-        return response()->json([
-            'message' => 'Logout berhasil',
-        ]);
+        return $user;
+    }
+
+    /**
+     * @group Auth
+     * Logout user
+     *
+     * @header Cookie XSRF-TOKEN
+     * @header Content-Type application/json
+     * @header Accept application/json
+     *
+     * Endpoint untuk logout user yang sudah login.
+     *
+     * @response 200 {
+     *   "message": "Logout berhasil"
+     * }
+     */
+    public function logout(Request $request)
+    {
+        return $this->authService->logout($request);
+    }
+
+    /**
+     *
+     * @group Auth
+     *
+     * @header Cookie XSRF-TOKEN
+     * @header Content-Type application/json
+     * @header Accept application/json
+     *
+     * Detail user
+     *
+     * Endpoint ini digunakan untuk mendapatkan data user yang sudah login berdasarkan session cookie yang ada.
+     *
+     * @params null
+     *
+     * @response 200 {
+     *   "status": sucecss,
+     *   "message": "Data berhasil ditemukan"
+     *   "data": {
+     *        "id":"1",
+     *        "name":"Admin",
+     *        "email": "admin@gmail.com",
+     *    }
+     * }
+     *
+     */
+    public function user()
+    {
+        return $this->authService->getUser();
     }
 }
-
-
