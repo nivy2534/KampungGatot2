@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Event;
+use Illuminate\Http\Request;
 
 class EventPageController extends Controller
 {
-    public function index(){
-        $events = Event::all();
-
-        return view('/event', ['events'=>$events]);
+    public function index()
+    {
+        $events = Event::orderBy('event_date', 'desc')->get();
+        return view('event', compact('events'));
     }
 }

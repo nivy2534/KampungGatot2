@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BlogPageController;
+use App\Http\Controllers\EventPageController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -17,9 +18,11 @@ Route::get('/blog/article', function () {
     return view('article');
 })->name('article');
 
-Route::get('/belanja', function () {
-    return view('shop');
-})->name('shop');
+Route::get('/event', function () {
+    return view('event');
+})->name('event');
+
+Route::get('/event', [EventPageController::class, 'index'])->name('event');
 
 Route::get('/login', function () {
     return view('auth.login');
@@ -30,7 +33,7 @@ Route::get('/register', function () {
 })->name('register');
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    return view('cms.dashboard');
 })->name('dashboard');
 
 // Dummy single product page for all links
