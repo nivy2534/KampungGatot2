@@ -28,8 +28,8 @@
                class="{{ Request::is('galeri') ? 'border-b-2 border-[#1B3A6D] font-semibold' : 'font-medium' }} text-black text-[20px] leading-[28px] font-['Plus Jakarta Sans']">
                 Galeri
             </a>
-            <a href="{{ url('/belanja') }}"
-               class="{{ Request::is('belanja') ? 'border-b-2 border-[#1B3A6D] font-semibold' : 'font-medium' }} text-black text-[20px] leading-[28px] font-['Plus Jakarta Sans']">
+            <a href="{{ url('/event') }}"
+               class="{{ Request::is('event') ? 'border-b-2 border-[#1B3A6D] font-semibold' : 'font-medium' }} text-black text-[20px] leading-[28px] font-['Plus Jakarta Sans']">
                 Belanja
             </a>
         </nav>
