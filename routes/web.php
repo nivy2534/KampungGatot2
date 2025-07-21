@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BlogPageController;
 use App\Http\Controllers\EventPageController;
+use App\Http\Controllers\GaleriPageController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -10,9 +11,7 @@ Route::get('/', function () {
 
 Route::get('/blog', [BlogPageController::class, 'index'])->name('blog');
 
-Route::get('/galeri', function () {
-    return view('galeri');
-})->name('galeri');
+Route::get('/galeri', [GaleriPageController::class, 'index']);
 
 Route::get('/blog/article', function () {
     return view('article');
