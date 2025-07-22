@@ -8,11 +8,11 @@
                 <h1 class="text-3xl font-bold text-gray-900 mb-2">Kelola Blog</h1>
                 <p class="text-gray-600">Create, edit, and manage village news articles</p>
             </div>
-            <button id="addBlogBtn"
+            <a href="{{ url('blogs/create') }}"
                 class="bg-primary text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors">
                 Tambah Blog
                 <i class="fas fa-plus"></i>
-            </button>
+            </a>
         </div>
     </div>
 
@@ -131,6 +131,7 @@
                         data: 'date',
                         name: 'date',
                         className: "w-1/6",
+                        orderable: true,
                         render: function(data) {
                             return data;
                         }
@@ -159,28 +160,23 @@
                         }
                     },
                     {
-                        data: 'id',
+                        data: 'actions',
                         name: 'actions',
                         className: "w-1/6",
                         orderable: false,
                         searchable: false,
-                        render: function(data, type, row) {
-                            return `
-                                <div class="flex gap-2">
-                                    <button onclick="editBlog(${data})" class="text-blue-600 hover:text-blue-800 p-1">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button onclick="deleteBlog(${data})" class="text-red-600 hover:text-red-800 p-1">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-                            `;
-                        }
                     }
                 ],
                 dom: 't<"flex justify-between items-center mt-4 px-6 pb-4"<"flex items-center gap-2"li><"flex items-center gap-2"p>>',
                 language: {
                     emptyTable: `
+                    <div class="flex flex-col items-center justify-center py-12 text-center">
+                        <img src="/assets/img/empty_data.png" alt="Empty" class="w-60 h-40 mb-6" />
+                        <h3 class="text-lg font-semibold text-gray-700">Masih Kosong Nih!</h3>
+                        <p class="text-sm text-gray-500 mt-2">Belum ada data produk di sini.<br>
+                        Klik tombol di bawah untuk mulai menambahkan produk pertamamu.</p>
+                    </div>`,
+                    zeroRecords: `
                     <div class="flex flex-col items-center justify-center py-12 text-center">
                         <img src="/assets/img/empty_data.png" alt="Empty" class="w-60 h-40 mb-6" />
                         <h3 class="text-lg font-semibold text-gray-700">Masih Kosong Nih!</h3>
@@ -218,11 +214,69 @@
             $('#statusFilter').on('change', function() {
                 const value = this.value;
                 if (value) {
-                    table.column(2).search(value).draw();
+                    table.column(3).search(value).draw();
                 } else {
-                    table.column(2).search('').draw();
+                    table.column(3).search('').draw();
                 }
             });
+        });
+
+        $(document).on('click', '.btn-delete', function() {
+            const blogId = $(this).data('id');
+
+            Swal.fire({
+                title: 'Hapus Konten?',
+                text: 'Apakah Anda yakin ingin menghapus blog ini? Tindakan ini tidak dapat dibatalkan.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Hapus',
+                cancelButtonText: 'Batal',
+                reverseButtons: true,
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: 'border border-red-500 text-red-500 hover:bg-red-100 px-6 py-2 rounded-md w-full order-2',
+                    cancelButton: 'bg-red-500 text-white hover:bg-red-600 px-6 py-2 rounded-md w-full order-1 mt-2',
+                    actions: 'flex flex-col-reverse gap-2 mt-4 items-stretch'
+                },
+                allowOutsideClick: () => !Swal.isLoading(),
+                preConfirm: () => {
+                    Swal.showLoading(); // Munculkan spinner
+                    let _url = "{{ url('blogs/delete/') }}/" + blogId;
+                    return fetch(_url, {
+                            method: 'DELETE',
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                            },
+                            data: {
+                                _method: 'DELETE',
+                                _token: '{{ csrf_token() }}' // untuk Blade, atau ganti manual jika pakai JS murni
+                            },
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Gagal menghapus');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            // Sukses, tampilkan pesan atau reload tabel
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil',
+                                text: 'Blog berhasil dihapus.',
+                                timer: 2000,
+                                showConfirmButton: false,
+                            });
+
+                            // Refresh data tabel jika pakai DataTables
+                            $('#blogTable').DataTable().ajax.reload();
+                        })
+                        .catch(error => {
+                            Swal.showValidationMessage(error.message);
+                        });
+                }
+            });
+
         });
     </script>
 @endpush

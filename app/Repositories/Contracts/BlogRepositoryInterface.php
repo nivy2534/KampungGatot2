@@ -2,14 +2,14 @@
 
 namespace App\Repositories\Contracts;
 
-use App\Models\User;
+use App\Models\Blog;
 use Illuminate\Http\Request;
 
 interface BlogRepositoryInterface
 {
     public function index(Request $request);
     public function show($id);
-    public function store(Request $request);
-    public function update(Request $request);
+    public function store(array $data);
+    public function update(array $data);
     public function delete($id);
 }

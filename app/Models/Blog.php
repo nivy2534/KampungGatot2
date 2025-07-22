@@ -23,10 +23,6 @@ class Blog extends Model
         'image_path',
     ];
 
-    protected $casts = [
-        'created_at' => 'datetime',
-    ];
-
     /**
      * Get the formatted creation date.
      */

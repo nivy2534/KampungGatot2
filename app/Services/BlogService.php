@@ -20,4 +20,19 @@ class BlogService
     {
         return $this->blogRepository->index($request);
     }
+
+    public function store($request)
+    {
+        return $this->blogRepository->store($request);
+    }
+
+    public function update($request)
+    {
+        return $this->blogRepository->update($request);
+    }
+
+    public function delete($id)
+    {
+        return $this->blogRepository->delete($id);
+    }
 }

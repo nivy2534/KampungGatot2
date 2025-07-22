@@ -1,5 +1,6 @@
 @extends('layouts.app_dashboard')
 
+@php($page = 'dashboard')
 @section('content')
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         <div class="bg-white p-4 shadow rounded">

@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Blog;
 use Illuminate\Http\Request;
 use App\Services\BlogService;
+use App\Http\Requests\BlogRequest;
 use App\Http\Controllers\Controller;
+use App\Traits\ApiResponse;
 
 class BlogController extends Controller
 {
     protected $blogService;
+    use ApiResponse;
 
     public function __construct(BlogService $blogService)
     {
@@ -20,8 +24,42 @@ class BlogController extends Controller
         if (request()->ajax()) {
             return $this->blogService->index($request);
         }
-        return view("cms.v_blog");
+        return view("cms.blog.v_blog");
     }
 
-    public function create() {}
+    public function create()
+    {
+        return view("cms.blog.v_create_blog");
+    }
+
+    public function edit(Blog $blog)
+    {
+        return view("cms.blog.v_create_blog", compact("blog"));
+    }
+
+    public function store(BlogRequest $request)
+    {
+        $createBlog = $this->blogService->store($request->validated());
+        if ($createBlog) {
+            return $this->success($createBlog, 'Berita berhasil dibuat');
+        } else {
+            return $this->error('Berita gagal dibuat');
+        }
+    }
+
+    public function update(BlogRequest $request)
+    {
+        $createBlog = $this->blogService->update($request->validated());
+        if ($createBlog) {
+            return $this->success($createBlog, 'Berita berhasil dibuat');
+        } else {
+            return $this->error('Berita gagal dibuat');
+        }
+    }
+
+    public function destroy($id)
+    {
+        $data = $this->blogService->delete($id);
+        return $this->success($data, 'Data berhasil dihapus');
+    }
 }

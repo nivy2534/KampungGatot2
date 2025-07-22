@@ -1,30 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Dashboard Admin</title>
+    <title>Desa Ngebruk</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Plus+Jakarta+Sans:wght@500;600&display=swap"
+        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700&family=Poppins:wght@600&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    @vite(['resources/css/app.css'])
+    @vite('resources/css/app.css')
 </head>
 
-<body class="bg-gray-100 font-sans">
-    <div class="flex min-h-screen">
-        @include('components.dashboard.sidebar')
-        <div class="flex-1 flex flex-col">
-            @include('components.dashboard.navbar')
-            <main class="p-6 flex-1">
-                @yield('content')
-            </main>
-            @include('components.dashboard.footer')
-        </div>
-    </div>
-
-    @vite('resources/js/app.js')
+<body class="font-sans text-gray-800 bg-white">
+    @yield('content')
 
     @stack('prepend-script')
     @stack('addon-script')
@@ -36,7 +31,8 @@
             }
         });
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
 </body>
 
 </html>
