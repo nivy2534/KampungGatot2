@@ -220,5 +220,63 @@
                 }
             });
         });
+
+        $(document).on('click', '.btn-delete', function() {
+            const blogId = $(this).data('id');
+
+            Swal.fire({
+                title: 'Hapus Konten?',
+                text: 'Apakah Anda yakin ingin menghapus blog ini? Tindakan ini tidak dapat dibatalkan.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, Hapus',
+                cancelButtonText: 'Batal',
+                reverseButtons: true,
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: 'border border-red-500 text-red-500 hover:bg-red-100 px-6 py-2 rounded-md w-full order-2',
+                    cancelButton: 'bg-red-500 text-white hover:bg-red-600 px-6 py-2 rounded-md w-full order-1 mt-2',
+                    actions: 'flex flex-col-reverse gap-2 mt-4 items-stretch'
+                },
+                allowOutsideClick: () => !Swal.isLoading(),
+                preConfirm: () => {
+                    Swal.showLoading(); // Munculkan spinner
+                    let _url = "{{ url('blogs/delete/') }}/" + blogId;
+                    return fetch(_url, {
+                            method: 'DELETE',
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                            },
+                            data: {
+                                _method: 'DELETE',
+                                _token: '{{ csrf_token() }}' // untuk Blade, atau ganti manual jika pakai JS murni
+                            },
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Gagal menghapus');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            // Sukses, tampilkan pesan atau reload tabel
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil',
+                                text: 'Blog berhasil dihapus.',
+                                timer: 2000,
+                                showConfirmButton: false,
+                            });
+
+                            // Refresh data tabel jika pakai DataTables
+                            $('#blogTable').DataTable().ajax.reload();
+                        })
+                        .catch(error => {
+                            Swal.showValidationMessage(error.message);
+                        });
+                }
+            });
+
+        });
     </script>
 @endpush

@@ -33,6 +33,6 @@ Route::middleware(['auth'])->group(
         Route::get('/blogs/edit/{blog}', [BlogController::class, 'edit'])->name("blogs.edit");
         Route::post('/blogs/save', [BlogController::class, 'store'])->name("blogs.save");
         Route::post('/blogs/update', [BlogController::class, 'update'])->name("blogs.update");
-        Route::delete('/blogs/delete/{blog}', [BlogController::class, 'destroy']);
+        Route::delete('/blogs/delete/{id}', [BlogController::class, 'destroy'])->name("blogs.delete");
     }
 );

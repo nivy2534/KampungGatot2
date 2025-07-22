@@ -31,8 +31,8 @@ class BlogService
         return $this->blogRepository->update($request);
     }
 
-    public function delete($blog)
+    public function delete($id)
     {
-        return $this->blogRepository->delete($blog);
+        return $this->blogRepository->delete($id);
     }
 }

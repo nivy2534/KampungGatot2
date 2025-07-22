@@ -41,15 +41,20 @@ class BlogRepository implements BlogRepositoryInterface
             ])
             ->addColumn("actions", function ($item) {
                 $editUrl = route('blogs.edit', $item->id);
-                return '<div class="flex gap-2">
-                        <a href="' . $editUrl . '" class="text-blue-600 hover:text-blue-800 p-1">
-                            <i class="fas fa-edit"></i>
-                        </a>
-                        <button onclick="deleteBlog(' . $item->id . ')" class="text-red-600 hover:text-red-800 p-1">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                ';
+                return '    <div class="flex gap-2">
+                                <a href="' . $editUrl . '" class="text-blue-600 hover:text-blue-800 p-1">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <button
+                                    type="button"
+                                    class="btn-delete text-red-600 hover:text-red-800 p-1"
+                                    data-id="' . $item->id . '"
+                                    data-url="' . route('blogs.delete', $item->id) . '"
+                                >
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        ';
             })
             ->rawColumns(['actions'])
             ->addIndexColumn()
@@ -96,8 +101,9 @@ class BlogRepository implements BlogRepositoryInterface
     }
 
 
-    public function delete(Blog $blog)
+    public function delete($id)
     {
+        $blog = Blog::findOrFail($id);
         // Hapus file thumbnail jika ada dan file-nya masih ada di storage
         if ($blog->image_path && Storage::exists($blog->image_path)) {
             Storage::delete($blog->image_path);
@@ -106,7 +112,9 @@ class BlogRepository implements BlogRepositoryInterface
         // Hapus data dari database
         return $blog->delete();
     }
+
     public function show($id) {}
+
 
     private function uploadThumbnail($image)
     {

@@ -11,5 +11,5 @@ interface BlogRepositoryInterface
     public function show($id);
     public function store(array $data);
     public function update(array $data);
-    public function delete(Blog $blog);
+    public function delete($id);
 }

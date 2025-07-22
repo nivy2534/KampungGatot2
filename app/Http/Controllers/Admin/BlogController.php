@@ -57,9 +57,9 @@ class BlogController extends Controller
         }
     }
 
-    public function destroy(Blog $blog)
+    public function destroy($id)
     {
-        $data = $this->blogService->delete($blog);
+        $data = $this->blogService->delete($id);
         return $this->success($data, 'Data berhasil dihapus');
     }
 }
