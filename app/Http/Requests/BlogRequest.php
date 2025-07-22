@@ -20,6 +20,7 @@ class BlogRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'id' => 'nullable',
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'status' => 'required|in:draft,published,archived', // sesuaikan enum

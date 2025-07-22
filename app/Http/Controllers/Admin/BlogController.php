@@ -47,6 +47,16 @@ class BlogController extends Controller
         }
     }
 
+    public function update(BlogRequest $request)
+    {
+        $createBlog = $this->blogService->update($request->validated());
+        if ($createBlog) {
+            return $this->success($createBlog, 'Berita berhasil dibuat');
+        } else {
+            return $this->error('Berita gagal dibuat');
+        }
+    }
+
     public function destroy(Blog $blog)
     {
         $data = $this->blogService->delete($blog);

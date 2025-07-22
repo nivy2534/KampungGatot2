@@ -31,21 +31,21 @@ return [
     'disks' => [
 
         'local' => [
-                'driver' => 'local',
-                'root' => storage_path('app'),
-                'permissions' => [
-                    'file' => [
-                        'public' => 0775,
-                        'private' => 0600,
-                    ],
-                    'dir' => [
-                        'public' => 0775,
-                        'private' => 0700,
-                    ],
+            'driver' => 'local',
+            'root' => storage_path('app'),
+            'permissions' => [
+                'file' => [
+                    'public' => 0775,
+                    'private' => 0600,
+                ],
+                'dir' => [
+                    'public' => 0775,
+                    'private' => 0700,
                 ],
             ],
+        ],
 
-        'local' => [
+        'private' => [
             'driver' => 'local',
             'root' => storage_path('app/private'),
             'serve' => true,
@@ -56,18 +56,18 @@ return [
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => env('APP_URL').'/storage',
+            'url' => env('APP_URL') . '/storage',
             'visibility' => 'public',
             'permissions' => [
-                        'file' => [
-                            'public' => 0775,
-                            'private' => 0600,
-                        ],
-                        'dir' => [
-                            'public' => 0775,
-                            'private' => 0700,
-                        ],
-                    ],
+                'file' => [
+                    'public' => 0775,
+                    'private' => 0600,
+                ],
+                'dir' => [
+                    'public' => 0775,
+                    'private' => 0700,
+                ],
+            ],
             'throw' => false,
             'report' => false,
         ],

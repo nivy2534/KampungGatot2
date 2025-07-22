@@ -40,18 +40,18 @@ class BlogRepository implements BlogRepositoryInterface
                 "recordsFiltered" => $count,
             ])
             ->addColumn("actions", function ($item) {
-                return '
-            <div class="flex gap-2">
-                <button onclick="editBlog(' . $item->id . ')" class="text-blue-600 hover:text-blue-800 p-1">
-                    <i class="fas fa-edit"></i>
-                </button>
-                <button onclick="deleteBlog(' . $item->id . ')" class="text-red-600 hover:text-red-800 p-1">
-                    <i class="fas fa-trash"></i>
-                </button>
-            </div>
-        ';
+                $editUrl = route('blogs.edit', $item->id);
+                return '<div class="flex gap-2">
+                        <a href="' . $editUrl . '" class="text-blue-600 hover:text-blue-800 p-1">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <button onclick="deleteBlog(' . $item->id . ')" class="text-red-600 hover:text-red-800 p-1">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                ';
             })
-            ->rawColumns(['action'])
+            ->rawColumns(['actions'])
             ->addIndexColumn()
             ->make();
     }
@@ -74,8 +74,9 @@ class BlogRepository implements BlogRepositoryInterface
     }
 
 
-    public function update(Blog $blog, array $data)
+    public function update(array $data)
     {
+        $blog = Blog::findOrFail($data["id"]);
         if (isset($data['image'])) {
             if ($blog->image_path && Storage::exists($blog->image_path)) {
                 Storage::delete($blog->image_path);
@@ -109,7 +110,7 @@ class BlogRepository implements BlogRepositoryInterface
 
     private function uploadThumbnail($image)
     {
-        $path = $image->store('public/blogs'); // simpan di storage/app/public/blogs
+        $path = $image->store('blogs', 'public'); // simpan di storage/app/public/blogs
         return [
             'image_path' => $path,
             'image_url' => Storage::url($path), // hasilnya: /storage/blogs/xxx.jpg

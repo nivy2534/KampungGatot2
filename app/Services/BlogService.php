@@ -26,6 +26,11 @@ class BlogService
         return $this->blogRepository->store($request);
     }
 
+    public function update($request)
+    {
+        return $this->blogRepository->update($request);
+    }
+
     public function delete($blog)
     {
         return $this->blogRepository->delete($blog);

@@ -160,23 +160,11 @@
                         }
                     },
                     {
-                        data: 'id',
+                        data: 'actions',
                         name: 'actions',
                         className: "w-1/6",
                         orderable: false,
                         searchable: false,
-                        render: function(data, type, row) {
-                            return `
-                                <div class="flex gap-2">
-                                    <button onclick="editBlog(${data})" class="text-blue-600 hover:text-blue-800 p-1">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button onclick="deleteBlog(${data})" class="text-red-600 hover:text-red-800 p-1">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-                            `;
-                        }
                     }
                 ],
                 dom: 't<"flex justify-between items-center mt-4 px-6 pb-4"<"flex items-center gap-2"li><"flex items-center gap-2"p>>',
