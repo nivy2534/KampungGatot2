@@ -3,8 +3,11 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\BlogController;
+use App\Http\Controllers\Homepage\HomepageController;
 
 
+
+Route::get('/', [HomepageController::class, 'index']);
 
 Route::get('/login', function () {
     return view('auth.login');
@@ -26,5 +29,10 @@ Route::middleware(['auth'])->group(
 
         Route::get('/blogs', [BlogController::class, 'index']);
         Route::post('/blogs', [BlogController::class, 'index']);
+        Route::get('/blogs/create', [BlogController::class, 'create']);
+        Route::get('/blogs/edit/{blog}', [BlogController::class, 'edit']);
+        Route::post('/blogs/save', [BlogController::class, 'store'])->name("blogs.save");
+        Route::post('/blogs/update/{blog}', [BlogController::class, 'update']);
+        Route::delete('/blogs/delete/{blog}', [BlogController::class, 'destroy']);
     }
 );

@@ -8,11 +8,11 @@
                 <h1 class="text-3xl font-bold text-gray-900 mb-2">Kelola Blog</h1>
                 <p class="text-gray-600">Create, edit, and manage village news articles</p>
             </div>
-            <button id="addBlogBtn"
+            <a href="{{ url('blogs/create') }}"
                 class="bg-primary text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors">
                 Tambah Blog
                 <i class="fas fa-plus"></i>
-            </button>
+            </a>
         </div>
     </div>
 
@@ -131,6 +131,7 @@
                         data: 'date',
                         name: 'date',
                         className: "w-1/6",
+                        orderable: true,
                         render: function(data) {
                             return data;
                         }
@@ -187,6 +188,13 @@
                         <p class="text-sm text-gray-500 mt-2">Belum ada data produk di sini.<br>
                         Klik tombol di bawah untuk mulai menambahkan produk pertamamu.</p>
                     </div>`,
+                    zeroRecords: `
+                    <div class="flex flex-col items-center justify-center py-12 text-center">
+                        <img src="/assets/img/empty_data.png" alt="Empty" class="w-60 h-40 mb-6" />
+                        <h3 class="text-lg font-semibold text-gray-700">Masih Kosong Nih!</h3>
+                        <p class="text-sm text-gray-500 mt-2">Belum ada data produk di sini.<br>
+                        Klik tombol di bawah untuk mulai menambahkan produk pertamamu.</p>
+                    </div>`,
                     info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
                     infoEmpty: "Menampilkan 0 sampai 0 dari 0 entri",
                     infoFiltered: "(difilter dari _MAX_ total entri)",
@@ -218,9 +226,9 @@
             $('#statusFilter').on('change', function() {
                 const value = this.value;
                 if (value) {
-                    table.column(2).search(value).draw();
+                    table.column(3).search(value).draw();
                 } else {
-                    table.column(2).search('').draw();
+                    table.column(3).search('').draw();
                 }
             });
         });
