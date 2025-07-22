@@ -1,61 +1,263 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🚀 Laravel + Docker + Vite Starter
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Proyek ini menggunakan Laravel dengan stack modern berbasis **Docker** dan **Vite** untuk frontend development.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 📦 Requirements
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- [Docker](https://www.docker.com/)
+- [Docker Compose](https://docs.docker.com/compose/)
+- (Opsional) [Laravel Installer](https://laravel.com/docs/installation)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 🛠️ Langkah Instalasi
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### 1. Clone Repository
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+```bash
+git clone https://github.com/username/nama-proyek.git
+cd nama-proyek
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+> Ganti `https://github.com/username/nama-proyek.git` dengan URL proyek Anda (jika sudah diupload).
 
-## Laravel Sponsors
+---
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### 2. Salin `.env`
 
-### Premium Partners
+```bash
+cp .env.example .env
+```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+---
 
-## Contributing
+### 3. Setup Docker
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Buat file `docker-compose.yml`:
 
-## Code of Conduct
+```yaml
+version: '3.8'
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+services:
+  app:
+    build:
+      context: ./docker/php
+    container_name: kampung_gatot
+    volumes:
+      - .:/var/www/html:cached
+    depends_on:
+      - mysql
+    networks:
+      - kampung_gatot
+    mem_limit: 2g
+    cpus: 3
 
-## Security Vulnerabilities
+  nginx:
+    image: nginx:stable-alpine
+    container_name: kampung_gatot_nginx
+    ports:
+      - "8888:80"
+    volumes:
+      - .:/var/www/html:cached
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+    networks:
+      - kampung_gatot
+    mem_limit: 512m
+    cpus: 0.5
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+  mysql:
+    image: mysql:8.0
+    container_name: kampung_gatot_mysql
+    restart: unless-stopped
+    environment:
+        MYSQL_DATABASE: db_kampung_gatot
+        MYSQL_USER: user
+        MYSQL_PASSWORD: secret
+        MYSQL_ROOT_PASSWORD: secret # Diperlukan untuk inisialisasi
+    ports:
+        - "3311:3306"
+    volumes:
+        - mysql-data:/var/lib/mysql
+    networks:
+        - kampung_gatot
+    mem_limit: 2g
+    cpus: 2
 
-## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+  redis:
+    image: redis:7-alpine
+    container_name: kampung_gatot_redis
+    ports:
+      - "6379:6379"
+    networks:
+      - kampung_gatot
+    mem_limit: 512m
+    cpus: 0.5
+
+networks:
+  kampung_gatot:
+    driver: bridge
+
+volumes:
+  mysql-data:
+```
+
+---
+
+### 4. Tambahkan konfigurasi NGINX
+
+Buat folder `docker/nginx` dan file `default.conf`:
+
+```nginx
+server {
+    listen 80;
+    index index.php index.html;
+    root /var/www/html/public;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location ~ \.php$ {
+        include fastcgi_params;
+        fastcgi_pass app:9000;
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+        fastcgi_param PATH_INFO $fastcgi_path_info;
+    }
+
+    location ~ /\.ht {
+        deny all;
+    }
+}
+```
+
+---
+
+### 5. Jalankan Docker
+
+```bash
+docker-compose up -d
+```
+
+---
+
+### 6. Masuk ke Container PHP
+
+```bash
+docker compose exec app bash
+```
+
+---
+
+### 7. Compose Install
+
+```bash
+composer install
+```
+
+---
+
+### 8. Generate App Key & Migrasi
+
+```bash
+php artisan key:generate
+php artisan migrate
+```
+
+---
+
+## ⚡ Install Frontend (Vite + Tailwind)
+
+### 1. Masuk ke container Node
+
+```bash
+docker compose exec app bash
+```
+
+### 2. Install dependencies
+
+```bash
+npm install
+```
+
+> Jika belum ada `package.json`, jalankan:
+
+```bash
+npm init -y
+npm install vite laravel-vite-plugin tailwindcss postcss autoprefixer
+npx tailwindcss init -p
+```
+
+### 3. Konfigurasi `vite.config.js`
+
+```js
+import { defineConfig } from 'vite';
+import laravel from 'laravel-vite-plugin';
+
+export default defineConfig({
+  plugins: [
+    server: {
+        host: "127.0.0.1", // Paksa gunakan IPv4
+        port: 5173,
+    },
+    laravel({
+      input: ['resources/css/app.css', 'resources/js/app.js'],
+      refresh: true,
+    }),
+  ],
+});
+```
+
+### 4. `resources/css/app.css`
+
+```css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+```
+
+---
+
+## 🔁 Jalankan Vite
+
+```bash
+npm run dev
+```
+
+> Gunakan `npm run build` saat production.
+
+---
+
+## 🌐 Akses Website
+
+```bash
+docker compose exec app bash
+```
+
+```bash
+php artisan serve
+```
+
+- Laravel: <http://localhost:8888>
+- PHP: port `9000`
+- MySQL: port `3311`
+
+---
+
+## 🧽 Troubleshooting
+
+- Jika container tidak jalan: `docker-compose down -v && docker-compose up -d`
+- Cek log: `docker-compose logs -f`
+- Permission error? Jalankan `chmod -R 775 storage bootstrap/cache`
+
+---
+
+## ✅ Selesai
+
+Anda sudah berhasil menjalankan Laravel dengan Docker dan Vite. 🎉

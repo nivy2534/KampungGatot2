@@ -2,18 +2,19 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Blog extends Model
 {
     use HasFactory;
+    protected $appends = ['title', 'content', 'date'];
 
-    protected $fillable =[
-        'blog_name',
-        'blog_description',
-        'blog_date',
-        'blog_status',
+    protected $fillable = [
+        'name',
+        'description',
+        'status',
         'author_id',
         'author_name',
         'slug',
@@ -22,15 +23,27 @@ class Blog extends Model
         'image_path',
     ];
 
-    protected $appends = ['title', 'content'];
+    protected $casts = [
+        'created_at' => 'datetime',
+    ];
+
+    /**
+     * Get the formatted creation date.
+     */
+    public function getDateAttribute(): string
+    {
+        return $this->created_at
+            ? $this->created_at->translatedFormat('d F Y H:i:s')
+            : '';
+    }
 
     public function getTitleAttribute()
     {
-        return $this->blog_name;
+        return $this->name;
     }
 
     public function getContentAttribute()
     {
-        return $this->blog_description;
+        return $this->description;
     }
 }

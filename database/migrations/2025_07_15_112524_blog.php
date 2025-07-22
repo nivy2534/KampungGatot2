@@ -11,13 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('blogs', function(Blueprint $table){
-            $table->engine = 'InnoDB';
+        Schema::create('blogs', function (Blueprint $table) {
             $table->id();
-            $table->string('blog_name');
-            $table->text('blog_description');
-            $table->date('blog_date');
-            $table->string('status');
+            $table->string('name');
+            $table->text('description');
+            $table->enum('status', array("draft", "published", "archived"))->default("draft");
             $table->unsignedBigInteger('author_id');
             $table->string('author_name');
             $table->string('slug')->unique();
