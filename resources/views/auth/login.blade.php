@@ -185,6 +185,8 @@
                             alert(
                                 'Login gagal, coba lagi.'
                             ); // ganti menggunakan sweetalert lebih bagus
+
+                            $button.html('Masuk');
                         }
                     },
                     error: function(jqXHR) {

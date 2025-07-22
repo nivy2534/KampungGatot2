@@ -7,7 +7,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\EventController;
 use App\Http\Controllers\Api\ProductController;
 
-Route::post('/register', [AuthController::class, 'register']);
+/* Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/ping', function () {
     return response()->json(['message' => 'API working!']);
@@ -15,17 +15,17 @@ Route::get('/ping', function () {
 
 Route::middleware('auth:sanctum')->group(function(){
     Route::post('/logout', [AuthController::class, 'logout']);
-   
+
     //CRUD photo
     Route::post('/photos',[PhotoController::class, 'store']);
     Route::put('/photos/{id}', [PhotoController::class, 'update']);
     Route::delete('/photos/{id}',[PhotoController::class, 'destroy']);
-    
+
     //CRUD events
     Route::post('/events', [EventController::class, 'store']);
     Route::put('/events/{id}', [EventController::class, 'update']);
     Route::delete('/events/{id}', [EventController::class, 'destroy']);
-    
+
     //CRUD blogs
     Route::post('/blogs', [BlogController::class, 'store']);
     Route::put('/blogs/{id}', [BlogController::class, 'update']);
@@ -61,4 +61,4 @@ Route::get('/blogs/count', [BlogController::class, 'countByStatus']);
 
 
 Route::get('/produtcs',[ProductController::class, 'index']);
-Route::get('/products/{id}', [ProductController::class, 'show']);
+Route::get('/products/{id}', [ProductController::class, 'show']); */

@@ -37,9 +37,9 @@ class AuthService
         ]);
     }
 
-    public function register(Request $request)
+    public function register($data)
     {
-        $user = $this->authRepository->register($request);
+        $user = $this->authRepository->register($data);
 
         return $this->success(new UserResource($user), 'Data ditemukan');
     }

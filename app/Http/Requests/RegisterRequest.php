@@ -22,6 +22,7 @@ class RegisterRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
+            'password' => 'required',
         ];
     }
 
@@ -33,6 +34,7 @@ class RegisterRequest extends FormRequest
         return [
             'name.required' => 'Nama user wajib diisi.',
             'email.required' => 'Email wajib diisi.',
+            'password.required' => 'Password wajib diisi.',
         ];
     }
 }

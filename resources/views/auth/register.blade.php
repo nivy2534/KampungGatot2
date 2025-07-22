@@ -220,10 +220,19 @@
                         password: password,
                     },
                     success: function(response) {
-                        // 4. Handle jika request SUKSES
-                        alert('Pendaftaran berhasil! Anda akan dialihkan ke halaman login.');
-                        // Arahkan ke halaman login atau dashboard
-                        window.location.href = '/login'; // <-- Ganti sesuai kebutuhan
+                        if (response.success) {
+                            alert(
+                                'Pendaftaran berhasil, Silahkan masuk kedalam aplikasi'
+                            ); // ganti menggunakan sweetalert lebih bagus
+                            // Arahkan ke halaman login atau dashboard
+                            window.location.href = '/login'; // <-- Ganti sesuai kebutuhan
+                        } else {
+                            alert(
+                                'Pendaftaran gagal, coba lagi.'
+                            ); // ganti menggunakan sweetalert lebih bagus
+
+                            $button.html('Daftar').prop('disabled', false);
+                        }
                     },
                     error: function(jqXHR) {
                         // 5. Handle jika request GAGAL

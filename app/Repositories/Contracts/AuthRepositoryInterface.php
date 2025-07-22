@@ -8,5 +8,5 @@ use Illuminate\Http\Request;
 interface AuthRepositoryInterface
 {
     public function findByEmail(string $email): ?User;
-    public function register(Request $data);
+    public function register(array $data);
 }

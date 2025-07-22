@@ -9,21 +9,43 @@
         </div>
     </div>
     <nav class="flex flex-col space-y-2 mt-4">
-        <a href="#" class="px-4 py-4 hover:bg-[#0f203c] rounded transition-colors duration-200">
+        <a href="#" class="px-4 py-4 hover:bg-primary rounded transition-colors duration-200">
             <i class="fa-solid fa-house mr-3" style="color: #ffffff;"></i> Dashboard
         </a>
 
-        <a href="#" class="px-4 py-4 hover:bg-[#0f203c] rounded transition-colors duration-200">
+        <a href="{{ url('/blogs') }}" class="px-4 py-4 hover:bg-primary rounded transition-colors duration-200">
             <i class="fa-solid fa-book mr-4" style="color: #ffffff;"></i> Kelola Blog
         </a>
-        <a href="#" class="px-4 py-4 hover:bg-[#0f203c] rounded transition-colors duration-200">
+        <a href="#" class="px-4 py-4 hover:bg-primary rounded transition-colors duration-200">
             <i class="fa-solid fa-cart-flatbed mr-3" style="color: #ffffff;"></i> Kelola Barang
         </a>
-        <a href="#" class="px-4 py-4 hover:bg-[#0f203c] rounded transition-colors duration-200">
+        <a href="#" class="px-4 py-4 hover:bg-primary rounded transition-colors duration-200">
             <i class="fa-solid fa-image mr-4" style="color: #ffffff;"></i> Kelola Galeri
         </a>
-        <a href="#" class="px-4 py-4 hover:bg-[#0f203c] rounded transition-colors duration-200">
+        <a href="javascript:void()" id="logout-button"
+            class="px-4 py-4 hover:bg-primary rounded transition-colors duration-200">
             <i class="fa-solid fa-right-from-bracket mr-4" style="color: #ffffff;"></i> Logout
         </a>
     </nav>
 </aside>
+
+<script>
+    $('#logout-button').on('click', function(e) {
+        e.preventDefault();
+
+        $.ajax({
+            url: "{{ route('logout') }}",
+            type: 'POST',
+            data: {
+                _token: "{{ csrf_token() }}"
+            },
+            success: function(response) {
+                window.location.href = "{{ route('login') }}"; // redirect ke halaman login
+            },
+            error: function(xhr) {
+                console.error(xhr.responseText);
+                alert('Gagal logout!');
+            }
+        });
+    });
+</script>
