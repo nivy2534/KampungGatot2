@@ -4,6 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Homepage\HomepageController;
+use App\Http\Controllers\BlogPageController;
+use App\Http\Controllers\EventPageController;
+use App\Http\Controllers\GaleriPageController;
 
 
 
@@ -20,6 +23,11 @@ Route::post('/logout', [AuthController::class, 'logout'])->name("logout");
 Route::get('/register', function () {
     return view('auth.register');
 })->name('register');
+
+// Ordinary people
+Route::get('/blog', [BlogPageController::class, 'index'])->name('blog');
+Route::get('/galeri', [GaleriPageController::class, 'index'])->name('galeri');
+Route::get('/event', [EventPageController::class, 'index'])->name('event');
 
 Route::middleware(['auth'])->group(
     function () {

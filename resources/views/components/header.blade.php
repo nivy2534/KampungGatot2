@@ -16,20 +16,20 @@
     <div class="w-[878px] flex justify-between items-center">
         {{-- Nav links --}}
         <nav class="w-[465px] flex justify-center items-center gap-[52px]">
-            <a href="#"
-                class="{{ Request::is('/') ? 'border-b-2 border-[#1B3A6D] font-semibold' : 'font-medium' }} text-black text-[20px] leading-[28px] font-['Plus Jakarta Sans']">
+            <a href="{{ url('/') }}"
+               class="{{ Request::is('/') ? 'border-b-2 border-[#1B3A6D] font-semibold' : 'font-medium' }} text-black text-[20px] leading-[28px] font-['Plus Jakarta Sans']">
                 Home
             </a>
-            <a href="#"
-                class="{{ Request::is('blogs') ? 'border-b-2 border-[#1B3A6D] font-semibold' : 'font-medium' }} text-black text-[20px] leading-[28px] font-['Plus Jakarta Sans']">
+            <a href="{{ route('blog') }}"
+               class="{{ Request::is('blog') ? 'border-b-2 border-[#1B3A6D] font-semibold' : 'font-medium' }} text-black text-[20px] leading-[28px] font-['Plus Jakarta Sans']">
                 Blog
             </a>
-            <a href="#"
-                class="{{ Request::is('galeri') ? 'border-b-2 border-[#1B3A6D] font-semibold' : 'font-medium' }} text-black text-[20px] leading-[28px] font-['Plus Jakarta Sans']">
+            <a href="{{ url('/galeri') }}"
+               class="{{ Request::is('galeri') ? 'border-b-2 border-[#1B3A6D] font-semibold' : 'font-medium' }} text-black text-[20px] leading-[28px] font-['Plus Jakarta Sans']">
                 Galeri
             </a>
-            <a href="#"
-                class="{{ Request::is('event') ? 'border-b-2 border-[#1B3A6D] font-semibold' : 'font-medium' }} text-black text-[20px] leading-[28px] font-['Plus Jakarta Sans']">
+            <a href="{{ url('/event') }}"
+               class="{{ Request::is('event') ? 'border-b-2 border-[#1B3A6D] font-semibold' : 'font-medium' }} text-black text-[20px] leading-[28px] font-['Plus Jakarta Sans']">
                 Belanja
             </a>
         </nav>
