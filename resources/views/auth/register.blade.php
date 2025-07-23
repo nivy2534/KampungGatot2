@@ -213,6 +213,7 @@
                 // ==========================================================
                 $.ajax({
                     url: '/register', // <-- GANTI DENGAN URL API ANDA
+                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                     method: 'POST',
                     data: {
                         name: name,
