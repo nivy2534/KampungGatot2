@@ -26,13 +26,13 @@
     {{-- Articles Grid --}}
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
       @foreach ($blogs as $blog)
-        <a href="{{ route('article', ['id'=>$blog['id']]) }}" class="block">
+        <a href="{{ route('blog', ['id'=>$blog['id']]) }}" class="block">
           @include('components.article-card', [
-            'title' => $blog['blog_name'] ?? 'Judul tidak tersedia',
-            'date' => \Carbon\Carbon::parse($blog['blog_date'])->translatedFormat('d F Y'),
+            'title' => $blog['name'] ?? 'Judul tidak tersedia',
+            'date' => \Carbon\Carbon::parse($blog['created_at'])->translatedFormat('d F Y'),
             'category' => 'Sejarah',
-            'excerpt' => \Illuminate\Support\Str::limit($blog['blog_description'], 100),
-            'image' => '/assets/img/blogthumb.png'
+            'excerpt' => \Illuminate\Support\Str::limit($blog['description'], 100),
+            'image' => $blog['image_url'] ?? '/assets/img/blogthumb.png'
           ])
         </a>
       @endforeach
