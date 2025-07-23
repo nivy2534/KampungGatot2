@@ -16,27 +16,27 @@
     <div class="w-[878px] flex justify-between items-center">
         {{-- Nav links --}}
         <nav class="w-[465px] flex justify-center items-center gap-[52px]">
-            <a href="{{ url('/') }}"
-               class="{{ Request::is('/') ? 'border-b-2 border-[#1B3A6D] font-semibold' : 'font-medium' }} text-black text-[20px] leading-[28px] font-['Plus Jakarta Sans']">
+            <a href="#"
+                class="{{ Request::is('/') ? 'border-b-2 border-[#1B3A6D] font-semibold' : 'font-medium' }} text-black text-[20px] leading-[28px] font-['Plus Jakarta Sans']">
                 Home
             </a>
-            <a href="{{ route('blog') }}"
-               class="{{ Request::is('blog') ? 'border-b-2 border-[#1B3A6D] font-semibold' : 'font-medium' }} text-black text-[20px] leading-[28px] font-['Plus Jakarta Sans']">
+            <a href="#"
+                class="{{ Request::is('blogs') ? 'border-b-2 border-[#1B3A6D] font-semibold' : 'font-medium' }} text-black text-[20px] leading-[28px] font-['Plus Jakarta Sans']">
                 Blog
             </a>
-            <a href="{{ url('/galeri') }}"
-               class="{{ Request::is('galeri') ? 'border-b-2 border-[#1B3A6D] font-semibold' : 'font-medium' }} text-black text-[20px] leading-[28px] font-['Plus Jakarta Sans']">
+            <a href="#"
+                class="{{ Request::is('galeri') ? 'border-b-2 border-[#1B3A6D] font-semibold' : 'font-medium' }} text-black text-[20px] leading-[28px] font-['Plus Jakarta Sans']">
                 Galeri
             </a>
-            <a href="{{ url('/event') }}"
-               class="{{ Request::is('event') ? 'border-b-2 border-[#1B3A6D] font-semibold' : 'font-medium' }} text-black text-[20px] leading-[28px] font-['Plus Jakarta Sans']">
+            <a href="#"
+                class="{{ Request::is('event') ? 'border-b-2 border-[#1B3A6D] font-semibold' : 'font-medium' }} text-black text-[20px] leading-[28px] font-['Plus Jakarta Sans']">
                 Belanja
             </a>
         </nav>
 
         {{-- Login Button --}}
         <a href="/login"
-           class="w-[121px] h-[48px] px-6 py-3 bg-[#1B3A6D] rounded-[8px] flex items-center justify-center text-white text-[16px] leading-[24px] font-semibold font-['Plus Jakarta Sans']">
+            class="w-[121px] h-[48px] px-6 py-3 bg-[#1B3A6D] rounded-[8px] flex items-center justify-center text-white text-[16px] leading-[24px] font-semibold font-['Plus Jakarta Sans']">
             Login
         </a>
     </div>

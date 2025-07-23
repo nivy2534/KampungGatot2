@@ -21,6 +21,6 @@
         "axios": "^1.10.0",
         "datatables.net-dt": "^2.3.2",
         "jquery": "^3.7.1",
-        "tailwindcss": "^3.4.17"
+        "sweetalert2": "^11.22.2"
     }
 }

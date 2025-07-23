@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Services\AuthService;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\RegisterRequest;
+use App\Models\User; // atau model User kamu
 
 class AuthController extends Controller
 {
@@ -42,20 +42,44 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-        $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
+        if (Auth::attempt($request->only('email', 'password'))) {
+            $user = Auth::user();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Login berhasil',
+                'data' => $user,
+                'redirect' => 'http://localhost:3000/dashboard',
+            ]);
+        }
+
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Email atau password salah',
+        ], 401);
+    }
+
+   
+
+    public function register(Request $request)
+    {
+        $validated = $request->validate([
+            'email' => 'required|email|unique:users,email',
+            'name' => 'required|string|max:255',
+            'password' => 'required|string|min:6',
         ]);
 
-        return $this->authService->login($request);
+        $user = User::create([
+            'email' => $validated['email'],
+            'name' => $validated['name'],
+            'password' => bcrypt($validated['password']),
+        ]);
+
+        auth()->login($user);
+
+        return redirect()->away('http://localhost:3000/dashboard');
     }
 
-    public function register(RegisterRequest $request)
-    {
-        $validated = $request->validated();
-        $user = $this->authService->register($validated);
-        return $user;
-    }
 
     /**
      * @group Auth
