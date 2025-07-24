@@ -18,8 +18,9 @@
             class="{{ Request::is('blogs') ? 'bg-primary' : '' }} px-4 py-4 hover:bg-primary rounded transition-colors duration-200">
             <i class="fa-solid fa-book mr-4" style="color: #ffffff;"></i> Kelola Blog
         </a>
-        <a href="#" class="px-4 py-4 hover:bg-primary rounded transition-colors duration-200">
-            <i class="fa-solid fa-cart-flatbed mr-3" style="color: #ffffff;"></i> Kelola Barang
+        <a href="{{ url('/products') }}"
+            class="{{ Request::is('products') ? 'bg-primary' : '' }} px-4 py-4 hover:bg-primary rounded transition-colors duration-200">
+            <i class="fa-solid fa-book mr-4" style="color: #ffffff;"></i> Kelola Barang
         </a>
         <a href="#" class="px-4 py-4 hover:bg-primary rounded transition-colors duration-200">
             <i class="fa-solid fa-image mr-4" style="color: #ffffff;"></i> Kelola Galeri

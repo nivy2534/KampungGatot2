@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\BlogController;
+use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Homepage\HomepageController;
 use App\Http\Controllers\BlogPageController;
 use App\Http\Controllers\EventPageController;
@@ -35,6 +36,7 @@ Route::middleware(['auth'])->group(
             return view('cms.dashboard');
         })->name('dashboard');
 
+        // Blog Related
         Route::get('/blogs', [BlogController::class, 'index']);
         Route::post('/blogs', [BlogController::class, 'index']);
         Route::get('/blogs/create', [BlogController::class, 'create']);
@@ -42,5 +44,14 @@ Route::middleware(['auth'])->group(
         Route::post('/blogs/save', [BlogController::class, 'store'])->name("blogs.save");
         Route::post('/blogs/update', [BlogController::class, 'update'])->name("blogs.update");
         Route::delete('/blogs/delete/{id}', [BlogController::class, 'destroy'])->name("blogs.delete");
+
+        // Produk related
+        Route::get('/products', [ProductController::class, 'index']);
+        Route::post('/products', [ProductController::class, 'index']);
+        Route::get('/products/create', [ProductController::class, 'create']);
+        Route::get('/products/edit/{blog}', [ProductController::class, 'edit'])->name("products.edit");
+        Route::post('/products/save', [ProductController::class, 'store'])->name("products.save");
+        Route::post('/products/update', [ProductController::class, 'update'])->name("products.update");
+        Route::delete('/products/delete/{id}', [ProductController::class, 'destroy'])->name("products.delete");
     }
 );
