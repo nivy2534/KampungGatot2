@@ -32,7 +32,7 @@ class ProductController extends Controller
         return view("cms.product.v_create_product");
     }
 
-    public function edit(Product $blog)
+    public function edit(Product $product)
     {
         return view("cms.blog.v_create_product", compact("product"));
     }
@@ -41,9 +41,9 @@ class ProductController extends Controller
     {
         $createProduct = $this->productService->store($request->validated());
         if ($createProduct) {
-            return $this->success($createProduct, 'Berita berhasil dibuat');
+            return $this->success($createProduct, 'Produk berhasil dibuat');
         } else {
-            return $this->error('Berita gagal dibuat');
+            return $this->error('Produk gagal dibuat');
         }
     }
 
@@ -51,15 +51,15 @@ class ProductController extends Controller
     {
         $createProduct = $this->productService->update($request->validated());
         if ($createProduct) {
-            return $this->success($createProduct, 'Berita berhasil dibuat');
+            return $this->success($createProduct, 'Produk berhasil dibuat');
         } else {
-            return $this->error('Berita gagal dibuat');
+            return $this->error('Produk gagal dibuat');
         }
     }
 
     public function destroy($id)
     {
         $data = $this->productService->delete($id);
-        return $this->success($data, 'Data berhasil dihapus');
+        return $this->success($data, 'Produk berhasil dihapus');
     }
 }

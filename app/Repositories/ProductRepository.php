@@ -83,7 +83,7 @@ class ProductRepository implements ProductRepositoryInterface
     {
         $product = Product::findOrFail($data["id"]);
         if (isset($data['image'])) {
-            if ($blog->image_path && Storage::exists($blog->image_path)) {
+            if ($product->image_path && Storage::exists($product->image_path)) {
                 Storage::delete($product->image_path);
             }
 
@@ -97,7 +97,7 @@ class ProductRepository implements ProductRepositoryInterface
         $data['author_name'] = Auth::user()->name;
         $data['excerpt'] = $data['description'];
 
-        return $blog->update($data);
+        return $product->update($data);
     }
 
 

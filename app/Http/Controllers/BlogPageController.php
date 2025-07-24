@@ -14,7 +14,6 @@ class BlogPageController extends Controller
 
         $blogs = Blog::query();
 
-        // Kalau ada tag di URL, filter berdasarkan tag
         if ($tag) {
             $blogs->where('tag', $tag);
         }
@@ -23,7 +22,7 @@ class BlogPageController extends Controller
 
         return view('blog', [
             'blogs' => $blogs,
-            'activeTag' => $tag // kirim juga untuk styling tombol aktif
+            'activeTag' => $tag
         ]);
     }
 }
