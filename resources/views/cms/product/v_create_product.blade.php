@@ -136,8 +136,17 @@
         delBtn.className =
           "absolute top-1 right-1 bg-white/80 text-red-600 text-xs rounded hover:bg-red-100 hidden group-hover:block";
         delBtn.addEventListener("click", () => {
-          imageFiles.splice(index, 1);
-          updatePreviewList();
+            const removedSrc = e.target.result;
+
+            if(previewImage.src === removedSrc){
+                previewImage.classList.add("hidden");
+                previewImage.src = "";
+                uploadPlaceholder.classList.remove("hidden");
+                imageActions.classList.add("hidden");
+            }
+            
+            imageFiles.splice(index, 1);
+            updatePreviewList();
         });
 
         wrapper.appendChild(img);
