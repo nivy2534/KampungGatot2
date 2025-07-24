@@ -15,11 +15,20 @@
     <div class="flex flex-col md:flex-col md:items-center justify-between gap-4 mb-8">
       <input type="text" placeholder="Cari" class="w-[700px] px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
       <div class="flex flex-wrap gap-2">
-        <button class="px-4 py-2 rounded-full bg-blue-600 text-white text-sm">Semua</button>
-        <button class="px-4 py-2 rounded-full border text-sm">Sejarah</button>
-        <button class="px-4 py-2 rounded-full border text-sm">Potensi Desa</button>
-        <button class="px-4 py-2 rounded-full border text-sm">Kabar Warga</button>
-        <button class="px-4 py-2 rounded-full border text-sm">UMKM Lokal</button>
+        <a href="{{ route('blog') }}"
+          class="px-4 py-2 rounded-full text-sm {{ !$activeTag ? 'bg-blue-600 text-white' : 'border' }}">Semua</a>
+
+        <a href="{{ route('blog', ['tag' => 'sejarah']) }}"
+          class="px-4 py-2 rounded-full text-sm {{ $activeTag === 'sejarah' ? 'bg-blue-600 text-white' : 'border' }}">Sejarah</a>
+
+        <a href="{{ route('blog', ['tag' => 'potensi_desa']) }}"
+          class="px-4 py-2 rounded-full text-sm {{ $activeTag === 'potensi_desa' ? 'bg-blue-600 text-white' : 'border' }}">Potensi Desa</a>
+
+        <a href="{{ route('blog', ['tag' => 'kabar_warga']) }}"
+          class="px-4 py-2 rounded-full text-sm {{ $activeTag === 'kabar_warga' ? 'bg-blue-600 text-white' : 'border' }}">Kabar Warga</a>
+
+        <a href="{{ route('blog', ['tag' => 'umkm_lokal']) }}"
+          class="px-4 py-2 rounded-full text-sm {{ $activeTag === 'umkm_lokal' ? 'bg-blue-600 text-white' : 'border' }}">UMKM Lokal</a>
       </div>
     </div>
 
@@ -30,7 +39,7 @@
           @include('components.article-card', [
             'title' => $blog['name'] ?? 'Judul tidak tersedia',
             'date' => \Carbon\Carbon::parse($blog['created_at'])->translatedFormat('d F Y'),
-            'category' => 'Sejarah',
+            'category' => \Illuminate\Support\Str::of($blog['tag'] ?? '')->replace('_',' ')->title() ? : 'Tag Tidak Tersedia',
             'excerpt' => \Illuminate\Support\Str::limit($blog['description'], 100),
             'image' => $blog['image_url'] ?? '/assets/img/blogthumb.png'
           ])

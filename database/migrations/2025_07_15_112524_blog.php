@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('excerpt', 500);
             $table->string('image_url')->nullable();
             $table->string('image_path')->nullable();
+            $table->string('tag');
 
             $table->timestamps();
         });

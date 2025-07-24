@@ -21,6 +21,7 @@ class Blog extends Model
         'excerpt',
         'image_url',
         'image_path',
+        'tag',
     ];
 
     /**

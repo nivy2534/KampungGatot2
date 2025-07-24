@@ -24,6 +24,7 @@ class BlogRequest extends FormRequest
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'status' => 'required|in:draft,published,archived', // sesuaikan enum
+            'tag' => 'required|in:sejarah,potensi_desa,kabar_warga,umkm_lokal',
             'image' => 'nullable',
         ];
     }
