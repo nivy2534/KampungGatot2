@@ -54,6 +54,7 @@ Route::middleware(['auth'])->group(
           Route::post('/products/save', [ProductController::class, 'store'])->name("products.save");
           Route::post('/products/update', [ProductController::class, 'update'])->name("products.update");
           Route::delete('/products/delete/{id}', [ProductController::class, 'destroy'])->name("products.delete");
+          Route::delete('/product-images/{id}', [ProductImageController::class, 'destroy']);
         });
     }
 );

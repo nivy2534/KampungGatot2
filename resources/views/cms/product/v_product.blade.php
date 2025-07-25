@@ -60,8 +60,8 @@
                         <p class="text-sm text-gray-600">Rp{{ number_format($product->price, 0, ',', '.') }}</p>
 
                         <div class="mt-3 flex gap-2">
-                            <a href="{{ url('products/edit', $product->id) }}" class="bg-blue-700 hover:bg-blue-800 text-white text-sm font-medium px-3 py-1 rounded">Edit</a>
-                            <form action="{{ url('products/destroy', $product->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus?')">
+                            <a href="{{ url('dashboard/products/edit', $product->id) }}" class="bg-blue-700 hover:bg-blue-800 text-white text-sm font-medium px-3 py-1 rounded">Edit</a>
+                            <form action="{{ url('dashboard/products/destroy', $product->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus?')">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="bg-red-600 hover:bg-red-700 text-white text-sm font-medium px-3 py-1 rounded">Hapus</button>
