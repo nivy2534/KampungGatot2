@@ -1,35 +1,49 @@
-<aside class="w-96 text-white flex flex-col p-5 space-y-6 shadow-lg p-8"
+<aside class="w-56 md:w-60 text-white flex flex-col h-screen overflow-hidden"
     style="background-color: rgb(27, 58, 109) !important;">
-    <div class="flex items-center space-x-3 mb-4">
-        <img src="{{ asset('assets/img/logo_tutwuri.png') }}" class="h-12 w-12" alt="Logo">
-        <img src="{{ asset('assets/img/logo_unm.png') }}" class="h-12 w-12" alt="Logo">
-        <div>
-            <h1 class="text-xl font-bold leading-tight">Kampung Gatot</h1>
-            <p class="text-sm text-white/80">Panel Admin</p>
+    <div class="flex items-center space-x-2 p-3 md:p-4 border-b border-white/10">
+        <div class="flex space-x-1.5">
+            <img src="{{ asset('assets/img/logo_tutwuri.png') }}" class="h-8 w-8 md:h-9 md:w-9 flex-shrink-0" alt="Logo Tutwuri">
+            <img src="{{ asset('assets/img/logo_unm.png') }}" class="h-8 w-8 md:h-9 md:w-9 flex-shrink-0" alt="Logo UNM">
+        </div>
+        <div class="min-w-0 flex-1">
+            <h1 class="text-sm md:text-base font-semibold leading-tight truncate">Kampung Gatot</h1>
+            <p class="text-xs text-white/70">Panel Admin</p>
         </div>
     </div>
-    <nav class="flex flex-col space-y-2 mt-4">
+    
+    <nav class="flex flex-col px-3 md:px-4 py-4 space-y-1 flex-1 overflow-hidden">
         <a href="{{ url('/dashboard') }}"
-            class="{{ Request::is('dashboard') ? 'bg-primary' : '' }} px-4 py-4 hover:bg-primary rounded transition-colors duration-200">
-            <i class="fa-solid fa-house mr-3" style="color: #ffffff;"></i> Dashboard
+            class="{{ Request::is('dashboard') ? 'bg-primary' : '' }} flex items-center px-3 py-2.5 hover:bg-primary rounded-md transition-colors duration-200 group">
+            <i class="fa-solid fa-house mr-2.5 flex-shrink-0 text-sm" style="color: #ffffff;"></i> 
+            <span class="truncate text-sm">Dashboard</span>
         </a>
 
         <a href="{{ url('/blogs') }}"
-            class="{{ Request::is('blogs') ? 'bg-primary' : '' }} px-4 py-4 hover:bg-primary rounded transition-colors duration-200">
-            <i class="fa-solid fa-book mr-4" style="color: #ffffff;"></i> Kelola Blog
+            class="{{ Request::is('blogs') ? 'bg-primary' : '' }} flex items-center px-3 py-2.5 hover:bg-primary rounded-md transition-colors duration-200 group">
+            <i class="fa-solid fa-book mr-2.5 flex-shrink-0 text-sm" style="color: #ffffff;"></i> 
+            <span class="truncate text-sm">Kelola Blog</span>
         </a>
+        
         <a href="{{ url('/products') }}"
-            class="{{ Request::is('products') ? 'bg-primary' : '' }} px-4 py-4 hover:bg-primary rounded transition-colors duration-200">
-            <i class="fa-solid fa-book mr-4" style="color: #ffffff;"></i> Kelola Barang
+            class="{{ Request::is('products') ? 'bg-primary' : '' }} flex items-center px-3 py-2.5 hover:bg-primary rounded-md transition-colors duration-200 group">
+            <i class="fa-solid fa-shopping-bag mr-2.5 flex-shrink-0 text-sm" style="color: #ffffff;"></i> 
+            <span class="truncate text-sm">Kelola Barang</span>
         </a>
-        <a href="#" class="px-4 py-4 hover:bg-primary rounded transition-colors duration-200">
-            <i class="fa-solid fa-image mr-4" style="color: #ffffff;"></i> Kelola Galeri
-        </a>
-        <a href="javascript:void()" id="logout-button"
-            class="px-4 py-4 hover:bg-primary rounded transition-colors duration-200">
-            <i class="fa-solid fa-right-from-bracket mr-4" style="color: #ffffff;"></i> Logout
+        
+        <a href="#" class="flex items-center px-3 py-2.5 hover:bg-primary rounded-md transition-colors duration-200 group">
+            <i class="fa-solid fa-image mr-2.5 flex-shrink-0 text-sm" style="color: #ffffff;"></i> 
+            <span class="truncate text-sm">Kelola Galeri</span>
         </a>
     </nav>
+        
+    <!-- Logout Button - Fixed at bottom -->
+    <div class="p-3 md:p-4 border-t border-white/10">
+        <a href="javascript:void()" id="logout-button"
+            class="flex items-center px-3 py-2.5 hover:bg-red-600 rounded-md transition-colors duration-200 group w-full">
+            <i class="fa-solid fa-right-from-bracket mr-2.5 flex-shrink-0 text-sm" style="color: #ffffff;"></i> 
+            <span class="truncate text-sm">Logout</span>
+        </a>
+    </div>
 </aside>
 
 <script>
@@ -38,19 +52,19 @@
 
         Swal.fire({
             html: `
-                <div class="flex flex-col items-center">
-                    <img src="/assets/cms/logout.svg" alt="Logout" class="w-40 h-40 mb-4">
-                    <h2 class="text-xl font-bold text-gray-800 mb-2">Keluar dari Aplikasi?</h2>
-                    <p class="text-sm text-gray-600">Kamu yakin ingin keluar?<br>Semua data tetap aman dan bisa diakses kembali saat login.</p>
+                <div class="flex flex-col items-center px-4">
+                    <img src="/assets/cms/logout.svg" alt="Logout" class="w-32 h-32 md:w-40 md:h-40 mb-4">
+                    <h2 class="text-lg md:text-xl font-bold text-gray-800 mb-2 text-center">Keluar dari Aplikasi?</h2>
+                    <p class="text-sm text-gray-600 text-center">Kamu yakin ingin keluar?<br>Semua data tetap aman dan bisa diakses kembali saat login.</p>
                 </div>
             `,
             showCancelButton: true,
             showConfirmButton: true,
             customClass: {
-                popup: 'rounded-xl px-6 py-8',
-                cancelButton: ' w-full bg-red-500 text-white px-6 py-2 rounded font-semibold',
-                confirmButton: ' w-full border border-red-500 text-red-500 px-6 py-2 rounded font-semibold',
-                actions: ' w-full flex flex-col-reverse gap-3 mt-6'
+                popup: 'rounded-xl px-4 py-6 md:px-6 md:py-8 max-w-sm md:max-w-md',
+                cancelButton: 'w-full bg-red-500 text-white px-4 py-2 md:px-6 md:py-2 rounded font-semibold text-sm md:text-base',
+                confirmButton: 'w-full border border-red-500 text-red-500 px-4 py-2 md:px-6 md:py-2 rounded font-semibold text-sm md:text-base',
+                actions: 'w-full flex flex-col-reverse gap-3 mt-4 md:mt-6'
             },
             buttonsStyling: false,
             confirmButtonText: 'Keluar',

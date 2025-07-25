@@ -2,39 +2,41 @@
 
 @section('content')
     <!-- Header -->
-    <div class="mb-8">
-        <div class="flex justify-between items-start mb-4">
-            <div>
-                <h1 class="text-3xl font-bold text-gray-900 mb-2">Kelola Barang</h1>
-                <p class="text-gray-600">Create, edit, and manage village news articles</p>
+    <div class="mb-4 md:mb-6">
+        <div class="flex flex-col space-y-3 md:flex-row md:items-start md:justify-between md:space-y-0">
+            <div class="flex-1 min-w-0">
+                <h1 class="text-xl md:text-2xl font-bold text-gray-900 mb-1">Kelola Barang</h1>
+                <p class="text-xs md:text-sm text-gray-600">Create, edit, and manage village products</p>
             </div>
-            <a href="{{ url('products/create') }}"
-                class="bg-primary text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors">
-                Tambah Barang
-                <i class="fas fa-plus"></i>
-            </a>
+            <div class="flex-shrink-0">
+                <a href="{{ url('products/create') }}"
+                    class="w-full md:w-auto bg-primary text-white px-3 py-2 rounded-lg flex items-center justify-center gap-2 transition-colors hover:bg-primary/90 text-sm">
+                    <span>Tambah Barang</span>
+                    <i class="fas fa-plus text-xs"></i>
+                </a>
+            </div>
         </div>
     </div>
 
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
         <!-- Section Header -->
-        <div class="p-6 border-b border-gray-200">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-xl font-semibold text-gray-900">Barang</h2>
-                <div class="flex gap-3">
+        <div class="p-3 md:p-4 border-b border-gray-200">
+            <div class="flex flex-col space-y-3 md:flex-row md:items-center md:justify-between md:space-y-0">
+                <h2 class="text-lg font-semibold text-gray-900">Barang</h2>
+                <div class="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
                     <!-- Search -->
                     <div class="relative">
-                        <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                        <i class="fas fa-search absolute left-2.5 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm"></i>
                         <input type="text" id="searchInput" placeholder="Cari..."
-                            class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
+                            class="w-full sm:w-auto pl-8 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
                     </div>
                     <!-- Status Filter -->
                     <select id="statusFilter"
-                        class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none bg-white">
+                        class="w-full sm:w-auto px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none bg-white">
                         <option value="">All Status</option>
-                        <option value="published">Published</option>
-                        <option value="draft">Draft</option>
-                        <option value="archived">Archived</option>
+                        <option value="ready">Ready</option>
+                        <option value="sold">Sold</option>
+                        <option value="unavailable">Unavailable</option>
                     </select>
                 </div>
             </div>

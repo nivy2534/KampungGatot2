@@ -2,35 +2,37 @@
 
 @section('content')
     <!-- Header -->
-    <div class="mb-8">
-        <div class="flex justify-between items-start mb-4">
-            <div>
-                <h1 class="text-3xl font-bold text-gray-900 mb-2">Kelola Blog</h1>
-                <p class="text-gray-600">Create, edit, and manage village news articles</p>
+    <div class="mb-4 md:mb-6">
+        <div class="flex flex-col space-y-3 md:flex-row md:items-start md:justify-between md:space-y-0">
+            <div class="flex-1 min-w-0">
+                <h1 class="text-xl md:text-2xl font-bold text-gray-900 mb-1">Kelola Blog</h1>
+                <p class="text-xs md:text-sm text-gray-600">Create, edit, and manage village news articles</p>
             </div>
-            <a href="{{ url('blogs/create') }}"
-                class="bg-primary text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors">
-                Tambah Blog
-                <i class="fas fa-plus"></i>
-            </a>
+            <div class="flex-shrink-0">
+                <a href="{{ url('blogs/create') }}"
+                    class="w-full md:w-auto bg-primary text-white px-3 py-2 rounded-lg flex items-center justify-center gap-2 transition-colors hover:bg-primary/90 text-sm">
+                    <span>Tambah Blog</span>
+                    <i class="fas fa-plus text-xs"></i>
+                </a>
+            </div>
         </div>
     </div>
 
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
         <!-- Section Header -->
-        <div class="p-6 border-b border-gray-200">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-xl font-semibold text-gray-900">Blog</h2>
-                <div class="flex gap-3">
+        <div class="p-3 md:p-4 border-b border-gray-200">
+            <div class="flex flex-col space-y-3 md:flex-row md:items-center md:justify-between md:space-y-0">
+                <h2 class="text-lg font-semibold text-gray-900">Blog</h2>
+                <div class="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
                     <!-- Search -->
                     <div class="relative">
-                        <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                        <i class="fas fa-search absolute left-2.5 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm"></i>
                         <input type="text" id="searchInput" placeholder="Cari..."
-                            class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
+                            class="w-full sm:w-auto pl-8 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
                     </div>
                     <!-- Status Filter -->
                     <select id="statusFilter"
-                        class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none bg-white">
+                        class="w-full sm:w-auto px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none bg-white">
                         <option value="">All Status</option>
                         <option value="published">Published</option>
                         <option value="draft">Draft</option>
@@ -40,20 +42,25 @@
             </div>
         </div>
 
-        <!-- Table -->
-        <div>
-            <table id="blogTable" class="w-full table-auto">
+        <!-- Table Container with horizontal scroll -->
+        <div class="overflow-x-auto">
+            <table id="blogTable" class="w-full table-auto min-w-full">
                 <thead class="bg-gray-50">
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title
+                        <th class="px-3 md:px-4 py-2.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Title
                         </th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Author
+                        <th class="hidden sm:table-cell px-3 md:px-4 py-2.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Author
                         </th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date
-                            Created</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status
+                        <th class="hidden md:table-cell px-3 md:px-4 py-2.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Date Created
                         </th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions
+                        <th class="px-3 md:px-4 py-2.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Status
+                        </th>
+                        <th class="px-3 md:px-4 py-2.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Actions
                         </th>
                     </tr>
                 </thead>
@@ -64,20 +71,20 @@
         </div>
 
         <!-- Empty State (initially hidden) -->
-        <div id="emptyState" class="text-center py-12 hidden">
-            <div class="mb-4">
+        <div id="emptyState" class="text-center py-8 hidden">
+            <div class="mb-3">
                 <!-- Illustration placeholder -->
-                <div class="mx-auto w-48 h-48 bg-gray-100 rounded-lg flex items-center justify-center">
-                    <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="mx-auto w-32 h-32 bg-gray-100 rounded-lg flex items-center justify-center">
+                    <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
                         </path>
                     </svg>
                 </div>
             </div>
-            <h3 class="text-lg font-medium text-gray-900 mb-2">Masih Kosong Nih!</h3>
-            <p class="text-gray-500 mb-6">Belum ada data produk di sini</p>
-            <button class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-colors">
+            <h3 class="text-base font-medium text-gray-900 mb-2">Masih Kosong Nih!</h3>
+            <p class="text-sm text-gray-500 mb-4">Belum ada data produk di sini</p>
+            <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors text-sm">
                 Tambah Blog Baru
             </button>
         </div>
@@ -116,7 +123,7 @@
                         name: 'name',
                         className: "w-2/6",
                         render: function(data, type, row) {
-                            return `<div class="font-medium text-gray-900 px-4 py-2">${data}</div>`;
+                            return `<div class="font-medium text-gray-900 text-sm">${data}</div>`;
                         }
                     },
                     {
@@ -124,7 +131,7 @@
                         name: 'author_name',
                         className: "w-1/6",
                         render: function(data, type, row) {
-                            return `<div class="font-medium text-gray-900 px-4 py-2">${data}</div>`;
+                            return `<div class="font-medium text-gray-900 text-sm">${data}</div>`;
                         }
                     },
                     {
@@ -133,7 +140,7 @@
                         className: "w-1/6",
                         orderable: true,
                         render: function(data) {
-                            return data;
+                            return `<span class="text-sm text-gray-600">${data}</span>`;
                         }
                     },
                     {
@@ -167,19 +174,19 @@
                         searchable: false,
                     }
                 ],
-                dom: 't<"flex justify-between items-center mt-4 px-6 pb-4"<"flex items-center gap-2"li><"flex items-center gap-2"p>>',
+                dom: 't<"flex justify-between items-center mt-3 px-3 md:px-4 pb-3"<"flex items-center gap-2"li><"flex items-center gap-2"p>>',
                 language: {
                     emptyTable: `
-                    <div class="flex flex-col items-center justify-center py-12 text-center">
-                        <img src="/assets/img/empty_data.png" alt="Empty" class="w-60 h-40 mb-6" />
-                        <h3 class="text-lg font-semibold text-gray-700">Masih Kosong Nih!</h3>
+                    <div class="flex flex-col items-center justify-center py-8 text-center">
+                        <img src="/assets/img/empty_data.png" alt="Empty" class="w-40 h-28 mb-4" />
+                        <h3 class="text-base font-semibold text-gray-700">Masih Kosong Nih!</h3>
                         <p class="text-sm text-gray-500 mt-2">Belum ada data produk di sini.<br>
                         Klik tombol di bawah untuk mulai menambahkan produk pertamamu.</p>
                     </div>`,
                     zeroRecords: `
-                    <div class="flex flex-col items-center justify-center py-12 text-center">
-                        <img src="/assets/img/empty_data.png" alt="Empty" class="w-60 h-40 mb-6" />
-                        <h3 class="text-lg font-semibold text-gray-700">Masih Kosong Nih!</h3>
+                    <div class="flex flex-col items-center justify-center py-8 text-center">
+                        <img src="/assets/img/empty_data.png" alt="Empty" class="w-40 h-28 mb-4" />
+                        <h3 class="text-base font-semibold text-gray-700">Masih Kosong Nih!</h3>
                         <p class="text-sm text-gray-500 mt-2">Belum ada data produk di sini.<br>
                         Klik tombol di bawah untuk mulai menambahkan produk pertamamu.</p>
                     </div>`,
@@ -188,20 +195,24 @@
                     infoFiltered: "(difilter dari _MAX_ total entri)",
                     lengthMenu: "Tampilkan _MENU_ entri",
                     search: "Cari:",
-                    loadingRecords: `<div class="px-4 py-2 text-gray-600 text-sm text-center">Memuat...</div>`,
+                    loadingRecords: `<div class="px-3 py-2 text-gray-600 text-sm text-center">Memuat...</div>`,
                 },
                 pageLength: 10,
                 responsive: true,
                 createdRow: function(row, data, dataIndex) {
-                    $('td', row).addClass('px-4 py-2'); // Tambahkan padding Tailwind
+                    $('td', row).addClass('px-3 md:px-4 py-2 text-sm'); // Tambahkan padding Tailwind yang lebih kecil
                     $(row).addClass('hover:bg-gray-50 transition-colors');
                 },
                 drawCallback: function() {
-                    // Custom pagination styling
+                    // Custom pagination styling dengan ukuran lebih kecil
                     $('.dataTables_paginate .paginate_button').addClass(
-                        'px-3 py-2 mx-1 border rounded-lg hover:bg-gray-50 transition-colors');
+                        'px-2 py-1 mx-0.5 border rounded text-sm hover:bg-gray-50 transition-colors');
                     $('.dataTables_paginate .paginate_button.current').addClass(
                         'bg-blue-600 text-white border-blue-600 hover:bg-blue-700');
+                    
+                    // Style info dan length menu
+                    $('.dataTables_info').addClass('text-xs text-gray-600');
+                    $('.dataTables_length select').addClass('text-sm');
                 }
             });
 
