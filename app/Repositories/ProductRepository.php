@@ -103,14 +103,14 @@ class ProductRepository implements ProductRepositoryInterface
 
     public function delete($id)
     {
-        $blog = Product::findOrFail($id);
+        $product = Product::findOrFail($id);
         // Hapus file thumbnail jika ada dan file-nya masih ada di storage
-        if ($blog->image_path && Storage::exists($blog->image_path)) {
-            Storage::delete($blog->image_path);
+        if ($product->image_path && Storage::exists($product->image_path)) {
+            Storage::delete($product->image_path);
         }
 
         // Hapus data dari database
-        return $blog->delete();
+        return $product->delete();
     }
 
     public function show($id) {}
@@ -118,7 +118,7 @@ class ProductRepository implements ProductRepositoryInterface
 
     private function uploadThumbnail($image)
     {
-        $path = $image->store('blogs', 'public'); // simpan di storage/app/public/blogs
+        $path = $image->store('productss', 'public'); // simpan di storage/app/public/productss
         return [
             'image_path' => $path,
             'image_url' => Storage::url($path), // hasilnya: /storage/blogs/xxx.jpg

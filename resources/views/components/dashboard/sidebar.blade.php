@@ -36,18 +36,41 @@
     $('#logout-button').on('click', function(e) {
         e.preventDefault();
 
-        $.ajax({
-            url: "{{ route('logout') }}",
-            type: 'POST',
-            data: {
-                _token: "{{ csrf_token() }}"
+        Swal.fire({
+            html: `
+                <div class="flex flex-col items-center">
+                    <img src="/assets/cms/logout.svg" alt="Logout" class="w-40 h-40 mb-4">
+                    <h2 class="text-xl font-bold text-gray-800 mb-2">Keluar dari Aplikasi?</h2>
+                    <p class="text-sm text-gray-600">Kamu yakin ingin keluar?<br>Semua data tetap aman dan bisa diakses kembali saat login.</p>
+                </div>
+            `,
+            showCancelButton: true,
+            showConfirmButton: true,
+            customClass: {
+                popup: 'rounded-xl px-6 py-8',
+                cancelButton: ' w-full bg-red-500 text-white px-6 py-2 rounded font-semibold',
+                confirmButton: ' w-full border border-red-500 text-red-500 px-6 py-2 rounded font-semibold',
+                actions: ' w-full flex flex-col-reverse gap-3 mt-6'
             },
-            success: function(response) {
-                window.location.href = "{{ route('login') }}"; // redirect ke halaman login
-            },
-            error: function(xhr) {
-                console.error(xhr.responseText);
-                alert('Gagal logout!');
+            buttonsStyling: false,
+            confirmButtonText: 'Keluar',
+            cancelButtonText: 'Batal',
+            reverseButtons: true,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: "{{ route('logout') }}",
+                    type: 'POST',
+                    data: {
+                        _token: "{{ csrf_token() }}"
+                    },
+                    success: function(response) {
+                        window.location.href = "{{ route('login') }}";
+                    },
+                    error: function(xhr) {
+                        Swal.fire('Gagal', 'Logout gagal dilakukan.', 'error');
+                    }
+                });
             }
         });
     });
