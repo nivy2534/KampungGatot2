@@ -24,7 +24,8 @@ class ProductController extends Controller
         if (request()->ajax()) {
             return $this->productService->index($request);
         }
-        return view("cms.product.v_product");
+        $products = $this->productService->getAllProducts();
+        return view("cms.product.v_product", compact("products"));
     }
 
     public function create()

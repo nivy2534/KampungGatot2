@@ -35,4 +35,9 @@ class ProductService
     {
         return $this->productRepository->delete($id);
     }
+
+    public function getAllProducts()
+    {
+        return $this->productRepository->getAllProducts();
+    }
 }

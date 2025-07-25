@@ -124,4 +124,8 @@ class ProductRepository implements ProductRepositoryInterface
             'image_url' => Storage::url($path), // hasilnya: /storage/blogs/xxx.jpg
         ];
     }
+
+    public function getAllProducts(){
+        return Product::latest()->get();
+    }
 }

@@ -41,27 +41,37 @@
         </div>
 
         <!-- Table -->
-        <div>
-            <table id="productTable" class="w-full table-auto">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title
-                        </th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Author
-                        </th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date
-                            Created</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status
-                        </th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions
-                        </th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                    <!-- Data will be populated by DataTables -->
-                </tbody>
-            </table>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            @foreach($products as $product)
+                <div class="border rounded-lg overflow-hidden shadow-sm relative">
+                    <img src="{{ asset('storage/' . $product->image_path) }}" alt="{{ $product->name }}" class="w-full h-48 object-cover">
+
+                    {{-- Status label --}}
+                    @if($product->status == 'ready')
+                        <span class="absolute top-2 right-2 bg-green-200 text-green-800 text-xs font-bold px-2 py-1 rounded">Upload</span>
+                    @elseif($product->status == 'habis')
+                        <span class="absolute top-2 right-2 bg-red-200 text-red-800 text-xs font-bold px-2 py-1 rounded">Habis</span>
+                    @else
+                        <span class="absolute top-2 right-2 bg-yellow-200 text-yellow-800 text-xs font-bold px-2 py-1 rounded">Draft</span>
+                    @endif
+
+                    <div class="p-4">
+                        <h3 class="text-md font-semibold text-gray-800">{{ $product->name }}</h3>
+                        <p class="text-sm text-gray-600">Rp{{ number_format($product->price, 0, ',', '.') }}</p>
+
+                        <div class="mt-3 flex gap-2">
+                            <a href="{{ url('products/edit', $product->id) }}" class="bg-blue-700 hover:bg-blue-800 text-white text-sm font-medium px-3 py-1 rounded">Edit</a>
+                            <form action="{{ url('products/destroy', $product->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="bg-red-600 hover:bg-red-700 text-white text-sm font-medium px-3 py-1 rounded">Hapus</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
         </div>
+
 
         <!-- Empty State (initially hidden) -->
         <div id="emptyState" class="text-center py-12 hidden">
