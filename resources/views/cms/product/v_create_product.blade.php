@@ -1,111 +1,141 @@
 @extends('layouts.app_dashboard')
 
 @section('content')
-<div class="max-w-6xl mx-auto bg-white rounded-lg shadow">
-    <div class="bg-gray-200 px-4 py-2 border-b">
-        <h2 class="font-semibold text-sm text-gray-800">Tambah Barang</h2>
+    <!-- Header -->
+    <div class="mb-4 md:mb-6">
+        <div class="flex flex-col space-y-3 md:flex-row md:items-center md:justify-between md:space-y-0">
+            <div class="flex-1 min-w-0">
+                <h1 class="text-xl md:text-2xl font-bold text-gray-900 mb-1">
+                    {{ isset($product) ? 'Edit Barang' : 'Tambah Barang' }}
+                </h1>
+                <p class="text-xs md:text-sm text-gray-600">
+                    {{ isset($product) ? 'Ubah informasi produk yang sudah ada' : 'Buat produk baru untuk website desa' }}
+                </p>
+            </div>
+            <div class="flex-shrink-0">
+                <a href="{{ url('products') }}"
+                    class="w-full md:w-auto bg-gray-500 text-white px-3 py-2 rounded-lg flex items-center justify-center gap-2 transition-colors hover:bg-gray-600 text-sm">
+                    <i class="fas fa-arrow-left text-xs"></i>
+                    <span>Kembali</span>
+                </a>
+            </div>
+        </div>
     </div>
 
-    <div class="p-6">
-        <div class="flex flex-col md:flex-row gap-6">
+<div class="max-w-6xl mx-auto bg-white rounded-lg shadow-sm border border-gray-200">
+    <div class="bg-gray-50 px-4 md:px-6 py-3 border-b border-gray-200">
+        <h2 class="font-semibold text-base text-gray-800">
+            {{ isset($product) ? 'Form Edit Barang' : 'Form Barang Baru' }}
+        </h2>
+    </div>
+
+    <div class="p-4 md:p-6">
+        <div class="flex flex-col lg:flex-row gap-6">
             {{-- Upload Thumbnail --}}
-            <div class="md:w-1/3">
-            <label class="block mb-2 font-medium">Gambar Produk</label>
+            <div class="lg:w-1/3">
+                <label class="block mb-2 text-sm font-medium text-gray-700">Gambar Produk</label>
 
-            <!-- Input dan preview utama -->
-            <div
-                class="relative flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-md h-64 bg-gray-50 text-gray-500 text-center mb-4 overflow-hidden"
-                id="imageUploadContainer"
-            >
-                <img id="previewImage" src="" alt="Preview"
-                class="hidden absolute inset-0 w-full h-full object-cover z-0" />
+                <!-- Input dan preview utama -->
+                <div
+                    class="relative flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-lg h-48 md:h-64 bg-gray-50 text-gray-500 text-center mb-4 overflow-hidden"
+                    id="imageUploadContainer"
+                >
+                    <img id="previewImage" src="" alt="Preview"
+                    class="hidden absolute inset-0 w-full h-full object-cover z-0" />
 
-                <div id="uploadPlaceholder" class="z-10 flex flex-col items-center">
-                <i class="fa-solid fa-image fa-2xl text-primary"></i>
-                <label for="imageInput"
-                    class="cursor-pointer bg-primary text-white px-3 py-1 mt-4 rounded-lg hover:bg-primary-600 transition-colors">
-                    Pilih Gambar
-                </label>
-                <p class="text-sm mt-1">atau seret foto ke sini</p>
+                    <div id="uploadPlaceholder" class="z-10 flex flex-col items-center">
+                        <i class="fa-solid fa-image text-2xl md:text-3xl text-primary"></i>
+                        <label for="imageInput"
+                            class="cursor-pointer bg-primary text-white px-3 py-2 mt-3 rounded-lg hover:bg-primary/90 transition-colors text-sm">
+                            Pilih Gambar
+                        </label>
+                        <p class="text-xs mt-2">atau seret foto ke sini</p>
+                    </div>
+
+                    <!-- Tombol aksi untuk preview utama -->
+                    <div id="imageActions" class="absolute bottom-3 left-3 z-10 gap-2" style="display: none;">
+                        <button id="removePreviewBtn" type="button"
+                            class="bg-red-500 text-white px-3 py-1 text-sm rounded hover:bg-red-600">
+                            <i class="fa-solid fa-trash text-xs"></i>
+                        </button>
+                    </div>
+
+                    <input name="images[]" type="file" id="imageInput" class="hidden" accept="image/*" multiple />
                 </div>
 
-                <!-- Tombol aksi untuk preview utama -->
-                <div id="imageActions"
-                class="hidden absolute bottom-4 left-4 z-10 flex gap-2">
-                <button id="removePreviewBtn" type="button"
-                    class="bg-white/80 text-red-600 px-2 py-1 text-sm rounded hover:bg-red-100">
-                    ❌
-                </button>
-                </div>
+                <p class="text-xs text-gray-500 mb-4">Maksimal 1MB per gambar</p>
 
-                <input name="images[]" type="file" id="imageInput" class="hidden" accept="image/*" multiple />
+                <!-- Daftar thumbnail preview -->
+                <div id="imagePreviewList" class="flex flex-wrap gap-2"></div>
             </div>
 
-            <p class="text-xs text-gray-400 mb-4">Maksimal 1MB per gambar</p>
-
-            <!-- Daftar thumbnail preview -->
-            <div id="imagePreviewList" class="flex flex-wrap gap-2"></div>
-         </div>
-
-
-
             {{-- Form Input --}}
-            <div class="md:w-2/3 space-y-4">
+            <div class="lg:w-2/3 space-y-4">
+                <input type="hidden" name="productId" id="productId" value="{{ isset($product) ? $product->id : '' }}">
                 <!-- Nama Barang -->
                 <div>
-                    <label class="block mb-1 font-medium">Nama Barang</label>
+                    <label class="block mb-2 text-sm font-medium text-gray-700">Nama Barang</label>
                     <input id="nama" type="text" placeholder="Masukkan nama barang..."
-                        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        value="{{ isset($product) ? $product->nama : '' }}"
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
                 </div>
 
                 <!-- Harga Barang -->
                 <div>
-                    <label class="block mb-1 font-medium">Harga Barang</label>
+                    <label class="block mb-2 text-sm font-medium text-gray-700">Harga Barang</label>
                     <input id="harga" type="number" placeholder="Masukkan harga barang..."
-                        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        value="{{ isset($product) ? $product->harga : '' }}"
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
                 </div>
 
                 <!-- Nama Penjual -->
                 <div>
-                    <label class="block mb-1 font-medium">Nama Penjual</label>
+                    <label class="block mb-2 text-sm font-medium text-gray-700">Nama Penjual</label>
                     <input id="seller_name" type="text" placeholder="Masukkan nama penjual..."
-                        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        value="{{ isset($product) ? $product->seller_name : '' }}"
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
                 </div>
 
                 <!-- Nomor WhatsApp -->
                 <div>
-                    <label class="block mb-1 font-medium">Nomor WhatsApp</label>
+                    <label class="block mb-2 text-sm font-medium text-gray-700">Nomor WhatsApp</label>
                     <input id="contact_person" type="text" placeholder="08xxxx..."
-                        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        value="{{ isset($product) ? $product->contact_person : '' }}"
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
                 </div>
 
-                <!-- Deskripsi -->
-                <div>
-                    <label class="block mb-1 font-medium">Deskripsi Barang</label>
-                    <textarea id="deskripsi" rows="4" placeholder="Masukkan deskripsi..."
-                        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
-                </div>
+                <!-- Grid untuk Deskripsi dan Status -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Deskripsi -->
+                    <div class="md:col-span-2">
+                        <label class="block mb-2 text-sm font-medium text-gray-700">Deskripsi Barang</label>
+                        <textarea id="deskripsi" rows="4" placeholder="Masukkan deskripsi..."
+                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-vertical">{{ isset($product) ? $product->deskripsi : '' }}</textarea>
+                    </div>
 
-                <!-- Status -->
-                <div>
-                    <label class="block mb-1 font-medium">Status</label>
-                    <select id="status"
-                        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <option value="ready">Ready</option>
-                        <option value="habis">Habis</option>
-                        <option value="preorder">Pre-Order</option>
-                    </select>
+                    <!-- Status -->
+                    <div>
+                        <label class="block mb-2 text-sm font-medium text-gray-700">Status</label>
+                        <select id="status"
+                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <option value="ready" {{ isset($product) && $product->status == 'ready' ? 'selected' : '' }}>Ready</option>
+                            <option value="habis" {{ isset($product) && $product->status == 'habis' ? 'selected' : '' }}>Habis</option>
+                            <option value="preorder" {{ isset($product) && $product->status == 'preorder' ? 'selected' : '' }}>Pre-Order</option>
+                        </select>
+                    </div>
                 </div>
 
                 <!-- Tombol -->
-                <div class="flex gap-2">
+                <div class="flex flex-col sm:flex-row gap-3 pt-6 mt-6 border-t border-gray-200">
                     <button id="submitBarangBtn"
-                        class="bg-primary text-white px-4 py-2 rounded hover:bg-blue-800 transition">
-                        Simpan
+                        class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition text-sm font-medium">
+                        <i class="fas fa-save mr-2"></i>
+                        {{ isset($product) ? 'Update Barang' : 'Simpan Barang' }}
                     </button>
                     <a href="{{ url('products') }}"
-                        class="bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300 transition">
-                        Kembali
+                        class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition text-sm font-medium text-center">
+                        <i class="fas fa-times mr-2"></i>
+                        Batal
                     </a>
                 </div>
             </div>
@@ -200,6 +230,14 @@
         formData.append("images[]", file);
     });
 
+    // Tentukan URL dan method berdasarkan mode
+    const isEdit = productId !== "";
+    const url = isEdit ? "{{ url('products/update') }}" : "{{ url('products/save') }}";
+    
+    if (isEdit) {
+        formData.append("id", productId);
+    }
+
     try {
         const response = await fetch("{{ url('dashboard/products/save') }}", {
             method: "POST",
@@ -212,7 +250,7 @@
 
         if (response.ok) {
             const result = await response.json();
-            alert("Produk berhasil disimpan!");
+            alert(isEdit ? "Produk berhasil diperbarui!" : "Produk berhasil disimpan!");
             window.location.href = "{{ url('products') }}";
         } else {
             const text = await response.text();

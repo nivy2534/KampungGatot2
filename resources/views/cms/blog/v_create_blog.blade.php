@@ -1,95 +1,133 @@
 @extends('layouts.app_dashboard')
 
 @section('content')
-    <div class="max-w-xl mx-auto bg-white rounded-lg shadow">
-        <div class="bg-gray-200 px-4 py-2 border-b">
-            <h2 class="font-semibold text-sm text-gray-800">Tambah Berita</h2>
+    <!-- Header -->
+    <div class="mb-4 md:mb-6">
+        <div class="flex flex-col space-y-3 md:flex-row md:items-center md:justify-between md:space-y-0">
+            <div class="flex-1 min-w-0">
+                <h1 class="text-xl md:text-2xl font-bold text-gray-900 mb-1">
+                    {{ isset($blog) ? 'Edit Blog' : 'Tambah Blog' }}
+                </h1>
+                <p class="text-xs md:text-sm text-gray-600">
+                    {{ isset($blog) ? 'Ubah konten blog yang sudah ada' : 'Buat konten blog baru untuk website desa' }}
+                </p>
+            </div>
+            <div class="flex-shrink-0">
+                <a href="{{ url('blogs') }}"
+                    class="w-full md:w-auto bg-gray-500 text-white px-3 py-2 rounded-lg flex items-center justify-center gap-2 transition-colors hover:bg-gray-600 text-sm">
+                    <i class="fas fa-arrow-left text-xs"></i>
+                    <span>Kembali</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-sm border border-gray-200">
+        <div class="bg-gray-50 px-4 md:px-6 py-3 border-b border-gray-200">
+            <h2 class="font-semibold text-base text-gray-800">
+                {{ isset($blog) ? 'Form Edit Blog' : 'Form Blog Baru' }}
+            </h2>
         </div>
 
-        <div class="p-6">
+        <div class="p-4 md:p-6">
             <!-- Gambar Thumbnail -->
-            <label class="block mb-2 font-medium">Gambar Thumbnail</label>
-            <div class="relative flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-md h-64 bg-gray-50 text-gray-500 text-center mb-4 overflow-hidden"
-                id="imageUploadContainer">
-                <img id="previewImage" src="" alt="Preview"
-                    class="hidden absolute inset-0 w-full h-full object-cover z-0" />
+            <div class="mb-6">
+                <label class="block mb-2 text-sm font-medium text-gray-700">Gambar Thumbnail</label>
+                <div class="relative flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-lg h-48 md:h-64 bg-gray-50 text-gray-500 text-center overflow-hidden"
+                    id="imageUploadContainer">
+                    <img id="previewImage" src="" alt="Preview"
+                        class="hidden absolute inset-0 w-full h-full object-cover z-0" />
 
-                <div id="uploadPlaceholder" class="z-10 flex flex-col items-center">
-                    <i class="fa-solid fa-image fa-2xl text-primary"></i>
-                    <label for="imageInput"
-                        class="cursor-pointer bg-primary text-white px-3 py-1 mt-4 rounded-lg hover:bg-primary-600 transition-colors">
-                        Pilih Gambar
-                    </label>
-                    <p class="text-sm mt-1">atau seret foto ke sini</p>
+                    <div id="uploadPlaceholder" class="z-10 flex flex-col items-center">
+                        <i class="fa-solid fa-image text-2xl md:text-3xl text-primary"></i>
+                        <label for="imageInput"
+                            class="cursor-pointer bg-primary text-white px-3 py-2 mt-3 rounded-lg hover:bg-primary/90 transition-colors text-sm">
+                            Pilih Gambar
+                        </label>
+                        <p class="text-xs mt-2">atau seret foto ke sini</p>
+                    </div>
+
+                    <div id="imageActions" class="absolute bottom-3 left-3 z-10 gap-2" style="display: none;">
+                        <label for="imageInput"
+                            class="inline-block bg-primary text-white px-3 py-1 text-sm rounded hover:bg-primary/90 cursor-pointer mr-2">
+                            Ganti
+                        </label>
+                        <button id="removeImageBtn" type="button"
+                            class="bg-red-500 text-white px-3 py-1 text-sm rounded hover:bg-red-600">
+                            <i class="fa-solid fa-trash text-xs"></i>
+                        </button>
+                    </div>
+
+                    <input name="image" type="file" id="imageInput" class="hidden" accept="image/*" />
                 </div>
-
-                <div id="imageActions" class="hidden absolute bottom-4 left-4 z-10 flex gap-2">
-                    <label for="imageInput"
-                        class="bg-primary text-white w-24 px-2 py-1 text-sm rounded hover:bg-primary cursor-pointer">
-                        Ganti
-                    </label>
-                    <button id="removeImageBtn" type="button"
-                        class="bg-primary text-white px-2 py-1 text-sm rounded hover:bg-primary">
-                        <i class="fa-solid fa-trash"></i>
-                    </button>
-                </div>
-
-                <input name="image" type="file" id="imageInput" class="hidden" accept="image/*" />
+                <p class="text-xs text-gray-500 mt-2">Lampirkan gambar. Ukuran file tidak boleh lebih dari 1MB</p>
             </div>
 
-            <p class="text-xs text-gray-400 mb-4">Lampirkan gambar. Ukuran file tidak boleh lebih dari 1MB</p>
-
-            <!-- Kategori -->
-            <div class="mb-4">
-                <label class="block mb-1 font-medium">Kategori</label>
-                <select id="kategori"
-                    class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <option value="">Status</option>
-                    <option value="draft" {{ isset($blog) && $blog->status == 'draft' ? 'selected' : '' }}>Draft</option>
-                    <option value="published" {{ isset($blog) && $blog->status == 'published' ? 'selected' : '' }}>
-                        Published</option>
-                    <option value="archived" {{ isset($blog) && $blog->status == 'archived' ? 'selected' : '' }}>Archived
-                    </option>
-                </select>
-            </div>
-
-            <!-- Tag -->
-            <div class="mb-4">
-                <label class="block mb-1 font-medium">Tag</label>
-                <select name="tag" id="tag"
-                    class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <option value="">Pilih Tag</option>
-                    <option value="sejarah" {{ isset($blog) && $blog->tag == 'sejarah' ? 'selected' : '' }}>Sejarah</option>
-                    <option value="potensi_desa" {{ isset($blog) && $blog->tag == 'potensi_desa' ? 'selected' : '' }}>Potensi Desa</option>
-                    <option value="kabar_warga" {{ isset($blog) && $blog->tag == 'kabar_warga' ? 'selected' : '' }}>Kabar Warga</option>
-                    <option value="umkm_lokal" {{ isset($blog) && $blog->tag == 'umkm_lokal' ? 'selected' : '' }}>UMKM Lokal</option>
-                </select>
+            <!-- Form Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                <!-- Kategori -->
+                <div class="mb-4">
+                    <label class="block mb-2 text-sm font-medium text-gray-700">Status</label>
+                    <select id="kategori"
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <option value="">Pilih Status</option>
+                        <option value="draft" {{ isset($blog) && $blog->status == 'draft' ? 'selected' : '' }}>Draft</option>
+                        <option value="published" {{ isset($blog) && $blog->status == 'published' ? 'selected' : '' }}>
+                            Published</option>
+                        <option value="archived" {{ isset($blog) && $blog->status == 'archived' ? 'selected' : '' }}>Archived
+                        </option>
+                    </select>
+                </div>
+                <!-- Tag -->
+                <div class="mb-4">
+                    <label class="block mb-2 text-sm font-medium text-gray-700">Tag</label>
+                    <select name="tag" id="tag"
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <option value="">Pilih Tag</option>
+                        <option value="sejarah" {{ isset($blog) && $blog->tag == 'sejarah' ? 'selected' : '' }}>Sejarah</option>
+                        <option value="potensi_desa" {{ isset($blog) && $blog->tag == 'potensi_desa' ? 'selected' : '' }}>Potensi Desa</option>
+                        <option value="kabar_warga" {{ isset($blog) && $blog->tag == 'kabar_warga' ? 'selected' : '' }}>Kabar Warga</option>
+                        <option value="umkm_lokal" {{ isset($blog) && $blog->tag == 'umkm_lokal' ? 'selected' : '' }}>UMKM Lokal</option>
+                    </select>
+                </div>
             </div>
 
             <!-- Judul Berita -->
-            <div class="mb-4">
-                <label class="block mb-1 font-medium">Judul Berita</label>
+            <div class="mb-6">
+                <label class="block mb-2 text-sm font-medium text-gray-700">Judul Berita</label>
                 <input type="hidden" name="blogId" id="blogId" value="{{ isset($blog) ? $blog->id : '' }}">
                 <input id="judul" type="text" placeholder="Masukkan judul berita..."
-                    class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     value="{{ isset($blog) ? $blog->name : '' }}" />
             </div>
 
             <!-- Deskripsi -->
-            <div class="mb-4">
-                <label class="block mb-1 font-medium">Deskripsi Berita</label>
+            <div class="mb-6">
+                                <label class="block mb-2 text-sm font-medium text-gray-700">Deskripsi</label>
                 <textarea id="deskripsi" rows="4" placeholder="Masukkan deskripsi berita..."
-                    class="w-full border-2 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">{{ isset($blog) ? $blog->description : '' }}</textarea>
+                    class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-vertical">{{ isset($blog) ? $blog->description : '' }}</textarea>
+            </div>
+
+            <!-- Konten Blog -->
+            <div class="mb-6">
+                <label class="block mb-2 text-sm font-medium text-gray-700">Konten Blog</label>
+                <textarea id="konten" rows="8" placeholder="Tulis konten blog di sini..."
+                    class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-vertical">{{ isset($blog) ? $blog->content : '' }}</textarea>
             </div>
 
             <!-- Tombol -->
-            <div class="flex gap-2">
-                <button id="submitBtn" class="bg-primary text-white px-4 py-2 rounded hover:bg-blue-800 transition">
-                    Simpan
+            <div class="flex flex-col sm:flex-row gap-3 pt-4 border-t border-gray-200">
+                <button id="submitBtn" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition text-sm font-medium">
+                    <i class="fas fa-save mr-2"></i>
+                    {{ isset($blog) ? 'Update Blog' : 'Simpan Blog' }}
                 </button>
-                <button class="bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300 transition">
-                    Kembali
-                </button>
+                <a href="{{ url('blogs') }}" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition text-sm font-medium text-center">
+                    <i class="fas fa-times mr-2"></i>
+                    Batal
+                </a>
+            </div>
+        </div>
+    </div>
             </div>
         </div>
     </div>
