@@ -158,7 +158,7 @@
                 uploadPlaceholder.classList.remove("hidden");
                 imageActions.classList.add("hidden");
             }
-            
+
             imageFiles.splice(index, 1);
             updatePreviewList();
         });
@@ -209,7 +209,7 @@
                 "X-CSRF-TOKEN": "{{ csrf_token() }}",
             },
             body: formData
-        }); 
+        });
 
         if (response.ok) {
             const result = await response.json();
