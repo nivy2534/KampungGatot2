@@ -50,7 +50,7 @@ Route::middleware(['auth'])->group(
           Route::get('/products', [ProductController::class, 'index']);
           Route::post('/products', [ProductController::class, 'index']);
           Route::get('/products/create', [ProductController::class, 'create']);
-          Route::get('/products/edit/{blog}', [ProductController::class, 'edit'])->name("products.edit");
+          Route::get('/products/edit/{product}', [ProductController::class, 'edit'])->name("products.edit");
           Route::post('/products/save', [ProductController::class, 'store'])->name("products.save");
           Route::post('/products/update', [ProductController::class, 'update'])->name("products.update");
           Route::delete('/products/delete/{id}', [ProductController::class, 'destroy'])->name("products.delete");

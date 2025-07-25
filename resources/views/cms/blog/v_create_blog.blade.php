@@ -3,7 +3,7 @@
 @section('content')
     <!-- Header -->
     <div class="mb-4 md:mb-6">
-        <div class="flex flex-col space-y-3 md:flex-row md:items-center md:justify-between md:space-y-0">
+        <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between md:gap-0 px-3 md:px-0">
             <div class="flex-1 min-w-0">
                 <h1 class="text-xl md:text-2xl font-bold text-gray-900 mb-1">
                     {{ isset($blog) ? 'Edit Blog' : 'Tambah Blog' }}
@@ -13,7 +13,7 @@
                 </p>
             </div>
             <div class="flex-shrink-0">
-                <a href="{{ url('blogs') }}"
+                <a href="{{ url('dashboard/blogs') }}"
                     class="w-full md:w-auto bg-gray-500 text-white px-3 py-2 rounded-lg flex items-center justify-center gap-2 transition-colors hover:bg-gray-600 text-sm">
                     <i class="fas fa-arrow-left text-xs"></i>
                     <span>Kembali</span>
@@ -22,8 +22,8 @@
         </div>
     </div>
 
-    <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-sm border border-gray-200">
-        <div class="bg-gray-50 px-4 md:px-6 py-3 border-b border-gray-200">
+    <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-sm border border-gray-200 mb-8 mx-2 md:mx-auto">
+        <div class="bg-gray-50 px-4 md:px-6 py-3 md:py-4 border-b border-gray-200">
             <h2 class="font-semibold text-base text-gray-800">
                 {{ isset($blog) ? 'Form Edit Blog' : 'Form Blog Baru' }}
             </h2>
@@ -64,7 +64,7 @@
             </div>
 
             <!-- Form Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+            <div class="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6">
                 <!-- Kategori -->
                 <div class="mb-4">
                     <label class="block mb-2 text-sm font-medium text-gray-700">Status</label>
@@ -116,12 +116,12 @@
             </div>
 
             <!-- Tombol -->
-            <div class="flex flex-col sm:flex-row gap-3 pt-4 border-t border-gray-200">
-                <button id="submitBtn" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition text-sm font-medium">
+            <div class="flex flex-col md:flex-row gap-3 md:gap-4 pt-6 border-t border-gray-200 mt-6">
+                <button id="submitBtn" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition text-sm font-medium w-full md:w-auto">
                     <i class="fas fa-save mr-2"></i>
                     {{ isset($blog) ? 'Update Blog' : 'Simpan Blog' }}
                 </button>
-                <a href="{{ url('blogs') }}" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition text-sm font-medium text-center">
+                <a href="{{ url('dashboard/blogs') }}" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition text-sm font-medium text-center w-full md:w-auto">
                     <i class="fas fa-times mr-2"></i>
                     Batal
                 </a>

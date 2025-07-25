@@ -2,31 +2,26 @@
 
 @section('content')
     <!-- Header -->
-    <div class="mb-4 md:mb-6">
-        <div class="flex flex-col space-y-3 md:flex-row md:items-start md:justify-between md:space-y-0">
+    <div class="mb-4 md:mb-6 px-2 md:px-0">
+        <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between md:gap-0">
             <div class="flex-1 min-w-0">
                 <h1 class="text-xl md:text-2xl font-bold text-gray-900 mb-1">Kelola Blog</h1>
                 <p class="text-xs md:text-sm text-gray-600">Create, edit, and manage village news articles</p>
             </div>
             <div class="flex-shrink-0">
-                <a href="{{ url('blogs/create') }}"
+                <a href="{{ url('dashboard/blogs/create') }}"
                     class="w-full md:w-auto bg-primary text-white px-3 py-2 rounded-lg flex items-center justify-center gap-2 transition-colors hover:bg-primary/90 text-sm">
                     <span>Tambah Blog</span>
                     <i class="fas fa-plus text-xs"></i>
                 </a>
             </div>
-            <a href="{{ url('/dashboard/blogs/create') }}"
-                class="bg-primary text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors">
-                Tambah Blog
-                <i class="fas fa-plus"></i>
-            </a>
         </div>
     </div>
 
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden mx-2 md:mx-0">
         <!-- Section Header -->
         <div class="p-3 md:p-4 border-b border-gray-200">
-            <div class="flex flex-col space-y-3 md:flex-row md:items-center md:justify-between md:space-y-0">
+            <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between md:gap-0">
                 <h2 class="text-lg font-semibold text-gray-900">Blog</h2>
                 <div class="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
                     <!-- Search -->
@@ -77,21 +72,14 @@
 
         <!-- Empty State (initially hidden) -->
         <div id="emptyState" class="text-center py-8 hidden">
-            <div class="mb-3">
-                <!-- Illustration placeholder -->
-                <div class="mx-auto w-32 h-32 bg-gray-100 rounded-lg flex items-center justify-center">
-                    <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
-                        </path>
-                    </svg>
-                </div>
+            <div class="mb-3 flex justify-center">
+                <img src="/assets/img/empty_data.png" alt="Empty" class="w-40 h-28 mb-4" />
             </div>
-            <h3 class="text-base font-medium text-gray-900 mb-2">Masih Kosong Nih!</h3>
-            <p class="text-sm text-gray-500 mb-4">Belum ada data produk di sini</p>
-            <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors text-sm">
+            <h3 class="text-base font-semibold text-gray-700">Masih Kosong Nih!</h3>
+            <p class="text-sm text-gray-500 mt-2">Belum ada data blog di sini.<br>Klik tombol di atas untuk mulai menambahkan blog pertamamu.</p>
+            <a href="{{ url('dashboard/blogs/create') }}" class="inline-block mt-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors text-sm font-medium">
                 Tambah Blog Baru
-            </button>
+            </a>
         </div>
     </div>
 @endsection
@@ -257,7 +245,7 @@
                 allowOutsideClick: () => !Swal.isLoading(),
                 preConfirm: () => {
                     Swal.showLoading(); // Munculkan spinner
-                    let _url = "{{ url('blogs/delete/') }}/" + blogId;
+                    let _url = "{{ url('dashboard/blogs/delete/') }}/" + blogId;
                     return fetch(_url, {
                             method: 'DELETE',
                             headers: {
