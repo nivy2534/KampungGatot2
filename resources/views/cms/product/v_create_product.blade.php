@@ -75,7 +75,7 @@
                 <!-- Nomor WhatsApp -->
                 <div>
                     <label class="block mb-1 font-medium">Nomor WhatsApp</label>
-                    <input id="whatsapp_number" type="text" placeholder="08xxxx..."
+                    <input id="contact_person" type="text" placeholder="08xxxx..."
                         class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                 </div>
 
@@ -193,7 +193,7 @@
     formData.append("name", document.getElementById("nama").value);
     formData.append("price", document.getElementById("harga").value);
     formData.append("seller_name", document.getElementById("seller_name").value);
-    formData.append("whatsapp_number", document.getElementById("whatsapp_number").value);
+    formData.append("contact_person", document.getElementById("contact_person").value);
     formData.append("description", document.getElementById("deskripsi").value);
     formData.append("status", document.getElementById("status").value);
 
@@ -205,6 +205,7 @@
         const response = await fetch("{{ url('products/save') }}", {
             method: "POST",
             headers: {
+                "Accept":"application/json",
                 "X-CSRF-TOKEN": "{{ csrf_token() }}",
             },
             body: formData
@@ -215,8 +216,9 @@
             alert("Produk berhasil disimpan!");
             window.location.href = "{{ url('products') }}";
         } else {
-            const result = await response.json();
-            alert(result.message || "Gagal menyimpan produk.");
+            const text = await response.text();
+            console.error("Gagal menyimpan produk. Isi response:", text);
+            alert("Gagal menyimpan produk. Cek console untuk detail.");
         }
     } catch (error) {
         alert("Terjadi kesalahan saat mengirim data.");

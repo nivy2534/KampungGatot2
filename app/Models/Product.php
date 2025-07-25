@@ -15,7 +15,23 @@ class Product extends Model
         'description',
         'status',
         'image_path',
+        'author_id',
+        'author_name',
         'seller_name',
-        'whatsapp_number'
+        'slug',
+        'excerpt',
+        'image_url',
+        'image_path',
+        'contact_person'
     ];
+
+        /**
+         * Get the formatted creation date.
+         */
+    public function getDateAttribute(): string
+    {
+        return $this->created_at
+            ? $this->created_at->translatedFormat('d F Y H:i:s')
+            : '';
+    }
 }

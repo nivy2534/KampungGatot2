@@ -128,8 +128,8 @@
                         }
                     },
                     {
-                        data: 'date',
-                        name: 'date',
+                        data: 'created_at',
+                        name: 'created_at',
                         className: "w-1/6",
                         orderable: true,
                         render: function(data) {
