@@ -54,7 +54,7 @@
                             Price
                         </th>
                         <th class="px-3 md:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Seller
+                            Creator
                         </th>
                         <th class="px-3 md:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Status
@@ -72,7 +72,7 @@
                         <tr class="hover:bg-gray-50 transition-colors">
                             <td class="px-3 md:px-4 py-3">
                                 <div class="flex items-center space-x-3">
-                                    <img src="{{ asset('storage/' . $product->image_path) }}" alt="{{ $product->name }}" 
+                                    <img src="{{ asset('storage/' . $product->image_path) }}" alt="{{ $product->name }}"
                                          class="w-10 h-10 rounded-lg object-cover">
                                     <div>
                                         <h3 class="text-sm font-medium text-gray-900">{{ $product->name }}</h3>
@@ -106,11 +106,11 @@
                             </td>
                             <td class="px-3 md:px-4 py-3 text-center">
                                 <div class="flex items-center justify-center space-x-2">
-                                    <a href="{{ url('dashboard/products/edit', $product->id) }}" 
+                                    <a href="{{ url('dashboard/products/edit', $product->id) }}"
                                        class="bg-blue-700 hover:bg-blue-800 text-white text-xs font-medium px-2 py-1 rounded transition-colors">
                                         Edit
                                     </a>
-                                    <button type="button" class="btn-delete bg-red-600 hover:bg-red-700 text-white text-xs font-medium px-2 py-1 rounded transition-colors" 
+                                    <button type="button" class="btn-delete bg-red-600 hover:bg-red-700 text-white text-xs font-medium px-2 py-1 rounded transition-colors"
                                             data-id="{{ $product->id }}">
                                         Hapus
                                     </button>
@@ -133,7 +133,7 @@
     <script>
         let editingId = null;
         let table;
-        
+
         // Initialize DataTable
         $(document).ready(function() {
             table = $('#productTable').DataTable({
@@ -220,7 +220,19 @@
                         className: "w-1/6",
                         orderable: true,
                         render: function(data) {
-                            return `<div class="text-sm text-gray-500">${data}</div>`;
+                            const date = new Date(data);
+                            const day = date.getDate();
+                            const monthNames = [
+                                'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+                                'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+                            ];
+                            const month = monthNames[date.getMonth()];
+                            const year = date.getFullYear();
+
+                            const hours = String(date.getHours()).padStart(2, '0');
+                            const minutes = String(date.getMinutes()).padStart(2, '0');
+
+                            return `<div class="text-sm text-gray-500">${hours}:${minutes} ${day} ${month} ${year}</div>`;
                         }
                     },
                     {
@@ -232,11 +244,11 @@
                         render: function(data, type, row) {
                             return `
                                 <div class="flex items-center justify-center space-x-2">
-                                    <a href="{{ url('dashboard/products/edit') }}/${data}" 
+                                    <a href="{{ url('dashboard/products/edit') }}/${data}"
                                        class="bg-blue-700 hover:bg-blue-800 text-white text-xs font-medium px-2 py-1 rounded transition-colors">
                                         Edit
                                     </a>
-                                    <button type="button" class="btn-delete bg-red-600 hover:bg-red-700 text-white text-xs font-medium px-2 py-1 rounded transition-colors" 
+                                    <button type="button" class="btn-delete bg-red-600 hover:bg-red-700 text-white text-xs font-medium px-2 py-1 rounded transition-colors"
                                             data-id="${data}">
                                         Hapus
                                     </button>
