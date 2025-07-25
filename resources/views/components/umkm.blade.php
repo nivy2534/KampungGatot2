@@ -1,24 +1,37 @@
-<section class="py-12 px-6 bg-white">
-  <div style="width: 100%; height: 100%; justify-content: flex-start; align-items: center; gap: 91px; display: inline-flex">
-      <img style="width: 464px; height: 257px; position: relative; box-shadow: 0px 4px 52.599998474121094px rgba(0, 0, 0, 0.09); border-radius: 20px" src="https://placehold.co/464x257" />
-      <img style="width: 158px; height: 213px; position: relative; box-shadow: 0px 4px 52.599998474121094px rgba(0, 0, 0, 0.09); border-radius: 20px" src="https://placehold.co/158x213" />
-      <img style="width: 440px; height: 140px; border-radius: 20px" src="https://placehold.co/440x140" />
-      <div style="width: 561px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 28px; display: inline-flex">
-          <div style="align-self: stretch; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 4px; display: flex">
-              <div style="color: var(--Neutral-700, #4B4B4B); font-size: 16px; font-family: Poppins; font-weight: 400; line-height: 24px; word-wrap: break-word">INFORMASI</div>
-              <div style="align-self: stretch; color: var(--Neutral-900, black); font-size: 32px; font-family: Poppins; font-weight: 600; line-height: 40px; word-wrap: break-word">Pengenalan UMKM yang ada di Kampung Gatot</div>
-          </div>
-          <div style="align-self: stretch; color: var(--Neutral-800, #262626); font-size: 16px; font-family: Poppins; font-weight: 400; line-height: 24px; word-wrap: break-word">Temukan Daftar Negara Terbaik 2024 dan Jelajahi Destinasi Luar Biasa yang Menanti Anda!</div>
-          <div data-show-left-icon="false" data-show-right-icon="true" data-sizing="L" data-state="Default" data-type="Primary" style="width: 226px; padding-left: 24px; padding-right: 24px; padding-top: 12px; padding-bottom: 12px; background: var(--Primary-Primary500, #1B3A6D); border-radius: 12px; justify-content: center; align-items: center; display: inline-flex">
-              <div style="justify-content: center; align-items: center; display: flex">
-                  <div style="padding-left: 4px; padding-right: 4px; justify-content: center; align-items: center; display: flex">
-                      <div style="color: var(--Neutral-50, white); font-size: 16px; font-family: Poppins; font-weight: 600; line-height: 24px; word-wrap: break-word">Belanja Sekarang</div>
-                  </div>
-                  <div style="width: 24px; height: 24px; position: relative; overflow: hidden">
-                      <div style="width: 10px; height: 10px; left: 7px; top: 7px; position: absolute; outline: 2px var(--Neutral-50, white) solid; outline-offset: -1px"></div>
-                  </div>
-              </div>
-          </div>
-      </div>
-  </div>
+<section id="umkm" class="py-12 px-6 bg-white">
+    <div class="container mx-auto">
+        <div class="grid lg:grid-cols-2 gap-10 items-center">
+            <!-- Images Grid -->
+            <div class="grid grid-cols-2 gap-3">
+                <div class="space-y-3">
+                    <img class="w-full h-48 object-cover rounded-lg shadow-lg" src="https://placehold.co/300x192/e2e8f0/1B3A6D?text=UMKM+1" alt="UMKM Kampung Gatot" />
+                    <img class="w-full h-36 object-cover rounded-lg shadow-lg" src="https://placehold.co/300x144/f1f5f9/1B3A6D?text=UMKM+2" alt="UMKM Kampung Gatot" />
+                </div>
+                <div class="pt-6">
+                    <img class="w-full h-56 object-cover rounded-lg shadow-lg" src="https://placehold.co/300x224/f8fafc/1B3A6D?text=UMKM+3" alt="UMKM Kampung Gatot" />
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div class="space-y-4">
+                <div class="space-y-2">
+                    <p class="text-[#4B4B4B] text-sm font-medium tracking-wider uppercase">INFORMASI</p>
+                    <h2 class="text-2xl lg:text-3xl font-bold text-gray-900 leading-tight">
+                        Pengenalan UMKM yang ada di Kampung Gatot
+                    </h2>
+                </div>
+                
+                <p class="text-base text-gray-600 leading-relaxed">
+                    Temukan beragam produk berkualitas dari usaha mikro kecil dan menengah yang dikembangkan oleh masyarakat Kampung Gatot dengan kearifan lokal dan inovasi modern.
+                </p>
+                
+                <a href="/event" class="inline-flex items-center gap-2 bg-[#1B3A6D] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[#0f2a4f] transition-colors group">
+                    <span>Belanja Sekarang</span>
+                    <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </div>
 </section>
