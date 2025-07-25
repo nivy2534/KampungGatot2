@@ -14,11 +14,11 @@
             <i class="fa-solid fa-house mr-3" style="color: #ffffff;"></i> Dashboard
         </a>
 
-        <a href="{{ url('/blogs') }}"
+        <a href="{{ url('/dashboard/blogs') }}"
             class="{{ Request::is('blogs') ? 'bg-primary' : '' }} px-4 py-4 hover:bg-primary rounded transition-colors duration-200">
             <i class="fa-solid fa-book mr-4" style="color: #ffffff;"></i> Kelola Blog
         </a>
-        <a href="{{ url('/products') }}"
+        <a href="{{ url('/dashboard/products') }}"
             class="{{ Request::is('products') ? 'bg-primary' : '' }} px-4 py-4 hover:bg-primary rounded transition-colors duration-200">
             <i class="fa-solid fa-book mr-4" style="color: #ffffff;"></i> Kelola Barang
         </a>
