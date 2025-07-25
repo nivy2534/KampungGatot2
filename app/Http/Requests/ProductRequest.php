@@ -20,11 +20,14 @@ class ProductRequest extends FormRequest
      public function rules(): array
      {
          return [
-             'id' => 'nullable|exists:products,id',
-             'product_name' => 'required|string|max:255',
-             'product_description' => 'required|string|max:255',
-             'product_price' => 'required|numeric|min:0',
-             'product_contact_person' => 'required|string|max:255',
+            'id' => 'nullable|exists:products,id',
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'price' => 'required|numeric|min:0',
+            'status' => 'required|in:ready,habis,preorder',
+            'seller_name' => 'required|string|max:255',
+            'whatsapp_number' => 'required|string|max:20',
+            'image' => 'nullable|image|max:1024',
          ];
      }
 

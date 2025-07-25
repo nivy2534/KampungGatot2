@@ -14,10 +14,18 @@ return new class extends Migration
         Schema::create('products',function (Blueprint $table){
             $table->engine = 'InnoDB';
             $table->id();
-            $table->decimal('product_price', 10, 2);
-            $table->string('product_name');
-            $table->string('product_description');
-            $table->string('product_contact_person');
+            $table->string('price', 10, 2);
+            $table->string('name');
+            $table->string('description');
+            $table->string('contact_person');
+            $table->string('seller_name');
+            $table->enum('status', ['ready', 'habis', 'preorder'])->default('ready');
+            $table->unsignedBigInteger('author_id');
+            $table->string('author_name');
+            $table->string('slug')->unique();
+            $table->string('excerpt', 500);
+            $table->string('image_url')->nullable();
+            $table->string('image_path')->nullable();
         });
     }
 

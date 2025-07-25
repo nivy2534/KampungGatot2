@@ -65,6 +65,20 @@
                         class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                 </div>
 
+                <!-- Nama Penjual -->
+                <div>
+                    <label class="block mb-1 font-medium">Nama Penjual</label>
+                    <input id="seller_name" type="text" placeholder="Masukkan nama penjual..."
+                        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                </div>
+
+                <!-- Nomor WhatsApp -->
+                <div>
+                    <label class="block mb-1 font-medium">Nomor WhatsApp</label>
+                    <input id="whatsapp_number" type="text" placeholder="08xxxx..."
+                        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                </div>
+
                 <!-- Deskripsi -->
                 <div>
                     <label class="block mb-1 font-medium">Deskripsi Barang</label>
@@ -170,5 +184,44 @@
     uploadPlaceholder.classList.remove("hidden");
     imageActions.classList.add("hidden");
   });
+
+  document.getElementById("submitBarangBtn").addEventListener("click", async function () {
+    const formData = new FormData();
+    const imageFile = imageFiles[0]; // hanya ambil satu gambar utama
+
+    // Ambil nilai dari input
+    formData.append("name", document.getElementById("nama").value);
+    formData.append("price", document.getElementById("harga").value);
+    formData.append("seller_name", document.getElementById("seller_name").value);
+    formData.append("whatsapp_number", document.getElementById("whatsapp_number").value);
+    formData.append("description", document.getElementById("deskripsi").value);
+    formData.append("status", document.getElementById("status").value);
+
+    if (imageFile) {
+        formData.append("image", imageFile);
+    }
+
+    try {
+        const response = await fetch("{{ url('products/save') }}", {
+            method: "POST",
+            headers: {
+                "X-CSRF-TOKEN": "{{ csrf_token() }}",
+            },
+            body: formData
+        }); 
+
+        if (response.ok) {
+            const result = await response.json();
+            alert("Produk berhasil disimpan!");
+            window.location.href = "{{ url('products') }}";
+        } else {
+            const result = await response.json();
+            alert(result.message || "Gagal menyimpan produk.");
+        }
+    } catch (error) {
+        alert("Terjadi kesalahan saat mengirim data.");
+        console.error(error);
+    }
+});
 </script>
 @endpush
