@@ -8,13 +8,11 @@
                 <h1 class="text-xl md:text-2xl font-bold text-gray-900 mb-1">Kelola Blog</h1>
                 <p class="text-xs md:text-sm text-gray-600">Create, edit, and manage village news articles</p>
             </div>
-            <div class="flex-shrink-0">
-                <a href="{{ url('blogs/create') }}"
-                    class="w-full md:w-auto bg-primary text-white px-3 py-2 rounded-lg flex items-center justify-center gap-2 transition-colors hover:bg-primary/90 text-sm">
-                    <span>Tambah Blog</span>
-                    <i class="fas fa-plus text-xs"></i>
-                </a>
-            </div>
+            <a href="{{ url('/dashboard/blogs/create') }}"
+                class="bg-primary text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors">
+                Tambah Blog
+                <i class="fas fa-plus"></i>
+            </a>
         </div>
     </div>
 
@@ -101,7 +99,7 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: '/blogs',
+                    url: '/dashboard/blogs',
                     type: 'POST',
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),

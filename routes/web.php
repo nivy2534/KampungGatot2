@@ -36,22 +36,25 @@ Route::middleware(['auth'])->group(
             return view('cms.dashboard');
         })->name('dashboard');
 
-        // Blog Related
-        Route::get('/blogs', [BlogController::class, 'index']);
-        Route::post('/blogs', [BlogController::class, 'index']);
-        Route::get('/blogs/create', [BlogController::class, 'create']);
-        Route::get('/blogs/edit/{blog}', [BlogController::class, 'edit'])->name("blogs.edit");
-        Route::post('/blogs/save', [BlogController::class, 'store'])->name("blogs.save");
-        Route::post('/blogs/update', [BlogController::class, 'update'])->name("blogs.update");
-        Route::delete('/blogs/delete/{id}', [BlogController::class, 'destroy'])->name("blogs.delete");
+        Route::prefix('dashboard')->group(function () {
+          // Blog Related
+          Route::get('/blogs', [BlogController::class, 'index']);
+          Route::post('/blogs', [BlogController::class, 'index']);
+          Route::get('/blogs/create', [BlogController::class, 'create']);
+          Route::get('/blogs/edit/{blog}', [BlogController::class, 'edit'])->name("blogs.edit");
+          Route::post('/blogs/save', [BlogController::class, 'store'])->name("blogs.save");
+          Route::post('/blogs/update', [BlogController::class, 'update'])->name("blogs.update");
+          Route::delete('/blogs/delete/{id}', [BlogController::class, 'destroy'])->name("blogs.delete");
 
-        // Produk related
-        Route::get('/products', [ProductController::class, 'index']);
-        Route::post('/products', [ProductController::class, 'index']);
-        Route::get('/products/create', [ProductController::class, 'create']);
-        Route::get('/products/edit/{blog}', [ProductController::class, 'edit'])->name("products.edit");
-        Route::post('/products/save', [ProductController::class, 'store'])->name("products.save");
-        Route::post('/products/update', [ProductController::class, 'update'])->name("products.update");
-        Route::delete('/products/delete/{id}', [ProductController::class, 'destroy'])->name("products.delete");
+          // Produk related
+          Route::get('/products', [ProductController::class, 'index']);
+          Route::post('/products', [ProductController::class, 'index']);
+          Route::get('/products/create', [ProductController::class, 'create']);
+          Route::get('/products/edit/{blog}', [ProductController::class, 'edit'])->name("products.edit");
+          Route::post('/products/save', [ProductController::class, 'store'])->name("products.save");
+          Route::post('/products/update', [ProductController::class, 'update'])->name("products.update");
+          Route::delete('/products/delete/{id}', [ProductController::class, 'destroy'])->name("products.delete");
+          Route::delete('/product-images/{id}', [ProductImageController::class, 'destroy']);
+        });
     }
 );

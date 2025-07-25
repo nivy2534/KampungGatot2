@@ -35,7 +35,7 @@ class ProductController extends Controller
 
     public function edit(Product $product)
     {
-        return view("cms.product.v_create_product", compact("product"));
+        return view("cms.product.v_edit_product", compact("product"));
     }
 
     public function store(ProductRequest $request)
@@ -48,15 +48,28 @@ class ProductController extends Controller
         }
     }
 
-    public function update(ProductRequest $request)
-    {
-        $createProduct = $this->productService->update($request->validated());
-        if ($createProduct) {
-            return $this->success($createProduct, 'Produk berhasil dibuat');
-        } else {
-            return $this->error('Produk gagal dibuat');
+    public function update(Request $request, $id){
+        $product = Product::find($id);
+        if(!$product){
+            return response()->json(['message'=>'Produk tidak ditemukan'], 404);
         }
+
+        $validated = $request->validate([
+            'name'=>'sometimes|required|string|max:255',
+            'description'=>'sometimes|required|string',
+            'price'=>'sometimes|required|numeric',
+            'contact_person'=>'sometimes|required|string|max:15',
+            'images.*' => 'nullable|image|max:1024',
+        ]);
+
+        $validated['id'] = $id;
+        $validated['images'] = $request->file('images');
+
+        app(ProductRepository::class)->update($validated);
+
+        return response()->json(['message' => 'Produk berhasil diperbarui.']);
     }
+
 
     public function destroy($id)
     {

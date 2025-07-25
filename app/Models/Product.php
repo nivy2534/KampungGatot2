@@ -34,4 +34,10 @@ class Product extends Model
             ? $this->created_at->translatedFormat('d F Y H:i:s')
             : '';
     }
+    public function images()
+    {
+        return $this->hasMany(ProductImage::class);
+    }
+
+
 }

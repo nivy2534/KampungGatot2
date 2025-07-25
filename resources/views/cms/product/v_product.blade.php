@@ -8,13 +8,11 @@
                 <h1 class="text-xl md:text-2xl font-bold text-gray-900 mb-1">Kelola Barang</h1>
                 <p class="text-xs md:text-sm text-gray-600">Create, edit, and manage village products</p>
             </div>
-            <div class="flex-shrink-0">
-                <a href="{{ url('products/create') }}"
-                    class="w-full md:w-auto bg-primary text-white px-3 py-2 rounded-lg flex items-center justify-center gap-2 transition-colors hover:bg-primary/90 text-sm">
-                    <span>Tambah Barang</span>
-                    <i class="fas fa-plus text-xs"></i>
-                </a>
-            </div>
+            <a href="{{ url('dashboard/products/create') }}"
+                class="bg-primary text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors">
+                Tambah Barang
+                <i class="fas fa-plus"></i>
+            </a>
         </div>
     </div>
 
@@ -62,8 +60,8 @@
                         <p class="text-sm text-gray-600">Rp{{ number_format($product->price, 0, ',', '.') }}</p>
 
                         <div class="mt-3 flex gap-2">
-                            <a href="{{ url('products/edit', $product->id) }}" class="bg-blue-700 hover:bg-blue-800 text-white text-sm font-medium px-3 py-1 rounded">Edit</a>
-                            <form action="{{ url('products/destroy', $product->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus?')">
+                            <a href="{{ url('dashboard/products/edit', $product->id) }}" class="bg-blue-700 hover:bg-blue-800 text-white text-sm font-medium px-3 py-1 rounded">Edit</a>
+                            <form action="{{ url('dashboard/products/destroy', $product->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus?')">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="bg-red-600 hover:bg-red-700 text-white text-sm font-medium px-3 py-1 rounded">Hapus</button>
