@@ -13,6 +13,19 @@ class Product extends Model
         'product_name',
         'product_description',
         'product_price',
-        'product_contact_person'
+        'product_contact_person',
+        'author_name',
+        'image_url',
+        'image_path'
     ];
+
+        /**
+         * Get the formatted creation date.
+         */
+    public function getDateAttribute(): string
+    {
+        return $this->created_at
+            ? $this->created_at->translatedFormat('d F Y H:i:s')
+            : '';
+    }
 }
