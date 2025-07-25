@@ -8,7 +8,7 @@
                 <h1 class="text-3xl font-bold text-gray-900 mb-2">Kelola Blog</h1>
                 <p class="text-gray-600">Create, edit, and manage village news articles</p>
             </div>
-            <a href="{{ url('blogs/create') }}"
+            <a href="{{ url('/dashboard/blogs/create') }}"
                 class="bg-primary text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors">
                 Tambah Blog
                 <i class="fas fa-plus"></i>
@@ -94,7 +94,7 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: '/blogs',
+                    url: '/dashboard/blogs',
                     type: 'POST',
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),

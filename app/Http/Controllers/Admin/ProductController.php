@@ -35,7 +35,7 @@ class ProductController extends Controller
 
     public function edit(Product $product)
     {
-        return view("cms.blog.v_create_product", compact("product"));
+        return view("cms.blog.v_edit_product", compact("products"));
     }
 
     public function store(ProductRequest $request)

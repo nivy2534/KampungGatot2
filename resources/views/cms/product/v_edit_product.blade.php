@@ -158,7 +158,7 @@
                 uploadPlaceholder.classList.remove("hidden");
                 imageActions.classList.add("hidden");
             }
-
+            
             imageFiles.splice(index, 1);
             updatePreviewList();
         });
@@ -187,6 +187,7 @@
 
   document.getElementById("submitBarangBtn").addEventListener("click", async function () {
     const formData = new FormData();
+    const imageFile = imageFiles[0]; // hanya ambil satu gambar utama
 
     // Ambil nilai dari input
     formData.append("name", document.getElementById("nama").value);
@@ -196,19 +197,19 @@
     formData.append("description", document.getElementById("deskripsi").value);
     formData.append("status", document.getElementById("status").value);
 
-    imageFiles.forEach((file) => {
-        formData.append("images[]", file);
-    });
+    if (imageFile) {
+        formData.append("image", imageFile);
+    }
 
     try {
-        const response = await fetch("{{ url('dashboard/products/save') }}", {
+        const response = await fetch("{{ url('products/save') }}", {
             method: "POST",
             headers: {
                 "Accept":"application/json",
                 "X-CSRF-TOKEN": "{{ csrf_token() }}",
             },
             body: formData
-        });
+        }); 
 
         if (response.ok) {
             const result = await response.json();

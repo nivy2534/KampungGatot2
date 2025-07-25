@@ -27,7 +27,7 @@ class ProductRequest extends FormRequest
             'status' => 'required|in:ready,habis,preorder',
             'seller_name' => 'required|string|max:255',
             'contact_person' => 'required|string|max:20',
-            'image' => 'nullable|image|max:1024',
+            'images' => 'required|array|min:1',
          ];
      }
 

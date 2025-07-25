@@ -62,21 +62,34 @@ class ProductRepository implements ProductRepositoryInterface
     }
     public function store(array $data)
     {
-        if (isset($data['image'])) {
-            $uploaded = $this->uploadThumbnail($data['image']);
+        $images = $data['images'] ?? []; // tangkap semua file
+
+        // Upload thumbnail utama (pertama)
+        if (isset($images[0])) {
+            $uploaded = $this->uploadThumbnail($images[0]);
             $data['image_path'] = $uploaded['image_path'];
             $data['image_url'] = $uploaded['image_url'];
         }
 
-        // Bisa tambahkan generate slug jika tidak disediakan
         $data['slug'] = $data['slug'] ?? Str::slug($data['name']);
-
         $data['author_id'] = Auth::user()->id;
         $data['author_name'] = Auth::user()->name;
         $data['excerpt'] = $data['description'];
 
-        return Product::create($data);
+        $product = Product::create($data);
+
+        // Upload semua gambar tambahan (termasuk utama juga bisa disimpan di sini)
+        foreach ($images as $img) {
+            $uploaded = $this->uploadThumbnail($img);
+            $product->images()->create([
+                'image_path' => $uploaded['image_path'],
+                'image_url' => $uploaded['image_url'],
+            ]);
+        }
+
+        return $product;
     }
+
 
 
     public function update(array $data)
@@ -118,7 +131,7 @@ class ProductRepository implements ProductRepositoryInterface
 
     private function uploadThumbnail($image)
     {
-        $path = $image->store('productss', 'public'); // simpan di storage/app/public/productss
+        $path = $image->store('products', 'public'); // simpan di storage/app/public/products
         return [
             'image_path' => $path,
             'image_url' => Storage::url($path), // hasilnya: /storage/blogs/xxx.jpg
