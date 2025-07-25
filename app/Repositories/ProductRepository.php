@@ -95,6 +95,8 @@ class ProductRepository implements ProductRepositoryInterface
     public function update(array $data)
     {
         $product = Product::findOrFail($data["id"]);
+
+        // Gambar utama (image) tetap digunakan jika ada
         if (isset($data['image'])) {
             if ($product->image_path && Storage::exists($product->image_path)) {
                 Storage::delete($product->image_path);
@@ -110,8 +112,22 @@ class ProductRepository implements ProductRepositoryInterface
         $data['author_name'] = Auth::user()->name;
         $data['excerpt'] = $data['description'];
 
-        return $product->update($data);
+        $product->update($data);
+
+        // ✅ Upload semua gambar baru
+        if (isset($data['images']) && is_array($data['images'])) {
+            foreach ($data['images'] as $img) {
+                $uploaded = $this->uploadThumbnail($img);
+                $product->images()->create([
+                    'image_path' => $uploaded['image_path'],
+                    'image_url' => $uploaded['image_url'],
+                ]);
+            }
+        }
+
+        return $product;
     }
+
 
 
     public function delete($id)

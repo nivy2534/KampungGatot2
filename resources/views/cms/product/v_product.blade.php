@@ -2,109 +2,145 @@
 
 @section('content')
     <!-- Header -->
-    <div class="mb-8">
-        <div class="flex justify-between items-start mb-4">
-            <div>
-                <h1 class="text-3xl font-bold text-gray-900 mb-2">Kelola Barang</h1>
-                <p class="text-gray-600">Create, edit, and manage village news articles</p>
+    <div class="mb-4 md:mb-6 px-2 md:px-0">
+        <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between md:gap-0">
+            <div class="flex-1 min-w-0">
+                <h1 class="text-xl md:text-2xl font-bold text-gray-900 mb-1">Kelola Barang</h1>
+                <p class="text-xs md:text-sm text-gray-600">Create, edit, and manage village products</p>
             </div>
-            <a href="{{ url('dashboard/products/create') }}"
-                class="bg-primary text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors">
-                Tambah Barang
-                <i class="fas fa-plus"></i>
-            </a>
+            <div class="flex-shrink-0">
+                <a href="{{ url('dashboard/products/create') }}"
+                    class="w-full md:w-auto bg-primary text-white px-3 py-2 rounded-lg flex items-center justify-center gap-2 transition-colors hover:bg-primary/90 text-sm">
+                    <span>Tambah Barang</span>
+                    <i class="fas fa-plus text-xs"></i>
+                </a>
+            </div>
         </div>
     </div>
 
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden mx-2 md:mx-0">
         <!-- Section Header -->
-        <div class="p-6 border-b border-gray-200">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-xl font-semibold text-gray-900">Barang</h2>
-                <div class="flex gap-3">
+        <div class="p-3 md:p-4 border-b border-gray-200">
+            <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between md:gap-0">
+                <h2 class="text-lg font-semibold text-gray-900">Barang</h2>
+                <div class="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
                     <!-- Search -->
                     <div class="relative">
-                        <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                        <i class="fas fa-search absolute left-2.5 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm"></i>
                         <input type="text" id="searchInput" placeholder="Cari..."
-                            class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
+                            class="w-full sm:w-auto pl-8 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
                     </div>
                     <!-- Status Filter -->
                     <select id="statusFilter"
-                        class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none bg-white">
+                        class="w-full sm:w-auto px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none bg-white">
                         <option value="">All Status</option>
-                        <option value="published">Published</option>
-                        <option value="draft">Draft</option>
-                        <option value="archived">Archived</option>
+                        <option value="ready">Ready</option>
+                        <option value="sold">Sold</option>
+                        <option value="unavailable">Unavailable</option>
                     </select>
                 </div>
             </div>
         </div>
 
         <!-- Table -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            @foreach($products as $product)
-                <div class="border rounded-lg overflow-hidden shadow-sm relative">
-                    <img src="{{ asset('storage/' . $product->image_path) }}" alt="{{ $product->name }}" class="w-full h-48 object-cover">
-
-                    {{-- Status label --}}
-                    @if($product->status == 'ready')
-                        <span class="absolute top-2 right-2 bg-green-200 text-green-800 text-xs font-bold px-2 py-1 rounded">Upload</span>
-                    @elseif($product->status == 'habis')
-                        <span class="absolute top-2 right-2 bg-red-200 text-red-800 text-xs font-bold px-2 py-1 rounded">Habis</span>
-                    @else
-                        <span class="absolute top-2 right-2 bg-yellow-200 text-yellow-800 text-xs font-bold px-2 py-1 rounded">Draft</span>
-                    @endif
-
-                    <div class="p-4">
-                        <h3 class="text-md font-semibold text-gray-800">{{ $product->name }}</h3>
-                        <p class="text-sm text-gray-600">Rp{{ number_format($product->price, 0, ',', '.') }}</p>
-
-                        <div class="mt-3 flex gap-2">
-                            <a href="{{ url('products/edit', $product->id) }}" class="bg-blue-700 hover:bg-blue-800 text-white text-sm font-medium px-3 py-1 rounded">Edit</a>
-                            <form action="{{ url('products/destroy', $product->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus?')">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="bg-red-600 hover:bg-red-700 text-white text-sm font-medium px-3 py-1 rounded">Hapus</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            @endforeach
-        </div>
-
-
-        <!-- Empty State (initially hidden) -->
-        <div id="emptyState" class="text-center py-12 hidden">
-            <div class="mb-4">
-                <!-- Illustration placeholder -->
-                <div class="mx-auto w-48 h-48 bg-gray-100 rounded-lg flex items-center justify-center">
-                    <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
-                        </path>
-                    </svg>
-                </div>
-            </div>
-            <h3 class="text-lg font-medium text-gray-900 mb-2">Masih Kosong Nih!</h3>
-            <p class="text-gray-500 mb-6">Belum ada data produk di sini</p>
-            <button class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-colors">
-                Tambah Barang Baru
-            </button>
+        <div class="overflow-x-auto">
+            <table id="productTable" class="min-w-full bg-white">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-3 md:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Product Name
+                        </th>
+                        <th class="px-3 md:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Price
+                        </th>
+                        <th class="px-3 md:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Creator
+                        </th>
+                        <th class="px-3 md:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Status
+                        </th>
+                        <th class="px-3 md:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Date Created
+                        </th>
+                        <th class="px-3 md:px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Actions
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    @foreach($products as $product)
+                        <tr class="hover:bg-gray-50 transition-colors">
+                            <td class="px-3 md:px-4 py-3">
+                                <div class="flex items-center space-x-3">
+                                    <img src="{{ asset('storage/' . $product->image_path) }}" alt="{{ $product->name }}"
+                                         class="w-10 h-10 rounded-lg object-cover">
+                                    <div>
+                                        <h3 class="text-sm font-medium text-gray-900">{{ $product->name }}</h3>
+                                        <p class="text-xs text-gray-500">{{ Str::limit($product->description, 50) }}</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-3 md:px-4 py-3 text-sm text-gray-900">
+                                Rp{{ number_format($product->price, 0, ',', '.') }}
+                            </td>
+                            <td class="px-3 md:px-4 py-3 text-sm text-gray-900">
+                                {{ $product->seller_name ?? 'N/A' }}
+                            </td>
+                            <td class="px-3 md:px-4 py-3">
+                                @if($product->status == 'ready')
+                                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                        Ready
+                                    </span>
+                                @elseif($product->status == 'habis')
+                                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                        Habis
+                                    </span>
+                                @else
+                                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                        Draft
+                                    </span>
+                                @endif
+                            </td>
+                            <td class="px-3 md:px-4 py-3 text-sm text-gray-500">
+                                {{ $product->created_at->format('d M Y') }}
+                            </td>
+                            <td class="px-3 md:px-4 py-3 text-center">
+                                <div class="flex items-center justify-center space-x-2">
+                                    <a href="{{ url('dashboard/products/edit', $product->id) }}"
+                                       class="bg-blue-700 hover:bg-blue-800 text-white text-xs font-medium px-2 py-1 rounded transition-colors">
+                                        Edit
+                                    </a>
+                                    <button type="button" class="btn-delete bg-red-600 hover:bg-red-700 text-white text-xs font-medium px-2 py-1 rounded transition-colors"
+                                            data-id="{{ $product->id }}">
+                                        Hapus
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
     </div>
 @endsection
 
 @push('addon-script')
+    <!-- DataTables CSS dan JS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
         let editingId = null;
         let table;
+
         // Initialize DataTable
         $(document).ready(function() {
             table = $('#productTable').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: '/products',
+                    url: '/dashboard/products',
                     type: 'POST',
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
@@ -121,29 +157,38 @@
                         alert('Error loading data. Please check console for details.');
                     }
                 },
-                columns: [{
+                columns: [
+                    {
                         data: 'name',
                         name: 'name',
                         className: "w-2/6",
                         render: function(data, type, row) {
-                            return `<div class="font-medium text-gray-900 px-4 py-2">${data}</div>`;
+                            let imageUrl = row.image_path ? `{{ asset('storage/') }}/${row.image_path}` : '/assets/img/default-product.jpg';
+                            return `
+                                <div class="flex items-center space-x-3">
+                                    <img src="${imageUrl}" alt="${data}" class="w-10 h-10 rounded-lg object-cover">
+                                    <div>
+                                        <h3 class="text-sm font-medium text-gray-900">${data}</h3>
+                                        <p class="text-xs text-gray-500">${row.description ? row.description.substring(0, 50) + '...' : ''}</p>
+                                    </div>
+                                </div>
+                            `;
                         }
                     },
                     {
-                        data: 'author_name',
-                        name: 'author_name',
+                        data: 'price',
+                        name: 'price',
                         className: "w-1/6",
                         render: function(data, type, row) {
-                            return `<div class="font-medium text-gray-900 px-4 py-2">${data}</div>`;
+                            return `<div class="text-sm text-gray-900">Rp${new Intl.NumberFormat('id-ID').format(data)}</div>`;
                         }
                     },
                     {
-                        data: 'created_at',
-                        name: 'created_at',
+                        data: 'seller_name',
+                        name: 'seller_name',
                         className: "w-1/6",
-                        orderable: true,
-                        render: function(data) {
-                            return data;
+                        render: function(data, type, row) {
+                            return `<div class="text-sm text-gray-900">${data || 'N/A'}</div>`;
                         }
                     },
                     {
@@ -152,46 +197,88 @@
                         className: "w-1/6",
                         render: function(data) {
                             const statusConfig = {
-                                'published': {
+                                'ready': {
                                     class: 'bg-green-100 text-green-800',
-                                    text: 'Published'
+                                    text: 'Ready'
                                 },
-                                'draft': {
+                                'habis': {
+                                    class: 'bg-red-100 text-red-800',
+                                    text: 'Habis'
+                                },
+                                'preorder': {
                                     class: 'bg-yellow-100 text-yellow-800',
-                                    text: 'Draft'
-                                },
-                                'archived': {
-                                    class: 'bg-gray-100 text-gray-800',
-                                    text: 'Archived'
+                                    text: 'Pre-Order'
                                 }
                             };
-                            const config = statusConfig[data] || statusConfig['draft'];
-                            return `<span class="px-2 py-1 text-xs font-medium rounded-full ${config.class}">${config.text}</span>`;
+                            const config = statusConfig[data] || statusConfig['ready'];
+                            return `<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${config.class}">${config.text}</span>`;
                         }
                     },
                     {
-                        data: 'actions',
-                        name: 'actions',
+                        data: 'created_at',
+                        name: 'created_at',
                         className: "w-1/6",
+                        orderable: true,
+                        render: function(data) {
+                            const date = new Date(data);
+                            const day = date.getDate();
+                            const monthNames = [
+                                'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+                                'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+                            ];
+                            const month = monthNames[date.getMonth()];
+                            const year = date.getFullYear();
+
+                            const hours = String(date.getHours()).padStart(2, '0');
+                            const minutes = String(date.getMinutes()).padStart(2, '0');
+
+                            return `<div class="text-sm text-gray-500">${hours}:${minutes} ${day} ${month} ${year}</div>`;
+                        }
+                    },
+                    {
+                        data: 'id',
+                        name: 'actions',
+                        className: "w-1/6 text-center",
                         orderable: false,
                         searchable: false,
+                        render: function(data, type, row) {
+                            return `
+                                <div class="flex items-center justify-center space-x-2">
+                                    <a href="{{ url('dashboard/products/edit') }}/${data}"
+                                       class="bg-blue-700 hover:bg-blue-800 text-white text-xs font-medium px-2 py-1 rounded transition-colors">
+                                        Edit
+                                    </a>
+                                    <button type="button" class="btn-delete bg-red-600 hover:bg-red-700 text-white text-xs font-medium px-2 py-1 rounded transition-colors"
+                                            data-id="${data}">
+                                        Hapus
+                                    </button>
+                                </div>
+                            `;
+                        }
                     }
                 ],
-                dom: 't<"flex justify-between items-center mt-4 px-6 pb-4"<"flex items-center gap-2"li><"flex items-center gap-2"p>>',
+                dom: 't<"flex flex-col sm:flex-row justify-between items-center mt-4 px-3 md:px-4 pb-4 space-y-3 sm:space-y-0"<"flex items-center gap-2"li><"flex items-center gap-2"p>>',
                 language: {
                     emptyTable: `
                     <div class="flex flex-col items-center justify-center py-12 text-center">
-                        <img src="/assets/img/empty_data.png" alt="Empty" class="w-60 h-40 mb-6" />
+                        <div class="mx-auto w-48 h-48 bg-gray-100 rounded-lg flex items-center justify-center mb-6">
+                            <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4-8-4m16 0v10l-8 4-8-4V7"></path>
+                            </svg>
+                        </div>
                         <h3 class="text-lg font-semibold text-gray-700">Masih Kosong Nih!</h3>
                         <p class="text-sm text-gray-500 mt-2">Belum ada data produk di sini.<br>
-                        Klik tombol di bawah untuk mulai menambahkan produk pertamamu.</p>
+                        Klik tombol di atas untuk mulai menambahkan produk pertama.</p>
                     </div>`,
                     zeroRecords: `
                     <div class="flex flex-col items-center justify-center py-12 text-center">
-                        <img src="/assets/img/empty_data.png" alt="Empty" class="w-60 h-40 mb-6" />
-                        <h3 class="text-lg font-semibold text-gray-700">Masih Kosong Nih!</h3>
-                        <p class="text-sm text-gray-500 mt-2">Belum ada data produk di sini.<br>
-                        Klik tombol di bawah untuk mulai menambahkan produk pertamamu.</p>
+                        <div class="mx-auto w-48 h-48 bg-gray-100 rounded-lg flex items-center justify-center mb-6">
+                            <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-700">Tidak ada hasil</h3>
+                        <p class="text-sm text-gray-500 mt-2">Tidak ada produk yang sesuai dengan pencarian.</p>
                     </div>`,
                     info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
                     infoEmpty: "Menampilkan 0 sampai 0 dari 0 entri",
@@ -203,13 +290,15 @@
                 pageLength: 10,
                 responsive: true,
                 createdRow: function(row, data, dataIndex) {
-                    $('td', row).addClass('px-4 py-2'); // Tambahkan padding Tailwind
+                    $('td', row).addClass('px-3 md:px-4 py-2 text-sm'); // Tambahkan padding Tailwind yang lebih kecil
                     $(row).addClass('hover:bg-gray-50 transition-colors');
                 },
                 drawCallback: function() {
                     // Custom pagination styling
+                    $('.dataTables_info').addClass('text-xs text-gray-600');
+                    $('.dataTables_length select').addClass('text-sm');
                     $('.dataTables_paginate .paginate_button').addClass(
-                        'px-3 py-2 mx-1 border rounded-lg hover:bg-gray-50 transition-colors');
+                        'px-3 py-2 mx-1 border rounded-lg hover:bg-gray-50 transition-colors text-sm');
                     $('.dataTables_paginate .paginate_button.current').addClass(
                         'bg-blue-600 text-white border-blue-600 hover:bg-blue-700');
                 }
@@ -251,7 +340,7 @@
                 allowOutsideClick: () => !Swal.isLoading(),
                 preConfirm: () => {
                     Swal.showLoading(); // Munculkan spinner
-                    let _url = "{{ url('products/delete/') }}/" + productId;
+                    let _url = "{{ url('dashboard/products/delete/') }}/" + productId;
                     return fetch(_url, {
                             method: 'DELETE',
                             headers: {
