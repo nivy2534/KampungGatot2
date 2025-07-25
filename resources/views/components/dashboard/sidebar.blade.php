@@ -18,16 +18,13 @@
             <span class="truncate text-sm">Dashboard</span>
         </a>
 
-        <a href="{{ url('/blogs') }}"
-            class="{{ Request::is('blogs') ? 'bg-primary' : '' }} flex items-center px-3 py-2.5 hover:bg-primary rounded-md transition-colors duration-200 group">
-            <i class="fa-solid fa-book mr-2.5 flex-shrink-0 text-sm" style="color: #ffffff;"></i> 
-            <span class="truncate text-sm">Kelola Blog</span>
+        <a href="{{ url('/dashboard/blogs') }}"
+            class="{{ Request::is('blogs') ? 'bg-primary' : '' }} px-4 py-4 hover:bg-primary rounded transition-colors duration-200">
+            <i class="fa-solid fa-book mr-4" style="color: #ffffff;"></i> Kelola Blog
         </a>
-        
-        <a href="{{ url('/products') }}"
-            class="{{ Request::is('products') ? 'bg-primary' : '' }} flex items-center px-3 py-2.5 hover:bg-primary rounded-md transition-colors duration-200 group">
-            <i class="fa-solid fa-shopping-bag mr-2.5 flex-shrink-0 text-sm" style="color: #ffffff;"></i> 
-            <span class="truncate text-sm">Kelola Barang</span>
+        <a href="{{ url('/dashboard/products') }}"
+            class="{{ Request::is('products') ? 'bg-primary' : '' }} px-4 py-4 hover:bg-primary rounded transition-colors duration-200">
+            <i class="fa-solid fa-book mr-4" style="color: #ffffff;"></i> Kelola Barang
         </a>
         
         <a href="#" class="flex items-center px-3 py-2.5 hover:bg-primary rounded-md transition-colors duration-200 group">
