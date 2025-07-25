@@ -2,8 +2,8 @@
 
 @section('content')
     <!-- Header -->
-    <div class="mb-4 md:mb-6">
-        <div class="flex flex-col space-y-3 md:flex-row md:items-center md:justify-between md:space-y-0">
+    <div class="mb-4 md:mb-6 px-2 md:px-0">
+        <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between md:gap-0">
             <div class="flex-1 min-w-0">
                 <h1 class="text-xl md:text-2xl font-bold text-gray-900 mb-1">
                     {{ isset($product) ? 'Edit Barang' : 'Tambah Barang' }}
@@ -13,7 +13,7 @@
                 </p>
             </div>
             <div class="flex-shrink-0">
-                <a href="{{ url('products') }}"
+                <a href="{{ url('dashboard/products') }}"
                     class="w-full md:w-auto bg-gray-500 text-white px-3 py-2 rounded-lg flex items-center justify-center gap-2 transition-colors hover:bg-gray-600 text-sm">
                     <i class="fas fa-arrow-left text-xs"></i>
                     <span>Kembali</span>
@@ -22,7 +22,7 @@
         </div>
     </div>
 
-<div class="max-w-6xl mx-auto bg-white rounded-lg shadow-sm border border-gray-200">
+<div class="max-w-6xl mx-auto bg-white rounded-lg shadow-sm border border-gray-200 mx-2 md:mx-auto">
     <div class="bg-gray-50 px-4 md:px-6 py-3 border-b border-gray-200">
         <h2 class="font-semibold text-base text-gray-800">
             {{ isset($product) ? 'Form Edit Barang' : 'Form Barang Baru' }}
@@ -132,7 +132,7 @@
                         <i class="fas fa-save mr-2"></i>
                         {{ isset($product) ? 'Update Barang' : 'Simpan Barang' }}
                     </button>
-                    <a href="{{ url('products') }}"
+                    <a href="{{ url('dashboard/products') }}"
                         class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition text-sm font-medium text-center">
                         <i class="fas fa-times mr-2"></i>
                         Batal
@@ -230,14 +230,6 @@
         formData.append("images[]", file);
     });
 
-    // Tentukan URL dan method berdasarkan mode
-    const isEdit = productId !== "";
-    const url = isEdit ? "{{ url('products/update') }}" : "{{ url('products/save') }}";
-    
-    if (isEdit) {
-        formData.append("id", productId);
-    }
-
     try {
         const response = await fetch("{{ url('dashboard/products/save') }}", {
             method: "POST",
@@ -251,7 +243,7 @@
         if (response.ok) {
             const result = await response.json();
             alert(isEdit ? "Produk berhasil diperbarui!" : "Produk berhasil disimpan!");
-            window.location.href = "{{ url('products') }}";
+            window.location.href = "{{ url('dashboard/products') }}";
         } else {
             const text = await response.text();
             console.error("Gagal menyimpan produk. Isi response:", text);

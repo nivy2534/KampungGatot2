@@ -12,24 +12,27 @@
     </div>
     
     <nav class="flex flex-col px-3 md:px-4 py-4 space-y-1 flex-1 overflow-hidden">
+
         <a href="{{ url('/dashboard') }}"
-            class="{{ Request::is('dashboard') ? 'bg-primary' : '' }} flex items-center px-3 py-2.5 hover:bg-primary rounded-md transition-colors duration-200 group">
-            <i class="fa-solid fa-house mr-2.5 flex-shrink-0 text-sm" style="color: #ffffff;"></i> 
-            <span class="truncate text-sm">Dashboard</span>
+            class="{{ Request::is('dashboard') ? 'bg-primary' : '' }} flex items-center px-3 py-2.5 hover:bg-primary rounded-md transition-colors duration-200 group text-white">
+            <i class="fa-solid fa-house mr-2.5 flex-shrink-0 text-sm text-white"></i> 
+            <span class="truncate text-sm text-white">Dashboard</span>
         </a>
 
         <a href="{{ url('/dashboard/blogs') }}"
-            class="{{ Request::is('blogs') ? 'bg-primary' : '' }} px-4 py-4 hover:bg-primary rounded transition-colors duration-200">
-            <i class="fa-solid fa-book mr-4" style="color: #ffffff;"></i> Kelola Blog
+            class="{{ Request::is('blogs*') ? 'bg-primary' : '' }} flex items-center px-3 py-2.5 hover:bg-primary rounded-md transition-colors duration-200 group text-white">
+            <i class="fas fa-newspaper w-4 text-center mr-3 text-white"></i>
+            <span class="text-sm text-white">Kelola Blog</span>
         </a>
+
         <a href="{{ url('/dashboard/products') }}"
-            class="{{ Request::is('products') ? 'bg-primary' : '' }} px-4 py-4 hover:bg-primary rounded transition-colors duration-200">
-            <i class="fa-solid fa-book mr-4" style="color: #ffffff;"></i> Kelola Barang
+            class="{{ Request::is('products*') ? 'bg-primary' : '' }} flex items-center px-3 py-2.5 hover:bg-primary rounded-md transition-colors duration-200 group text-white">
+            <i class="fas fa-box w-4 text-center mr-3 text-white"></i>
+            <span class="text-sm text-white">Kelola Produk</span>
         </a>
-        
-        <a href="#" class="flex items-center px-3 py-2.5 hover:bg-primary rounded-md transition-colors duration-200 group">
-            <i class="fa-solid fa-image mr-2.5 flex-shrink-0 text-sm" style="color: #ffffff;"></i> 
-            <span class="truncate text-sm">Kelola Galeri</span>
+        <a href="#" class="flex items-center px-3 py-2.5 hover:bg-primary rounded-md transition-colors duration-200 group text-white">
+            <i class="fa-solid fa-image mr-2.5 flex-shrink-0 text-sm text-white"></i> 
+            <span class="truncate text-sm text-white">Kelola Galeri</span>
         </a>
     </nav>
         
