@@ -259,27 +259,20 @@
                 ],
                 dom: 't<"flex flex-col sm:flex-row justify-between items-center mt-4 px-3 md:px-4 pb-4 space-y-3 sm:space-y-0"<"flex items-center gap-2"li><"flex items-center gap-2"p>>',
                 language: {
-                    emptyTable: `
-                    <div class="flex flex-col items-center justify-center py-12 text-center">
-                        <div class="mx-auto w-48 h-48 bg-gray-100 rounded-lg flex items-center justify-center mb-6">
-                            <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4-8-4m16 0v10l-8 4-8-4V7"></path>
-                            </svg>
-                        </div>
-                        <h3 class="text-lg font-semibold text-gray-700">Masih Kosong Nih!</h3>
-                        <p class="text-sm text-gray-500 mt-2">Belum ada data produk di sini.<br>
-                        Klik tombol di atas untuk mulai menambahkan produk pertama.</p>
-                    </div>`,
-                    zeroRecords: `
-                    <div class="flex flex-col items-center justify-center py-12 text-center">
-                        <div class="mx-auto w-48 h-48 bg-gray-100 rounded-lg flex items-center justify-center mb-6">
-                            <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                            </svg>
-                        </div>
-                        <h3 class="text-lg font-semibold text-gray-700">Tidak ada hasil</h3>
-                        <p class="text-sm text-gray-500 mt-2">Tidak ada produk yang sesuai dengan pencarian.</p>
-                    </div>`,
+                  emptyTable: `
+                  <div class="flex flex-col items-center justify-center py-8 text-center">
+                      <img src="/assets/img/empty_data.png" alt="Empty" class="w-40 h-28 mb-4" />
+                      <h3 class="text-base font-semibold text-gray-700">Masih Kosong Nih!</h3>
+                      <p class="text-sm text-gray-500 mt-2">Belum ada data produk di sini.<br>
+                      Klik tombol di bawah untuk mulai menambahkan produk pertamamu.</p>
+                  </div>`,
+                  zeroRecords: `
+                  <div class="flex flex-col items-center justify-center py-8 text-center">
+                      <img src="/assets/img/empty_data.png" alt="Empty" class="w-40 h-28 mb-4" />
+                      <h3 class="text-base font-semibold text-gray-700">Masih Kosong Nih!</h3>
+                      <p class="text-sm text-gray-500 mt-2">Belum ada data produk di sini.<br>
+                      Klik tombol di bawah untuk mulai menambahkan produk pertamamu.</p>
+                  </div>`,  
                     info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
                     infoEmpty: "Menampilkan 0 sampai 0 dari 0 entri",
                     infoFiltered: "(difilter dari _MAX_ total entri)",
