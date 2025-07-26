@@ -8,6 +8,7 @@ use App\Services\ProductService;
 use App\Http\Requests\ProductRequest;
 use App\Http\Controllers\Controller;
 use App\Traits\ApiResponse;
+use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
 {
@@ -51,7 +52,47 @@ class ProductController extends Controller
         }
     }
 
-    public function update(Request $request, $id){
+    public function update(Request $request){
+        Log::info('Product update request received', [
+            'request_data' => $request->all(),
+            'files' => $request->hasFile('images') ? 'has files' : 'no files'
+        ]);
+
+        try {
+            $validated = $request->validate([
+                'id' => 'required|exists:products,id',
+                'name'=>'required|string|max:255',
+                'description'=>'required|string',
+                'price'=>'required|numeric|min:0',
+                'seller_name'=>'required|string|max:255',
+                'contact_person'=>'required|string|max:20',
+                'status'=>'required|in:ready,habis,preorder',
+                'images.*' => 'nullable|image|max:1024',
+                'image_order' => 'nullable|string',
+            ]);
+
+            Log::info('Validation passed', $validated);
+
+            $validated['images'] = $request->file('images');
+
+            $updateProduct = $this->productService->update($validated);
+            if ($updateProduct) {
+                Log::info('Product updated successfully');
+                return $this->success($updateProduct, 'Produk berhasil diperbarui');
+            } else {
+                Log::error('Product update failed in service');
+                return $this->error('Produk gagal diperbarui');
+            }
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            Log::error('Validation failed', ['errors' => $e->errors()]);
+            return response()->json(['message' => 'Validation failed', 'errors' => $e->errors()], 422);
+        } catch (\Exception $e) {
+            Log::error('Exception in product update', ['message' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
+            return response()->json(['message' => 'Server error: ' . $e->getMessage()], 500);
+        }
+    }
+
+    public function updateOld(Request $request, $id){
         $product = Product::find($id);
         if(!$product){
             return response()->json(['message'=>'Produk tidak ditemukan'], 404);

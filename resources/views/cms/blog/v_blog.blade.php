@@ -6,11 +6,11 @@
         <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between md:gap-0">
             <div class="flex-1 min-w-0">
                 <h1 class="text-xl md:text-2xl font-bold text-gray-900 mb-1">Kelola Blog</h1>
-                <p class="text-xs md:text-sm text-gray-600">Create, edit, and manage village news articles</p>
+                <p class="text-xs md:text-sm text-gray-600">Buat, edit, dan kelola artikel berita desa</p>
             </div>
             <div class="flex-shrink-0">
                 <a href="{{ url('dashboard/blogs/create') }}"
-                    class="w-full md:w-auto bg-[#1B3A6D] text-white px-3 py-2 rounded-lg flex items-center justify-center gap-2 transition-colors hover:bg-[#1B3A6D]/90 text-sm">
+                    class="w-full md:w-auto bg-primary text-white px-3 py-2 rounded-lg flex items-center justify-center gap-2 transition-colors hover:bg-primary/90 text-sm font-medium">
                     <span>Tambah Blog</span>
                     <i class="fas fa-plus text-xs"></i>
                 </a>
@@ -22,18 +22,18 @@
         <!-- Section Header -->
         <div class="p-3 md:p-4 border-b border-gray-200">
             <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between md:gap-0">
-                <h2 class="text-lg font-semibold text-gray-900">Blog</h2>
+                <h2 class="text-lg font-semibold text-gray-900">Daftar Artikel</h2>
                 <div class="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
                     <!-- Search -->
                     <div class="relative">
                         <i class="fas fa-search absolute left-2.5 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm"></i>
-                        <input type="text" id="searchInput" placeholder="Cari..."
-                            class="w-full sm:w-auto pl-8 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B3A6D] focus:border-[#1B3A6D] outline-none">
+                        <input type="text" id="searchInput" placeholder="Cari artikel..."
+                            class="w-full sm:w-auto pl-8 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none">
                     </div>
                     <!-- Status Filter -->
                     <select id="statusFilter"
-                        class="w-full sm:w-auto px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B3A6D] focus:border-[#1B3A6D] outline-none bg-white">
-                        <option value="">All Status</option>
+                        class="w-full sm:w-auto px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none bg-white">
+                        <option value="">Semua Status</option>
                         <option value="published">Published</option>
                         <option value="draft">Draft</option>
                         <option value="archived">Archived</option>
@@ -47,20 +47,20 @@
             <table id="blogTable" class="w-full table-auto min-w-full">
                 <thead class="bg-gray-50">
                     <tr>
-                        <th class="px-3 md:px-4 py-2.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Title
+                        <th class="px-3 md:px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                            Judul
                         </th>
-                        <th class="hidden sm:table-cell px-3 md:px-4 py-2.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Author
+                        <th class="hidden sm:table-cell px-3 md:px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                            Penulis
                         </th>
-                        <th class="hidden md:table-cell px-3 md:px-4 py-2.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Date Created
+                        <th class="hidden md:table-cell px-3 md:px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                            Tanggal
                         </th>
-                        <th class="px-3 md:px-4 py-2.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th class="px-3 md:px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
                             Status
                         </th>
-                        <th class="px-3 md:px-4 py-2.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Actions
+                        <th class="px-3 md:px-4 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                            Aksi
                         </th>
                     </tr>
                 </thead>
@@ -71,14 +71,16 @@
         </div>
 
         <!-- Empty State (initially hidden) -->
-        <div id="emptyState" class="text-center py-8 hidden">
-            <div class="mb-3 flex justify-center">
-                <img src="/assets/img/empty_data.png" alt="Empty" class="w-40 h-28 mb-4" />
+        <div id="emptyState" class="text-center py-12 hidden">
+            <div class="mb-4 flex justify-center">
+                <img src="/assets/img/empty_data.png" alt="Empty" class="w-32 h-24 opacity-60" />
             </div>
-            <h3 class="text-base font-semibold text-gray-700">Masih Kosong Nih!</h3>
-            <p class="text-sm text-gray-500 mt-2">Belum ada data blog di sini.<br>Klik tombol di atas untuk mulai menambahkan blog pertamamu.</p>
-            <a href="{{ url('dashboard/blogs/create') }}" class="inline-block mt-4 bg-[#1B3A6D] hover:bg-[#1B3A6D] text-white px-4 py-2 rounded-lg transition-colors text-sm font-medium">
-                Tambah Blog Baru
+            <h3 class="text-lg font-semibold text-gray-700 mb-2">Belum Ada Artikel</h3>
+            <p class="text-sm text-gray-500 mb-6">Mulai menulis artikel pertama Anda untuk berbagi cerita dengan warga desa.</p>
+            <a href="{{ url('dashboard/blogs/create') }}" 
+               class="inline-flex items-center gap-2 bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-lg transition-colors text-sm font-medium">
+                <i class="fas fa-plus text-xs"></i>
+                <span>Tulis Artikel Pertama</span>
             </a>
         </div>
     </div>
@@ -201,11 +203,11 @@
                     $('.dataTables_paginate .paginate_button').addClass(
                         'px-2 py-1 mx-0.5 border rounded text-sm hover:bg-gray-50 transition-colors');
                     $('.dataTables_paginate .paginate_button.current').addClass(
-                        'bg-[#1B3A6D] text-white border-[#1B3A6D] hover:bg-[#1B3A6D]');
+                        'bg-primary text-white border-primary hover:bg-primary');
                     
                     // Style info dan length menu
                     $('.dataTables_info').addClass('text-xs text-gray-600');
-                    $('.dataTables_length select').addClass('text-sm');
+                    $('.dataTables_length select').addClass('text-sm border border-gray-300 rounded px-2 py-1');
                 }
             });
 
