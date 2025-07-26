@@ -28,8 +28,10 @@ Route::get('/register', function () {
 
 // Ordinary people
 Route::get('/blog', [BlogPageController::class, 'index'])->name('blog');
+Route::get('/blog/{slug}', [BlogPageController::class, 'show'])->name('blog.show');
 Route::get('/galeri', [GaleriPageController::class, 'index'])->name('galeri');
 Route::get('/event', [EventPageController::class, 'index'])->name('event');
+Route::get('/event/{slug}', [EventPageController::class, 'show'])->name('event.show');
 
 Route::middleware(['auth'])->group(
     function () {

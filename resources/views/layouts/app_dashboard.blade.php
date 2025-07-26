@@ -10,14 +10,14 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     @vite(['resources/css/app.css'])
-    
+
     <style>
         /* Prevent horizontal overflow */
         html, body {
             overflow-x: hidden;
             height: 100%;
         }
-        
+
         /* Sidebar specific styles */
         .sidebar-container {
             position: sticky;
@@ -25,42 +25,42 @@
             height: 100vh;
             overflow: hidden;
         }
-        
+
         /* Main content area */
         .main-content {
             height: 100vh;
             overflow-y: auto;
             overflow-x: hidden;
         }
-        
+
         /* Custom scrollbar for webkit browsers */
         .main-content::-webkit-scrollbar {
             width: 6px;
         }
-        
+
         .main-content::-webkit-scrollbar-track {
             background: #f1f1f1;
         }
-        
+
         .main-content::-webkit-scrollbar-thumb {
             background: #c1c1c1;
             border-radius: 3px;
         }
-        
+
         .main-content::-webkit-scrollbar-thumb:hover {
             background: #a8a8a8;
         }
-        
+
         /* Ensure table is responsive */
         .table-container {
             min-height: 400px;
         }
-        
+
         /* Compact spacing */
         .compact-spacing {
             line-height: 1.3;
         }
-        
+
         /* Mobile sidebar animation */
         @media (max-width: 1023px) {
             .sidebar-container {
@@ -75,12 +75,12 @@
     <div class="flex min-h-screen">
         <!-- Mobile sidebar overlay -->
         <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-20 hidden lg:hidden"></div>
-        
+
         <!-- Sidebar -->
         <div id="sidebar" class="fixed lg:static inset-y-0 left-0 z-30 transform -translate-x-full lg:translate-x-0 transition-transform duration-200 ease-in-out lg:transition-none sidebar-container">
             @include('components.dashboard.sidebar')
         </div>
-        
+
         <div class="flex-1 flex flex-col min-w-0 main-content">
             @include('components.dashboard.navbar')
             <main class="flex-1 p-3 md:p-4">
@@ -106,7 +106,7 @@
         document.getElementById('mobile-menu-button').addEventListener('click', function() {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebar-overlay');
-            
+
             sidebar.classList.toggle('-translate-x-full');
             overlay.classList.toggle('hidden');
         });
@@ -115,11 +115,12 @@
         document.getElementById('sidebar-overlay').addEventListener('click', function() {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebar-overlay');
-            
+
             sidebar.classList.add('-translate-x-full');
             overlay.classList.add('hidden');
         });
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 
 </html>
