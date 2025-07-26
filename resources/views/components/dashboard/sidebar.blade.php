@@ -14,14 +14,14 @@
             <p class="text-xs text-white/70 font-medium">Panel Admin</p>
         </div>
     </div>
-    
+
     <!-- Navigation with improved styling -->
     <nav class="flex flex-col px-3 md:px-4 py-4 space-y-1 flex-1 overflow-y-auto">
         <div class="text-xs font-semibold text-white/60 uppercase tracking-wider mb-3 px-2">Menu Utama</div>
-        
+
         <a href="{{ url('/dashboard') }}"
             class="nav-item {{ Request::is('dashboard') ? 'active' : '' }} flex items-center px-3 py-3 hover:bg-white/10 rounded-lg transition-all duration-200 group text-white">
-            <i class="fa-solid fa-house mr-3 flex-shrink-0 text-sm"></i> 
+            <i class="fa-solid fa-house mr-3 flex-shrink-0 text-sm"></i>
             <span class="truncate text-sm">Dashboard</span>
         </a>
 
@@ -36,14 +36,14 @@
             <i class="fas fa-box mr-3 flex-shrink-0 text-sm"></i>
             <span class="text-sm">Kelola Produk</span>
         </a>
-        
-        <a href="{{ url('/dashboard/gallery') }}" 
-            class="nav-item {{ Request::is('dashboard/gallery*') ? 'active' : '' }} flex items-center px-3 py-3 hover:bg-white/10 rounded-lg transition-all duration-200 group text-white">
-            <i class="fa-solid fa-image mr-3 flex-shrink-0 text-sm"></i> 
+
+        <a href="{{ url('/dashboard/galery') }}"
+            class="nav-item {{ Request::is('dashboard/galery*') ? 'active' : '' }} flex items-center px-3 py-3 hover:bg-white/10 rounded-lg transition-all duration-200 group text-white">
+            <i class="fa-solid fa-image mr-3 flex-shrink-0 text-sm"></i>
             <span class="truncate text-sm">Kelola Galeri</span>
         </a>
     </nav>
-        
+
     <!-- User info section -->
     <div class="px-3 md:px-4 py-3 border-t border-white/10">
         <div class="flex items-center space-x-3 mb-3">
@@ -55,11 +55,11 @@
                 <p class="text-xs text-white/60">Administrator</p>
             </div>
         </div>
-        
+
         <!-- Logout Button -->
         <button id="logout-button"
             class="flex items-center px-3 py-2.5 hover:bg-red-600/80 rounded-lg transition-all duration-200 group w-full text-left">
-            <i class="fa-solid fa-right-from-bracket mr-3 flex-shrink-0 text-sm text-red-300 group-hover:text-white"></i> 
+            <i class="fa-solid fa-right-from-bracket mr-3 flex-shrink-0 text-sm text-red-300 group-hover:text-white"></i>
             <span class="truncate text-sm font-medium text-red-300 group-hover:text-white">Logout</span>
         </button>
     </div>
