@@ -13,7 +13,7 @@
                 <span class="text-xs text-gray-500">Total</span>
             </div>
             <div>
-                <h3 class="text-xl font-semibold text-gray-900 mb-1">24</h3>
+                <h3 class="text-xl font-semibold text-gray-900 mb-1">{{ $blogs->count() }}</h3>
                 <p class="text-sm text-gray-600">Artikel Blog</p>
             </div>
         </div>
@@ -27,7 +27,7 @@
                 <span class="text-xs text-gray-500">Total</span>
             </div>
             <div>
-                <h3 class="text-xl font-semibold text-gray-900 mb-1">18</h3>
+                <h3 class="text-xl font-semibold text-gray-900 mb-1">{{ $products->count() }}</h3>
                 <p class="text-sm text-gray-600">Produk UMKM</p>
             </div>
         </div>
@@ -41,7 +41,7 @@
                 <span class="text-xs text-gray-500">Total</span>
             </div>
             <div>
-                <h3 class="text-xl font-semibold text-gray-900 mb-1">156</h3>
+                <h3 class="text-xl font-semibold text-gray-900 mb-1">{{ $photos->count() }}</h3>
                 <p class="text-sm text-gray-600">Foto Galeri</p>
             </div>
         </div>
@@ -125,7 +125,7 @@
             <div class="bg-white rounded-lg border border-gray-200 p-4">
                 <h3 class="text-lg font-medium text-gray-900 mb-3">Aksi Cepat</h3>
                 <div class="space-y-2">
-                    <a href="{{ url('/dashboard/blogs/create') }}" 
+                    <a href="{{ url('/dashboard/blogs/create') }}"
                        class="flex items-center p-2 rounded-lg hover:bg-gray-50 transition-colors group">
                         <div class="w-7 h-7 bg-[#1B3A6D] rounded-lg flex items-center justify-center mr-3">
                             <i class="fas fa-plus text-white text-xs"></i>
@@ -133,7 +133,7 @@
                         <span class="text-sm font-medium text-gray-900">Tulis Artikel</span>
                     </a>
 
-                    <a href="{{ url('/dashboard/products/create') }}" 
+                    <a href="{{ url('/dashboard/products/create') }}"
                        class="flex items-center p-2 rounded-lg hover:bg-gray-50 transition-colors group">
                         <div class="w-7 h-7 bg-[#1B3A6D] rounded-lg flex items-center justify-center mr-3">
                             <i class="fas fa-box text-white text-xs"></i>
@@ -141,7 +141,7 @@
                         <span class="text-sm font-medium text-gray-900">Tambah Produk</span>
                     </a>
 
-                    <a href="{{ url('/dashboard/gallery') }}" 
+                    <a href="{{ url('/dashboard/galery') }}" 
                        class="flex items-center p-2 rounded-lg hover:bg-gray-50 transition-colors group">
                         <div class="w-7 h-7 bg-[#1B3A6D] rounded-lg flex items-center justify-center mr-3">
                             <i class="fas fa-images text-white text-xs"></i>

@@ -35,6 +35,9 @@ class ProductController extends Controller
 
     public function edit(Product $product)
     {
+        $product->load(['images' => function($query) {
+            $query->orderBy('order', 'asc');
+        }]);
         return view("cms.product.v_edit_product", compact("product"));
     }
 
@@ -60,10 +63,25 @@ class ProductController extends Controller
             'price'=>'sometimes|required|numeric',
             'contact_person'=>'sometimes|required|string|max:15',
             'images.*' => 'nullable|image|max:1024',
+            'image_order' => 'nullable|string',
         ]);
 
         $validated['id'] = $id;
         $validated['images'] = $request->file('images');
+
+        // Handle image order update
+        if ($request->has('image_order')) {
+            $imageOrder = json_decode($request->image_order, true);
+            if (is_array($imageOrder)) {
+                foreach ($imageOrder as $orderData) {
+                    if (isset($orderData['id']) && isset($orderData['order'])) {
+                        \App\Models\ProductImage::where('id', $orderData['id'])
+                            ->where('product_id', $id)
+                            ->update(['order' => $orderData['order']]);
+                    }
+                }
+            }
+        }
 
         app(ProductRepository::class)->update($validated);
 

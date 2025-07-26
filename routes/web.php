@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\ProductImageController;
 use App\Http\Controllers\Homepage\HomepageController;
 use App\Http\Controllers\BlogPageController;
 use App\Http\Controllers\EventPageController;
@@ -35,9 +36,7 @@ Route::get('/event/{slug}', [EventPageController::class, 'show'])->name('event.s
 
 Route::middleware(['auth'])->group(
     function () {
-        Route::get('/dashboard', function () {
-            return view('cms.dashboard');
-        })->name('dashboard');
+        Route::get('/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
 
         Route::prefix('dashboard')->group(function () {
           // Blog Related

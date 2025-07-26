@@ -17,10 +17,10 @@
                 class="relative flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-lg h-64 bg-gray-50 text-gray-500 text-center mb-4 overflow-hidden"
                 id="imageUploadContainer"
             >
-                <img id="previewImage" src="" alt="Preview"
-                class="hidden absolute inset-0 w-full h-full object-cover z-0" />
+                <img id="previewImage" src="{{ $product->image_path ? asset('storage/' . $product->image_path) : '' }}" alt="Preview"
+                class="{{ $product->image_path ? '' : 'hidden' }} absolute inset-0 w-full h-full object-cover z-0" />
 
-                <div id="uploadPlaceholder" class="z-10 flex flex-col items-center">
+                <div id="uploadPlaceholder" class="z-10 flex flex-col items-center{{ $product->image_path ? ' hidden' : '' }}">
                 <i class="fa-solid fa-image fa-2xl text-[#1B3A6D]"></i>
                 <label for="imageInput"
                     class="cursor-pointer bg-[#1B3A6D] text-white px-3 py-2 mt-3 rounded-lg hover:bg-[#1B3A6D]/90 transition-colors text-sm">
@@ -31,7 +31,7 @@
 
                 <!-- Tombol aksi untuk preview utama -->
                 <div id="imageActions"
-                class="hidden absolute bottom-4 left-4 z-10 flex gap-2">
+                class="{{ $product->image_path ? '' : 'hidden' }} absolute bottom-4 left-4 z-10 flex gap-2">
                 <button id="removePreviewBtn" type="button"
                     class="bg-white/80 text-red-600 px-2 py-1 text-sm rounded hover:bg-red-100">
                     ❌
@@ -44,7 +44,16 @@
             <p class="text-xs text-gray-500 mt-2">Lampirkan gambar. Ukuran file tidak boleh lebih dari 1MB</p>
 
             <!-- Daftar thumbnail preview -->
-            <div id="imagePreviewList" class="flex flex-wrap gap-2"></div>
+            <div id="imagePreviewList" class="flex flex-wrap gap-2">
+                @foreach($product->images as $img)
+                    <div class="relative group cursor-move" data-image-id="{{ $img->id }}" data-order="{{ $img->order }}">
+                        <img src="{{ asset('storage/' . $img->image_path) }}" class="w-20 h-20 object-cover rounded cursor-pointer old-image-preview" data-image-id="{{ $img->id }}">
+                        <button type="button" class="absolute top-1 right-1 bg-white/80 text-red-600 text-xs rounded hover:bg-red-100 hidden group-hover:block remove-old-image-btn" data-image-id="{{ $img->id }}">🗑️</button>
+                        <input type="hidden" name="existing_images[]" value="{{ $img->id }}">
+                        <div class="absolute top-1 left-1 bg-blue-500 text-white text-xs rounded px-1">{{ $img->order + 1 }}</div>
+                    </div>
+                @endforeach
+            </div>
          </div>
 
 
@@ -55,35 +64,39 @@
                 <div>
                     <label class="block mb-2 text-sm font-medium text-gray-700">Nama Barang</label>
                     <input id="nama" type="text" placeholder="Masukkan nama barang..."
-                        class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B3A6D] focus:border-[#1B3A6D]" />
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B3A6D] focus:border-[#1B3A6D]"
+                        value="{{ old('name', $product->name) }}" />
                 </div>
 
                 <!-- Harga Barang -->
                 <div>
                     <label class="block mb-2 text-sm font-medium text-gray-700">Harga Barang</label>
                     <input id="harga" type="number" placeholder="Masukkan harga barang..."
-                        class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B3A6D] focus:border-[#1B3A6D]" />
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B3A6D] focus:border-[#1B3A6D]"
+                        value="{{ old('price', $product->price) }}" />
                 </div>
 
                 <!-- Nama Penjual -->
                 <div>
                     <label class="block mb-2 text-sm font-medium text-gray-700">Nama Penjual</label>
                     <input id="seller_name" type="text" placeholder="Masukkan nama penjual..."
-                        class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B3A6D] focus:border-[#1B3A6D]" />
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B3A6D] focus:border-[#1B3A6D]"
+                        value="{{ old('seller_name', $product->seller_name) }}" />
                 </div>
 
                 <!-- Nomor WhatsApp -->
                 <div>
                     <label class="block mb-2 text-sm font-medium text-gray-700">Nomor WhatsApp</label>
                     <input id="contact_person" type="text" placeholder="08xxxx..."
-                        class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B3A6D] focus:border-[#1B3A6D]" />
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B3A6D] focus:border-[#1B3A6D]"
+                        value="{{ old('contact_person', $product->contact_person) }}" />
                 </div>
 
                 <!-- Deskripsi -->
                 <div>
                     <label class="block mb-2 text-sm font-medium text-gray-700">Deskripsi Barang</label>
                     <textarea id="deskripsi" rows="4" placeholder="Masukkan deskripsi..."
-                        class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B3A6D] focus:border-[#1B3A6D] resize-vertical"></textarea>
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B3A6D] focus:border-[#1B3A6D] resize-vertical">{{ old('description', $product->description) }}</textarea>
                 </div>
 
                 <!-- Status -->
@@ -91,9 +104,9 @@
                     <label class="block mb-2 text-sm font-medium text-gray-700">Status</label>
                     <select id="status"
                         class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B3A6D] focus:border-[#1B3A6D]">
-                        <option value="ready">Ready</option>
-                        <option value="habis">Habis</option>
-                        <option value="preorder">Pre-Order</option>
+                        <option value="ready" {{ $product->status == 'ready' ? 'selected' : '' }}>Ready</option>
+                        <option value="habis" {{ $product->status == 'habis' ? 'selected' : '' }}>Habis</option>
+                        <option value="preorder" {{ $product->status == 'preorder' ? 'selected' : '' }}>Pre-Order</option>
                     </select>
                 </div>
 
@@ -113,10 +126,23 @@
             </div>
         </div>
     </div>
+
+<!-- Modal Preview Gambar Besar -->
+<div id="modalImagePreview" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 hidden">
+    <div class="relative">
+        <img id="modalImagePreviewImg" src="" class="max-w-[90vw] max-h-[80vh] rounded shadow-lg border-4 border-white" />
+        <button id="closeModalImagePreview" class="absolute top-2 right-2 bg-white rounded-full p-1 shadow hover:bg-gray-200">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+        </button>
+    </div>
+</div>
 @endsection
 
 @push('addon-script')
-<script>
+    <!-- SortableJS for drag & drop -->
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+
+    <script>
   const imageInput = document.getElementById("imageInput");
   const previewImage = document.getElementById("previewImage");
   const uploadPlaceholder = document.getElementById("uploadPlaceholder");
@@ -143,8 +169,7 @@
 
         const img = document.createElement("img");
         img.src = e.target.result;
-        img.className = "w-20 h-20 object-cover rounded cursor-pointer";
-        img.addEventListener("click", () => showPreview(e.target.result));
+        img.className = "w-20 h-20 object-cover rounded cursor-pointer new-image-preview";
 
         const delBtn = document.createElement("button");
         delBtn.innerHTML = "🗑️";
@@ -197,13 +222,18 @@
     formData.append("contact_person", document.getElementById("contact_person").value);
     formData.append("description", document.getElementById("deskripsi").value);
     formData.append("status", document.getElementById("status").value);
+    formData.append("id", "{{ $product->id }}");
+
+    // Add image order data
+    const imageOrder = getImageOrder();
+    formData.append("image_order", JSON.stringify(imageOrder));
 
     if (imageFile) {
-        formData.append("image", imageFile);
+        formData.append("images[]", imageFile);
     }
 
     try {
-        const response = await fetch("{{ url('products/save') }}", {
+        const response = await fetch("{{ url('dashboard/products/update') }}", {
             method: "POST",
             headers: {
                 "Accept":"application/json",
@@ -214,17 +244,99 @@
 
         if (response.ok) {
             const result = await response.json();
-            alert("Produk berhasil disimpan!");
-            window.location.href = "{{ url('products') }}";
+            alert("Produk berhasil diperbarui!");
+            window.location.href = "{{ url('dashboard/products') }}";
         } else {
             const text = await response.text();
-            console.error("Gagal menyimpan produk. Isi response:", text);
-            alert("Gagal menyimpan produk. Cek console untuk detail.");
+            console.error("Gagal memperbarui produk. Isi response:", text);
+            alert("Gagal memperbarui produk. Cek console untuk detail.");
         }
     } catch (error) {
         alert("Terjadi kesalahan saat mengirim data.");
         console.error(error);
     }
 });
+
+// Remove old image preview on click
+document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('remove-old-image-btn')) {
+        const imageId = e.target.getAttribute('data-image-id');
+        const wrapper = e.target.closest('[data-image-id]');
+        if (wrapper) wrapper.remove();
+        // Optionally, add a hidden input to mark for deletion
+        const deletedInput = document.createElement('input');
+        deletedInput.type = 'hidden';
+        deletedInput.name = 'delete_images[]';
+        deletedInput.value = imageId;
+        document.getElementById('imagePreviewList').appendChild(deletedInput);
+    }
+
+    // Preview image in main preview area (imageUploadContainer) on click (old or new images)
+    if (e.target.classList.contains('old-image-preview') || e.target.classList.contains('new-image-preview')) {
+        const src = e.target.src;
+        const previewImage = document.getElementById('previewImage');
+        const uploadPlaceholder = document.getElementById('uploadPlaceholder');
+        const imageActions = document.getElementById('imageActions');
+        previewImage.src = src;
+        previewImage.classList.remove('hidden');
+        uploadPlaceholder.classList.add('hidden');
+        imageActions.classList.remove('hidden');
+    }
+});
+
+// Close modal preview
+document.getElementById('closeModalImagePreview').addEventListener('click', function() {
+    document.getElementById('modalImagePreview').classList.add('hidden');
+});
+
+// Close modal on background click
+document.getElementById('modalImagePreview').addEventListener('click', function(e) {
+    if (e.target === this) {
+        this.classList.add('hidden');
+    }
+});
+
+// Initialize Sortable for drag & drop
+document.addEventListener('DOMContentLoaded', function() {
+    const imagePreviewList = document.getElementById('imagePreviewList');
+    if (imagePreviewList) {
+        new Sortable(imagePreviewList, {
+            animation: 150,
+            ghostClass: 'sortable-ghost',
+            chosenClass: 'sortable-chosen',
+            dragClass: 'sortable-drag',
+            onEnd: function(evt) {
+                // Update order numbers after drag
+                updateOrderNumbers();
+            }
+        });
+    }
+});
+
+// Function to update order numbers
+function updateOrderNumbers() {
+    const imageItems = document.querySelectorAll('#imagePreviewList [data-image-id]');
+    imageItems.forEach((item, index) => {
+        const orderBadge = item.querySelector('.absolute.top-1.left-1');
+        if (orderBadge) {
+            orderBadge.textContent = index + 1;
+        }
+        item.setAttribute('data-order', index);
+    });
+}
+
+// Function to get current order of images
+function getImageOrder() {
+    const imageItems = document.querySelectorAll('#imagePreviewList [data-image-id]');
+    const order = [];
+    imageItems.forEach((item, index) => {
+        const imageId = item.getAttribute('data-image-id');
+        order.push({
+            id: imageId,
+            order: index
+        });
+    });
+    return order;
+}
 </script>
 @endpush
