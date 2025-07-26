@@ -141,7 +141,7 @@
                         <span class="text-sm font-medium text-gray-900">Tambah Produk</span>
                     </a>
 
-                    <a href="{{ url('/dashboard/galery') }}" 
+                    <a href="{{ url('/dashboard/gallery') }}" 
                        class="flex items-center p-2 rounded-lg hover:bg-gray-50 transition-colors group">
                         <div class="w-7 h-7 bg-[#1B3A6D] rounded-lg flex items-center justify-center mr-3">
                             <i class="fas fa-images text-white text-xs"></i>
