@@ -8,8 +8,23 @@ use App\Models\Product;
 
 class ProductController extends Controller
 {
-    public function index(){
-        return response()->json(Product::all());
+    public function index(Request $request){
+        $status = $request->query('status', 'all');
+        $perPage = $request->query('pageSize', 10);
+
+        $query = Product::orderBy('created_at', 'desc');
+
+        if ($status !== 'all') {
+            $query->where('status', $status);
+        }
+
+        $products = $query->paginate($perPage);
+
+        return response()->json([
+            'data' => $products->items(),
+            'totalItems' => $products->total(),
+            'totalPages' => $products->lastPage(),
+        ]);
     }
 
     public function show($id){
@@ -21,12 +36,36 @@ class ProductController extends Controller
         return response()->json($product);
     }
 
+    public function showBySlug($slug){
+        $product = Product::where('slug', $slug)->first();
+
+        if(!$product){
+            return response()->json(['message'=>'Produk tidak ditemukan'],404);
+        }
+
+        return response()->json($product);
+    }
+
+    public function getReady(Request $request){
+        $limit = $request->query('limit');
+
+        $query = Product::where('status', 'ready')->orderBy('created_at', 'desc');
+
+        if($limit && is_numeric($limit)){
+            $query->limit($limit);
+        }
+
+        $products = $query->get();
+
+        return response()->json($products);
+    }
+
     public function store(Request $request){
         $validate = $request->validate([
             'product_name'=>'required|string|max:255',
             'product_description'=>'required|string',
             'product_price'=>'required|numeric',
-            'prodcut_contact_person'=>'required|string|max:15',
+            'product_contact_person'=>'required|string|max:15',
         ]);
 
         $product = Product::create($validate);
@@ -57,6 +96,6 @@ class ProductController extends Controller
         }
 
         $product->delete();
-        return response()->json(['mesagge'=>'Produk berhasil dihapus']);
+        return response()->json(['message'=>'Produk berhasil dihapus']);
     }
 }

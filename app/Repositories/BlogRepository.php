@@ -124,4 +124,18 @@ class BlogRepository implements BlogRepositoryInterface
             'image_url' => Storage::url($path), // hasilnya: /storage/blogs/xxx.jpg
         ];
     }
+
+    private function generateUniqueSlug($name)
+    {
+        $slug = Str::slug($name);
+        $originalSlug = $slug;
+        $counter = 1;
+
+        while (Blog::where('slug', $slug)->exists()) {
+            $slug = $originalSlug . '-' . $counter;
+            $counter++;
+        }
+
+        return $slug;
+    }
 }
