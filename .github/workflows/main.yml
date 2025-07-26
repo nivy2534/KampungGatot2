@@ -1,0 +1,57 @@
+name: Deploy sistem gatot
+on:
+  push:
+    branches:
+      - main
+      - dashfix
+  issue_comment:
+    types: [created]
+
+jobs:
+  deployer:
+    if: contains(github.event.head_commit.message, 'fix:') || github.event.pull_request.merged == true || contains(github.event.comment.body, '/deploy')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.CICD_TOKEN }}
+      - name: Setup Composer
+        uses: https://github.com/sillyguodong/composer@gitea
+        with:
+          working_dir: ${{ github.workspace }}
+          dev: no
+          args: --no-interaction --prefer-dist --optimize-autoloader --no-dev
+      - name: Deploy ke vps6
+        uses: https://github.com/burnett01/rsync-deployments@7.0.1
+        with:
+          switches: -azr --no-p --delete --exclude='.git/' --exclude='/storage' --exclude='/vendor' --exclude='.gitea/' --exclude='perm.facl' --exclude '.gitignore' --exclude='DOCKER_ENV' --exclude='Dockerfile-php-build' --exclude='docker_tag' --exclude='output.log'
+          remote_path: /var/www/feedchain
+          remote_host: ${{ vars.VPS6 }}
+          remote_port: ${{ vars.SSH_PORT }}
+          remote_user: ${{ vars.SSH_USERNAME }}
+          remote_key: ${{ secrets.SSH_KEY }}
+      - name: Setup laravel
+        if: ${{ success() }}
+        uses: https://github.com/appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ vars.VPS6 }}
+          username: ${{ vars.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ vars.SSH_PORT }}
+          script: |
+            cd /var/www/feedchain
+            php artisan down || true
+            php artisan migrate:fresh --seed
+            php artisan storage:link
+            npm install --save-dev vite laravel-vite-plugin
+            npm install --save-dev @vitejs/plugin-vue
+            npm run build
+            php artisan cache:clear
+            php artisan auth:clear-resets
+            php artisan route:cache
+            php artisan config:cache
+            cp .env.example .env && php artisan key:generate && php artisan config:cache
+            php artisan view:cache
+            php artisan optimize
+            php artisan up

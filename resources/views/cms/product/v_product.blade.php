@@ -41,80 +41,32 @@
                 </div>
             </div>
         </div>
-        <!-- Table -->
-        <div class="overflow-x-auto">
-            <table id="productTable" class="min-w-full bg-white">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th class="px-3 md:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Product Name
-                        </th>
-                        <th class="px-3 md:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Price
-                        </th>
-                        <th class="px-3 md:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Creator
-                        </th>
-                        <th class="px-3 md:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Status
-                        </th>
-                        <th class="px-3 md:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Date Created
-                        </th>
-                        <th class="px-3 md:px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Actions
-                        </th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                    @foreach($products as $product)
-                        <tr class="hover:bg-gray-50 transition-colors">
-                            <td class="px-3 md:px-4 py-3">
-                                <div class="flex items-center space-x-3">
-                                    <img src="{{ asset('storage/' . $product->image_path) }}" alt="{{ $product->name }}"
-                                         class="w-10 h-10 rounded-lg object-cover">
-                                    <div>
-                                        <h3 class="text-sm font-medium text-gray-900">{{ $product->name }}</h3>
-                                        <p class="text-xs text-gray-500">{{ Str::limit($product->description, 50) }}</p>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="px-3 md:px-4 py-3 text-sm text-gray-900">
-                                Rp{{ number_format($product->price, 0, ',', '.') }}
-                            </td>
-                            <td class="px-3 md:px-4 py-3 text-sm text-gray-900">
-                                {{ $product->seller_name ?? 'N/A' }}
-                            </td>
-                            <td class="px-3 md:px-4 py-3">
-                                @if($product->status == 'ready')
-                                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                        Ready
-                                    </span>
-                                @elseif($product->status == 'habis')
-                                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                                        Habis
-                                    </span>
-                                @else
-                                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                        Draft
-                                    </span>
-                                @endif
-                            </td>
-                            <td class="px-3 md:px-4 py-3 text-sm text-gray-500">
-                                {{ $product->created_at->format('d M Y') }}
-                            </td>
-                            <td class="px-3 md:px-4 py-3 text-center">
-                                <div class="flex items-center justify-center space-x-2">
-                                    <a href="{{ url('dashboard/products/edit', $product->id) }}"
-                                       class="bg-blue-700 hover:bg-blue-800 text-white text-xs font-medium px-2 py-1 rounded transition-colors">
-                                        Edit
-                                    </a>
-                                    <button type="button" class="btn-delete bg-red-600 hover:bg-red-700 text-white text-xs font-medium px-2 py-1 rounded transition-colors"
-                                            data-id="{{ $product->id }}">
-                                        Hapus
-                                    </button>
-                                </div>
-                            </td>
+
+        <!-- Table Container with Fixed Height -->
+        <div class="min-h-[400px] relative">
+            <!-- Table -->
+            <div class="overflow-x-auto">
+                <table id="productTable" class="min-w-full bg-white">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-3 md:px-4 py-2.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Product Name
+                            </th>
+                            <th class="hidden sm:table-cell px-3 md:px-4 py-2.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Price
+                            </th>
+                            <th class="hidden md:table-cell px-3 md:px-4 py-2.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Seller
+                            </th>
+                            <th class="hidden md:table-cell px-3 md:px-4 py-2.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Date Created
+                            </th>
+                            <th class="px-3 md:px-4 py-2.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Status
+                            </th>
+                            <th class="px-3 md:px-4 py-2.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Actions
+                            </th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
@@ -152,7 +104,7 @@
         $(document).ready(function() {
             // Show empty state by default, hide when data loads
             $('#emptyState').removeClass('hidden');
-            
+
             table = $('#productTable').DataTable({
                 processing: true,
                 serverSide: true,
@@ -253,64 +205,29 @@
                         }
                     },
                     {
-                        data: 'created_at',
-                        name: 'created_at',
-                        className: "w-1/6",
-                        orderable: true,
-                        render: function(data) {
-                            const date = new Date(data);
-                            const day = date.getDate();
-                            const monthNames = [
-                                'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
-                                'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
-                            ];
-                            const month = monthNames[date.getMonth()];
-                            const year = date.getFullYear();
-
-                            const hours = String(date.getHours()).padStart(2, '0');
-                            const minutes = String(date.getMinutes()).padStart(2, '0');
-
-                            return `<div class="text-sm text-gray-500">${hours}:${minutes} ${day} ${month} ${year}</div>`;
-                        }
-                    },
-                    {
-                        data: 'id',
+                        data: 'actions',
                         name: 'actions',
                         className: "w-1/6",
                         orderable: false,
                         searchable: false,
-                        render: function(data, type, row) {
-                            return `
-                                <div class="flex items-center justify-center space-x-2">
-                                    <a href="{{ url('dashboard/products/edit') }}/${data}"
-                                       class="bg-blue-700 hover:bg-blue-800 text-white text-xs font-medium px-2 py-1 rounded transition-colors">
-                                        Edit
-                                    </a>
-                                    <button type="button" class="btn-delete bg-red-600 hover:bg-red-700 text-white text-xs font-medium px-2 py-1 rounded transition-colors"
-                                            data-id="${data}">
-                                        Hapus
-                                    </button>
-                                </div>
-                            `;
-                        }
                     }
                 ],
                 dom: '<"overflow-x-auto"t><"flex justify-between items-center mt-3 px-3 md:px-4 pb-3"<"flex items-center gap-2"li><"flex items-center gap-2"p>>',
                 language: {
-                  emptyTable: `
-                  <div class="flex flex-col items-center justify-center py-8 text-center">
-                      <img src="/assets/img/empty_data.png" alt="Empty" class="w-40 h-28 mb-4" />
-                      <h3 class="text-base font-semibold text-gray-700">Masih Kosong Nih!</h3>
-                      <p class="text-sm text-gray-500 mt-2">Belum ada data produk di sini.<br>
-                      Klik tombol di bawah untuk mulai menambahkan produk pertamamu.</p>
-                  </div>`,
-                  zeroRecords: `
-                  <div class="flex flex-col items-center justify-center py-8 text-center">
-                      <img src="/assets/img/empty_data.png" alt="Empty" class="w-40 h-28 mb-4" />
-                      <h3 class="text-base font-semibold text-gray-700">Masih Kosong Nih!</h3>
-                      <p class="text-sm text-gray-500 mt-2">Belum ada data produk di sini.<br>
-                      Klik tombol di bawah untuk mulai menambahkan produk pertamamu.</p>
-                  </div>`,  
+                    emptyTable: `
+                    <div class="flex flex-col items-center justify-center py-8 text-center">
+                        <img src="/assets/img/empty_data.png" alt="Empty" class="w-40 h-28 mb-4" />
+                        <h3 class="text-base font-semibold text-gray-700">Masih Kosong Nih!</h3>
+                        <p class="text-sm text-gray-500 mt-2">Belum ada data produk di sini.<br>
+                        Klik tombol di atas untuk mulai menambahkan produk pertamamu.</p>
+                    </div>`,
+                    zeroRecords: `
+                    <div class="flex flex-col items-center justify-center py-8 text-center">
+                        <img src="/assets/img/empty_data.png" alt="Empty" class="w-40 h-28 mb-4" />
+                        <h3 class="text-base font-semibold text-gray-700">Masih Kosong Nih!</h3>
+                        <p class="text-sm text-gray-500 mt-2">Belum ada data produk di sini.<br>
+                        Klik tombol di atas untuk mulai menambahkan produk pertamamu.</p>
+                    </div>`,
                     info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
                     infoEmpty: "Menampilkan 0 sampai 0 dari 0 entri",
                     infoFiltered: "(difilter dari _MAX_ total entri)",
@@ -330,11 +247,11 @@
                         'px-2 py-1 mx-0.5 border rounded text-sm hover:bg-gray-50 transition-colors');
                     $('.dataTables_paginate .paginate_button.current').addClass(
                         'bg-[#1B3A6D] text-white border-[#1B3A6D] hover:bg-[#1B3A6D]');
-                    
+
                     // Style info dan length menu
                     $('.dataTables_info').addClass('text-xs text-gray-600');
                     $('.dataTables_length select').addClass('text-sm');
-                    
+
                     // Check if table is empty and show/hide empty state
                     const tableData = table.data();
                     if (tableData.length === 0) {
