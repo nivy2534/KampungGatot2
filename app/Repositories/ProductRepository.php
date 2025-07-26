@@ -153,8 +153,22 @@ class ProductRepository implements ProductRepositoryInterface
         $path = $image->store('products', 'public'); // simpan di storage/app/public/products
         return [
             'image_path' => $path,
-            'image_url' => Storage::url($path), // hasilnya: /storage/blogs/xxx.jpg
+            'image_url' => Storage::url($path), // hasilnya: /storage/products/xxx.jpg
         ];
+    }
+
+    private function generateUniqueSlug($name)
+    {
+        $slug = Str::slug($name);
+        $originalSlug = $slug;
+        $counter = 1;
+
+        while (Product::where('slug', $slug)->exists()) {
+            $slug = $originalSlug . '-' . $counter;
+            $counter++;
+        }
+
+        return $slug;
     }
 
     public function getAllProducts(){

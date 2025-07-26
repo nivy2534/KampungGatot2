@@ -7,11 +7,14 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\EventController;
 use App\Http\Controllers\Api\ProductController;
 
-/* Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
 Route::get('/ping', function () {
     return response()->json(['message' => 'API working!']);
 });
+
+/*
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
+*/
 
 Route::middleware('auth:sanctum')->group(function(){
     Route::post('/logout', [AuthController::class, 'logout']);
@@ -60,5 +63,7 @@ Route::get('/blogs/published', [BlogController::class, 'getPublished']);
 Route::get('/blogs/count', [BlogController::class, 'countByStatus']);
 
 
-Route::get('/produtcs',[ProductController::class, 'index']);
-Route::get('/products/{id}', [ProductController::class, 'show']); */
+Route::get('/products',[ProductController::class, 'index']);
+Route::get('/products/{id}', [ProductController::class, 'show']);
+Route::get('/products/slug/{slug}', [ProductController::class, 'showBySlug']);
+Route::get('/products/ready', [ProductController::class, 'getReady']);

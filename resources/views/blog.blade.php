@@ -67,14 +67,16 @@
       {{-- Articles Grid --}}
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-8">
         @forelse ($blogs as $blog)
-          <div class="blog-card transition-all duration-300" data-tag="{{ $blog['tag'] ?? 'uncategorized' }}">
-            @include('components.article-card', [
-              'title' => $blog['name'] ?? 'Judul tidak tersedia',
-              'date' => \Carbon\Carbon::parse($blog['created_at'])->translatedFormat('d F Y'),
-              'category' => \Illuminate\Support\Str::of($blog['tag'] ?? '')->replace('_',' ')->title(),
-              'excerpt' => \Illuminate\Support\Str::limit($blog['description'], 100),
-              'image' => $blog['image_url'] ?? '/assets/img/blogthumb.png'
-            ])
+          <div class="blog-card transition-all duration-300" data-tag="{{ $blog->tag ?? 'uncategorized' }}">
+            <a href="{{ route('blog.show', $blog->slug) }}" class="block">
+              @include('components.article-card', [
+                'title' => $blog->name ?? 'Judul tidak tersedia',
+                'date' => \Carbon\Carbon::parse($blog->created_at)->translatedFormat('d F Y'),
+                'category' => \Illuminate\Support\Str::of($blog->tag ?? '')->replace('_',' ')->title(),
+                'excerpt' => \Illuminate\Support\Str::limit($blog->description, 100),
+                'image' => $blog->image_url ? asset($blog->image_url) : '/assets/img/blogthumb.png'
+              ])
+            </a>
           </div>
         @empty
           <div class="col-span-full text-center py-8">
@@ -101,36 +103,9 @@
       </div>
 
       {{-- Pagination --}}
-      @if(count($blogs) > 0)
+      @if($blogs->hasPages())
         <div class="flex justify-center">
-          <nav class="inline-flex items-center space-x-1 bg-white rounded-md shadow-sm border border-gray-200 p-1" aria-label="Pagination">
-            <button class="inline-flex items-center px-2 py-1.5 rounded text-xs font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
-              <svg class="h-3 w-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-              </svg>
-              Sebelumnya
-            </button>
-            
-            <button class="inline-flex items-center px-2.5 py-1.5 rounded text-xs font-medium bg-[#1B3A6D] text-white shadow-sm">
-              1
-            </button>
-            <button class="inline-flex items-center px-2.5 py-1.5 rounded text-xs font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 transition-colors duration-200">
-              2
-            </button>
-            <button class="inline-flex items-center px-2.5 py-1.5 rounded text-xs font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 transition-colors duration-200">
-              3
-            </button>
-            <span class="inline-flex items-center px-1.5 py-1.5 text-xs font-medium text-gray-500">
-              ...
-            </span>
-            
-            <button class="inline-flex items-center px-2 py-1.5 rounded text-xs font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50 transition-colors duration-200">
-              Selanjutnya
-              <svg class="h-3 w-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-              </svg>
-            </button>
-          </nav>
+          {{ $blogs->links() }}
         </div>
       @endif
     </div>

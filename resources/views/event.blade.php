@@ -63,72 +63,20 @@
         </div>
       </div>
 
-      {{-- Events Grid --}}
+      {{-- Products Grid --}}
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-8">
-        @forelse($events as $event)
-          <div class="event-card transition-all duration-300" data-type="{{ strtolower($event->event_type ?? 'event') }}">
-            <a href="/produk-detail" class="block">
-              <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 group">
-                <div class="relative h-40 bg-gray-200 overflow-hidden">
-                  <img src="{{ $event->event_image ?? '/assets/img/belanja.png' }}" 
-                       alt="{{ $event->event_name }}" 
-                       class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                  <div class="absolute top-3 left-3">
-                    <span class="bg-green-500 text-white text-xs font-semibold px-2 py-1 rounded-full">
-                      {{ strtoupper($event->event_type ?? 'EVENT') }}
-                    </span>
-                  </div>
-                  @if($event->event_discount ?? false)
-                    <div class="absolute top-3 right-3 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold">
-                      -{{ $event->event_discount }}%
-                    </div>
-                  @endif
-                </div>
-                <div class="p-4 space-y-2">
-                  <div class="flex items-center justify-between">
-                    <p class="text-xs text-gray-500">
-                      {{ \Carbon\Carbon::parse($event->event_date)->translatedFormat('d M Y') }}
-                    </p>
-                    @if($event->event_location ?? false)
-                      <span class="text-xs text-gray-400">
-                        <svg class="inline w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                        </svg>
-                        {{ $event->event_location }}
-                      </span>
-                    @endif
-                  </div>
-                  <h3 class="text-sm font-semibold text-gray-900 line-clamp-2">
-                    {{ $event->event_name }}
-                  </h3>
-                  <div class="flex items-center justify-between">
-                    <div class="flex flex-col">
-                      <span class="text-[#1B3A6D] text-lg font-bold">
-                        Rp {{ number_format($event->event_price, 0, ',', '.') }}
-                      </span>
-                      @if($event->original_price ?? false)
-                        <span class="text-gray-400 text-xs line-through">
-                          Rp {{ number_format($event->original_price, 0, ',', '.') }}
-                        </span>
-                      @endif
-                    </div>
-                    @if($event->rating ?? false)
-                      <div class="flex items-center gap-1 text-xs text-gray-500">
-                        <svg class="w-3 h-3 fill-yellow-400" viewBox="0 0 24 24">
-                          <path d="M12 2L14.97 8.72L22.29 9.64L17 14.89L18.36 22.13L12 18.52L5.64 22.13L7 14.89L1.71 9.64L9.03 8.72L12 2Z" />
-                        </svg>
-                        <span>{{ $event->rating }}</span>
-                      </div>
-                    @endif
-                  </div>
-                  @if($event->event_description ?? false)
-                    <p class="text-xs text-gray-600 line-clamp-2">
-                      {{ $event->event_description }}
-                    </p>
-                  @endif
-                </div>
-              </div>
+        @forelse($products as $product)
+          <div class="event-card transition-all duration-300" data-type="product">
+            <a href="{{ route('event.show', $product->slug) }}" class="block">
+              @include('components.product-card', [
+                'title' => $product->name,
+                'image' => $product->image_url ? asset($product->image_url) : '/assets/img/belanja.png',
+                'price' => $product->price,
+                'status' => $product->status,
+                'seller' => $product->seller_name ?: $product->author_name,
+                'description' => $product->description,
+                'buttonText' => 'Lihat Detail'
+              ])
             </a>
           </div>
         @empty
@@ -137,8 +85,8 @@
               <svg class="mx-auto h-10 w-10 text-gray-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3a4 4 0 118 0v4m-4 12v-6m-4 6v-6m8 6v-6m2 2h2a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2v-6a2 2 0 012-2h2"></path>
               </svg>
-              <h3 class="text-base font-medium text-gray-900 mb-1">Belum ada event</h3>
-              <p class="text-sm text-gray-500">Event dan produk akan tampil di sini ketika sudah tersedia.</p>
+              <h3 class="text-base font-medium text-gray-900 mb-1">Belum ada produk</h3>
+              <p class="text-sm text-gray-500">Produk akan tampil di sini ketika sudah tersedia.</p>
             </div>
           </div>
         @endforelse
@@ -156,36 +104,9 @@
       </div>
 
       {{-- Pagination --}}
-      @if(count($events) > 0)
+      @if($products->hasPages())
         <div class="flex justify-center">
-          <nav class="inline-flex items-center space-x-1 bg-white rounded-md shadow-sm border border-gray-200 p-1" aria-label="Pagination">
-            <button class="inline-flex items-center px-2 py-1.5 rounded text-xs font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
-              <svg class="h-3 w-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-              </svg>
-              Sebelumnya
-            </button>
-            
-            <button class="inline-flex items-center px-2.5 py-1.5 rounded text-xs font-medium bg-[#1B3A6D] text-white shadow-sm">
-              1
-            </button>
-            <button class="inline-flex items-center px-2.5 py-1.5 rounded text-xs font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 transition-colors duration-200">
-              2
-            </button>
-            <button class="inline-flex items-center px-2.5 py-1.5 rounded text-xs font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 transition-colors duration-200">
-              3
-            </button>
-            <span class="inline-flex items-center px-1.5 py-1.5 text-xs font-medium text-gray-500">
-              ...
-            </span>
-            
-            <button class="inline-flex items-center px-2 py-1.5 rounded text-xs font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50 transition-colors duration-200">
-              Selanjutnya
-              <svg class="h-3 w-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-              </svg>
-            </button>
-          </nav>
+          {{ $products->links() }}
         </div>
       @endif
     </div>
