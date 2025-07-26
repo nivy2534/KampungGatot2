@@ -19,13 +19,22 @@ class BlogRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'id' => 'nullable',
+        $rules = [
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'status' => 'required|in:draft,published,archived', // sesuaikan enum
+            'status' => 'required|in:draft,published,archived',
             'tag' => 'required|in:sejarah,potensi_desa,kabar_warga,umkm_lokal',
-            'image' => 'nullable',
         ];
+
+        // Jika ini adalah update (ada ID), image tidak wajib
+        if ($this->has('id') && $this->id) {
+            $rules['id'] = 'required|exists:blogs,id';
+            $rules['image'] = 'nullable|image|max:1024';
+        } else {
+            // Jika ini adalah create, image wajib ada
+            $rules['image'] = 'required|image|max:1024';
+        }
+
+        return $rules;
     }
 }
