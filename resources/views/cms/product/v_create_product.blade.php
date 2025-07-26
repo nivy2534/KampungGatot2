@@ -44,9 +44,9 @@
                     class="hidden absolute inset-0 w-full h-full object-cover z-0" />
 
                     <div id="uploadPlaceholder" class="z-10 flex flex-col items-center">
-                        <i class="fa-solid fa-image text-2xl md:text-3xl text-primary"></i>
+                        <i class="fa-solid fa-image text-2xl md:text-3xl text-[#1B3A6D]"></i>
                         <label for="imageInput"
-                            class="cursor-pointer bg-primary text-white px-3 py-2 mt-3 rounded-lg hover:bg-primary/90 transition-colors text-sm">
+                            class="cursor-pointer bg-[#1B3A6D] text-white px-3 py-2 mt-3 rounded-lg hover:bg-[#1B3A6D]/90 transition-colors text-sm">
                             Pilih Gambar
                         </label>
                         <p class="text-xs mt-2">atau seret foto ke sini</p>
@@ -77,7 +77,7 @@
                     <label class="block mb-2 text-sm font-medium text-gray-700">Nama Barang</label>
                     <input id="nama" type="text" placeholder="Masukkan nama barang..."
                         value="{{ isset($product) ? $product->nama : '' }}"
-                        class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B3A6D] focus:border-[#1B3A6D]" />
                 </div>
 
                 <!-- Harga Barang -->
@@ -85,7 +85,7 @@
                     <label class="block mb-2 text-sm font-medium text-gray-700">Harga Barang</label>
                     <input id="harga" type="number" placeholder="Masukkan harga barang..."
                         value="{{ isset($product) ? $product->harga : '' }}"
-                        class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B3A6D] focus:border-[#1B3A6D]" />
                 </div>
 
                 <!-- Nama Penjual -->
@@ -93,7 +93,7 @@
                     <label class="block mb-2 text-sm font-medium text-gray-700">Nama Penjual</label>
                     <input id="seller_name" type="text" placeholder="Masukkan nama penjual..."
                         value="{{ isset($product) ? $product->seller_name : '' }}"
-                        class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B3A6D] focus:border-[#1B3A6D]" />
                 </div>
 
                 <!-- Nomor WhatsApp -->
@@ -101,7 +101,7 @@
                     <label class="block mb-2 text-sm font-medium text-gray-700">Nomor WhatsApp</label>
                     <input id="contact_person" type="text" placeholder="08xxxx..."
                         value="{{ isset($product) ? $product->contact_person : '' }}"
-                        class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B3A6D] focus:border-[#1B3A6D]" />
                 </div>
 
                 <!-- Grid untuk Deskripsi dan Status -->
@@ -110,14 +110,14 @@
                     <div class="md:col-span-2">
                         <label class="block mb-2 text-sm font-medium text-gray-700">Deskripsi Barang</label>
                         <textarea id="deskripsi" rows="4" placeholder="Masukkan deskripsi..."
-                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-vertical">{{ isset($product) ? $product->deskripsi : '' }}</textarea>
+                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B3A6D] focus:border-[#1B3A6D] resize-vertical">{{ isset($product) ? $product->deskripsi : '' }}</textarea>
                     </div>
 
                     <!-- Status -->
                     <div>
                         <label class="block mb-2 text-sm font-medium text-gray-700">Status</label>
                         <select id="status"
-                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B3A6D] focus:border-[#1B3A6D]">
                             <option value="ready" {{ isset($product) && $product->status == 'ready' ? 'selected' : '' }}>Ready</option>
                             <option value="habis" {{ isset($product) && $product->status == 'habis' ? 'selected' : '' }}>Habis</option>
                             <option value="preorder" {{ isset($product) && $product->status == 'preorder' ? 'selected' : '' }}>Pre-Order</option>
@@ -128,7 +128,7 @@
                 <!-- Tombol -->
                 <div class="flex flex-col sm:flex-row gap-3 pt-6 mt-6 border-t border-gray-200">
                     <button id="submitBarangBtn"
-                        class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition text-sm font-medium">
+                        class="bg-[#1B3A6D] text-white px-4 py-2 rounded-lg hover:bg-[#1B3A6D]/90 transition text-sm font-medium">
                         <i class="fas fa-save mr-2"></i>
                         {{ isset($product) ? 'Update Barang' : 'Simpan Barang' }}
                     </button>

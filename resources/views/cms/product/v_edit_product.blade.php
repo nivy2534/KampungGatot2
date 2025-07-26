@@ -21,9 +21,9 @@
                 class="hidden absolute inset-0 w-full h-full object-cover z-0" />
 
                 <div id="uploadPlaceholder" class="z-10 flex flex-col items-center">
-                <i class="fa-solid fa-image fa-2xl text-primary"></i>
+                <i class="fa-solid fa-image fa-2xl text-[#1B3A6D]"></i>
                 <label for="imageInput"
-                    class="cursor-pointer bg-primary text-white px-3 py-1 mt-4 rounded-lg hover:bg-primary-600 transition-colors">
+                    class="cursor-pointer bg-[#1B3A6D] text-white px-3 py-1 mt-4 rounded-lg hover:bg-[#1B3A6D]-600 transition-colors">
                     Pilih Gambar
                 </label>
                 <p class="text-sm mt-1">atau seret foto ke sini</p>
@@ -55,42 +55,42 @@
                 <div>
                     <label class="block mb-1 font-medium">Nama Barang</label>
                     <input id="nama" type="text" placeholder="Masukkan nama barang..."
-                        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#1B3A6D]" />
                 </div>
 
                 <!-- Harga Barang -->
                 <div>
                     <label class="block mb-1 font-medium">Harga Barang</label>
                     <input id="harga" type="number" placeholder="Masukkan harga barang..."
-                        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#1B3A6D]" />
                 </div>
 
                 <!-- Nama Penjual -->
                 <div>
                     <label class="block mb-1 font-medium">Nama Penjual</label>
                     <input id="seller_name" type="text" placeholder="Masukkan nama penjual..."
-                        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#1B3A6D]" />
                 </div>
 
                 <!-- Nomor WhatsApp -->
                 <div>
                     <label class="block mb-1 font-medium">Nomor WhatsApp</label>
                     <input id="contact_person" type="text" placeholder="08xxxx..."
-                        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#1B3A6D]" />
                 </div>
 
                 <!-- Deskripsi -->
                 <div>
                     <label class="block mb-1 font-medium">Deskripsi Barang</label>
                     <textarea id="deskripsi" rows="4" placeholder="Masukkan deskripsi..."
-                        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#1B3A6D]"></textarea>
                 </div>
 
                 <!-- Status -->
                 <div>
                     <label class="block mb-1 font-medium">Status</label>
                     <select id="status"
-                        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#1B3A6D]">
                         <option value="ready">Ready</option>
                         <option value="habis">Habis</option>
                         <option value="preorder">Pre-Order</option>
@@ -100,7 +100,7 @@
                 <!-- Tombol -->
                 <div class="flex gap-2">
                     <button id="submitBarangBtn"
-                        class="bg-primary text-white px-4 py-2 rounded hover:bg-blue-800 transition">
+                        class="bg-[#1B3A6D] text-white px-4 py-2 rounded hover:bg-[#1B3A6D]/90 transition">
                         Simpan
                     </button>
                     <a href="{{ url('products') }}"

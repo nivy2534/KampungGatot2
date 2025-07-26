@@ -56,6 +56,9 @@ class ProductRepository implements ProductRepositoryInterface
                             </div>
                         ';
             })
+            ->editColumn('created_at', function ($item) {
+                return $item->created_at->format('d M Y');
+            })
             ->rawColumns(['actions'])
             ->addIndexColumn()
             ->make();

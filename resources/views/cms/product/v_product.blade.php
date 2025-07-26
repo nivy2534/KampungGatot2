@@ -10,7 +10,7 @@
             </div>
             <div class="flex-shrink-0">
                 <a href="{{ url('dashboard/products/create') }}"
-                    class="w-full md:w-auto bg-primary text-white px-3 py-2 rounded-lg flex items-center justify-center gap-2 transition-colors hover:bg-primary/90 text-sm">
+                    class="w-full md:w-auto bg-[#1B3A6D] text-white px-3 py-2 rounded-lg flex items-center justify-center gap-2 transition-colors hover:bg-[#1B3A6D]/90 text-sm">
                     <span>Tambah Barang</span>
                     <i class="fas fa-plus text-xs"></i>
                 </a>
@@ -35,91 +35,57 @@
                         class="w-full sm:w-auto px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none bg-white">
                         <option value="">All Status</option>
                         <option value="ready">Ready</option>
-                        <option value="sold">Sold</option>
-                        <option value="unavailable">Unavailable</option>
+                        <option value="habis">Habis</option>
+                        <option value="draft">Draft</option>
                     </select>
                 </div>
             </div>
         </div>
 
-        <!-- Table -->
-        <div class="overflow-x-auto">
-            <table id="productTable" class="min-w-full bg-white">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th class="px-3 md:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Product Name
-                        </th>
-                        <th class="px-3 md:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Price
-                        </th>
-                        <th class="px-3 md:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Seller
-                        </th>
-                        <th class="px-3 md:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Status
-                        </th>
-                        <th class="px-3 md:px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Date Created
-                        </th>
-                        <th class="px-3 md:px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Actions
-                        </th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                    @foreach($products as $product)
-                        <tr class="hover:bg-gray-50 transition-colors">
-                            <td class="px-3 md:px-4 py-3">
-                                <div class="flex items-center space-x-3">
-                                    <img src="{{ asset('storage/' . $product->image_path) }}" alt="{{ $product->name }}" 
-                                         class="w-10 h-10 rounded-lg object-cover">
-                                    <div>
-                                        <h3 class="text-sm font-medium text-gray-900">{{ $product->name }}</h3>
-                                        <p class="text-xs text-gray-500">{{ Str::limit($product->description, 50) }}</p>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="px-3 md:px-4 py-3 text-sm text-gray-900">
-                                Rp{{ number_format($product->price, 0, ',', '.') }}
-                            </td>
-                            <td class="px-3 md:px-4 py-3 text-sm text-gray-900">
-                                {{ $product->seller_name ?? 'N/A' }}
-                            </td>
-                            <td class="px-3 md:px-4 py-3">
-                                @if($product->status == 'ready')
-                                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                        Ready
-                                    </span>
-                                @elseif($product->status == 'habis')
-                                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                                        Habis
-                                    </span>
-                                @else
-                                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                        Draft
-                                    </span>
-                                @endif
-                            </td>
-                            <td class="px-3 md:px-4 py-3 text-sm text-gray-500">
-                                {{ $product->created_at->format('d M Y') }}
-                            </td>
-                            <td class="px-3 md:px-4 py-3 text-center">
-                                <div class="flex items-center justify-center space-x-2">
-                                    <a href="{{ url('dashboard/products/edit', $product->id) }}" 
-                                       class="bg-blue-700 hover:bg-blue-800 text-white text-xs font-medium px-2 py-1 rounded transition-colors">
-                                        Edit
-                                    </a>
-                                    <button type="button" class="btn-delete bg-red-600 hover:bg-red-700 text-white text-xs font-medium px-2 py-1 rounded transition-colors" 
-                                            data-id="{{ $product->id }}">
-                                        Hapus
-                                    </button>
-                                </div>
-                            </td>
+        <!-- Table Container with Fixed Height -->
+        <div class="min-h-[400px] relative">
+            <!-- Table -->
+            <div class="overflow-x-auto">
+                <table id="productTable" class="min-w-full bg-white">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-3 md:px-4 py-2.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Product Name
+                            </th>
+                            <th class="hidden sm:table-cell px-3 md:px-4 py-2.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Price
+                            </th>
+                            <th class="hidden md:table-cell px-3 md:px-4 py-2.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Seller
+                            </th>
+                            <th class="hidden md:table-cell px-3 md:px-4 py-2.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Date Created
+                            </th>
+                            <th class="px-3 md:px-4 py-2.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Status
+                            </th>
+                            <th class="px-3 md:px-4 py-2.5 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Actions
+                            </th>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <!-- Data will be populated by DataTables -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Empty State (absolute positioned overlay) -->
+            <div id="emptyState" class="absolute inset-0 flex flex-col items-center justify-center py-8 text-center bg-white hidden">
+                <div class="mb-3 flex justify-center">
+                    <img src="/assets/img/empty_data.png" alt="Empty" class="w-40 h-28 mb-4" />
+                </div>
+                <h3 class="text-base font-semibold text-gray-700">Masih Kosong Nih!</h3>
+                <p class="text-sm text-gray-500 mt-2">Belum ada data produk di sini.<br>Klik tombol di atas untuk mulai menambahkan produk pertamamu.</p>
+                <a href="{{ url('dashboard/products/create') }}" class="inline-block mt-4 bg-[#1B3A6D] hover:bg-[#1B3A6D] text-white px-4 py-2 rounded-lg transition-colors text-sm font-medium">
+                    Tambah Produk Baru
+                </a>
+            </div>
         </div>
     </div>
 @endsection
@@ -136,6 +102,9 @@
         
         // Initialize DataTable
         $(document).ready(function() {
+            // Show empty state by default, hide when data loads
+            $('#emptyState').removeClass('hidden');
+            
             table = $('#productTable').DataTable({
                 processing: true,
                 serverSide: true,
@@ -152,9 +121,21 @@
                         d.custom_search = $('#searchInput').val();
                         return d;
                     },
+                    success: function(response) {
+                        console.log('DataTables AJAX Success:', response);
+                        if (response.data && response.data.length > 0) {
+                            $('#emptyState').addClass('hidden');
+                            $('.dataTables_wrapper').removeClass('hidden');
+                        } else {
+                            $('#emptyState').removeClass('hidden');
+                            $('.dataTables_wrapper').addClass('hidden');
+                        }
+                    },
                     error: function(xhr, error, thrown) {
                         console.error('DataTables AJAX Error:', xhr.responseText);
-                        alert('Error loading data. Please check console for details.');
+                        // Show empty state on error
+                        $('#emptyState').removeClass('hidden');
+                        $('.dataTables_wrapper').addClass('hidden');
                     }
                 },
                 columns: [
@@ -178,17 +159,26 @@
                     {
                         data: 'price',
                         name: 'price',
-                        className: "w-1/6",
+                        className: "w-1/6 hidden sm:table-cell",
                         render: function(data, type, row) {
-                            return `<div class="text-sm text-gray-900">Rp${new Intl.NumberFormat('id-ID').format(data)}</div>`;
+                            return `<div class="font-medium text-gray-900 text-sm">Rp${new Intl.NumberFormat('id-ID').format(data)}</div>`;
                         }
                     },
                     {
                         data: 'seller_name',
                         name: 'seller_name',
-                        className: "w-1/6",
+                        className: "w-1/6 hidden md:table-cell",
                         render: function(data, type, row) {
-                            return `<div class="text-sm text-gray-900">${data || 'N/A'}</div>`;
+                            return `<div class="font-medium text-gray-900 text-sm">${data || 'N/A'}</div>`;
+                        }
+                    },
+                    {
+                        data: 'created_at',
+                        name: 'created_at',
+                        className: "w-1/6 hidden md:table-cell",
+                        orderable: true,
+                        render: function(data) {
+                            return `<span class="text-sm text-gray-600">${data}</span>`;
                         }
                     },
                     {
@@ -205,75 +195,45 @@
                                     class: 'bg-red-100 text-red-800',
                                     text: 'Habis'
                                 },
-                                'preorder': {
+                                'draft': {
                                     class: 'bg-yellow-100 text-yellow-800',
-                                    text: 'Pre-Order'
+                                    text: 'Draft'
                                 }
                             };
-                            const config = statusConfig[data] || statusConfig['ready'];
-                            return `<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${config.class}">${config.text}</span>`;
+                            const config = statusConfig[data] || statusConfig['draft'];
+                            return `<span class="px-2 py-1 text-xs font-medium rounded-full ${config.class}">${config.text}</span>`;
                         }
                     },
                     {
-                        data: 'created_at',
-                        name: 'created_at',
-                        className: "w-1/6",
-                        orderable: true,
-                        render: function(data) {
-                            return `<div class="text-sm text-gray-500">${data}</div>`;
-                        }
-                    },
-                    {
-                        data: 'id',
+                        data: 'actions',
                         name: 'actions',
-                        className: "w-1/6 text-center",
+                        className: "w-1/6",
                         orderable: false,
                         searchable: false,
-                        render: function(data, type, row) {
-                            return `
-                                <div class="flex items-center justify-center space-x-2">
-                                    <a href="{{ url('dashboard/products/edit') }}/${data}" 
-                                       class="bg-blue-700 hover:bg-blue-800 text-white text-xs font-medium px-2 py-1 rounded transition-colors">
-                                        Edit
-                                    </a>
-                                    <button type="button" class="btn-delete bg-red-600 hover:bg-red-700 text-white text-xs font-medium px-2 py-1 rounded transition-colors" 
-                                            data-id="${data}">
-                                        Hapus
-                                    </button>
-                                </div>
-                            `;
-                        }
                     }
                 ],
-                dom: 't<"flex flex-col sm:flex-row justify-between items-center mt-4 px-3 md:px-4 pb-4 space-y-3 sm:space-y-0"<"flex items-center gap-2"li><"flex items-center gap-2"p>>',
+                dom: '<"overflow-x-auto"t><"flex justify-between items-center mt-3 px-3 md:px-4 pb-3"<"flex items-center gap-2"li><"flex items-center gap-2"p>>',
                 language: {
                     emptyTable: `
-                    <div class="flex flex-col items-center justify-center py-12 text-center">
-                        <div class="mx-auto w-48 h-48 bg-gray-100 rounded-lg flex items-center justify-center mb-6">
-                            <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4-8-4m16 0v10l-8 4-8-4V7"></path>
-                            </svg>
-                        </div>
-                        <h3 class="text-lg font-semibold text-gray-700">Masih Kosong Nih!</h3>
+                    <div class="flex flex-col items-center justify-center py-8 text-center">
+                        <img src="/assets/img/empty_data.png" alt="Empty" class="w-40 h-28 mb-4" />
+                        <h3 class="text-base font-semibold text-gray-700">Masih Kosong Nih!</h3>
                         <p class="text-sm text-gray-500 mt-2">Belum ada data produk di sini.<br>
-                        Klik tombol di atas untuk mulai menambahkan produk pertama.</p>
+                        Klik tombol di atas untuk mulai menambahkan produk pertamamu.</p>
                     </div>`,
                     zeroRecords: `
-                    <div class="flex flex-col items-center justify-center py-12 text-center">
-                        <div class="mx-auto w-48 h-48 bg-gray-100 rounded-lg flex items-center justify-center mb-6">
-                            <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                            </svg>
-                        </div>
-                        <h3 class="text-lg font-semibold text-gray-700">Tidak ada hasil</h3>
-                        <p class="text-sm text-gray-500 mt-2">Tidak ada produk yang sesuai dengan pencarian.</p>
+                    <div class="flex flex-col items-center justify-center py-8 text-center">
+                        <img src="/assets/img/empty_data.png" alt="Empty" class="w-40 h-28 mb-4" />
+                        <h3 class="text-base font-semibold text-gray-700">Masih Kosong Nih!</h3>
+                        <p class="text-sm text-gray-500 mt-2">Belum ada data produk di sini.<br>
+                        Klik tombol di atas untuk mulai menambahkan produk pertamamu.</p>
                     </div>`,
                     info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
                     infoEmpty: "Menampilkan 0 sampai 0 dari 0 entri",
                     infoFiltered: "(difilter dari _MAX_ total entri)",
                     lengthMenu: "Tampilkan _MENU_ entri",
                     search: "Cari:",
-                    loadingRecords: `<div class="px-4 py-2 text-gray-600 text-sm text-center">Memuat...</div>`,
+                    loadingRecords: `<div class="px-3 py-2 text-gray-600 text-sm text-center">Memuat...</div>`,
                 },
                 pageLength: 10,
                 responsive: true,
@@ -282,13 +242,33 @@
                     $(row).addClass('hover:bg-gray-50 transition-colors');
                 },
                 drawCallback: function() {
-                    // Custom pagination styling
+                    // Custom pagination styling dengan ukuran lebih kecil
+                    $('.dataTables_paginate .paginate_button').addClass(
+                        'px-2 py-1 mx-0.5 border rounded text-sm hover:bg-gray-50 transition-colors');
+                    $('.dataTables_paginate .paginate_button.current').addClass(
+                        'bg-[#1B3A6D] text-white border-[#1B3A6D] hover:bg-[#1B3A6D]');
+                    
+                    // Style info dan length menu
                     $('.dataTables_info').addClass('text-xs text-gray-600');
                     $('.dataTables_length select').addClass('text-sm');
-                    $('.dataTables_paginate .paginate_button').addClass(
-                        'px-3 py-2 mx-1 border rounded-lg hover:bg-gray-50 transition-colors text-sm');
-                    $('.dataTables_paginate .paginate_button.current').addClass(
-                        'bg-blue-600 text-white border-blue-600 hover:bg-blue-700');
+                    
+                    // Check if table is empty and show/hide empty state
+                    const tableData = table.data();
+                    if (tableData.length === 0) {
+                        $('#emptyState').removeClass('hidden');
+                        $('.dataTables_wrapper').addClass('hidden');
+                    } else {
+                        $('#emptyState').addClass('hidden');
+                        $('.dataTables_wrapper').removeClass('hidden');
+                    }
+                },
+                initComplete: function() {
+                    // Check initial state
+                    const tableData = table.data();
+                    if (tableData.length === 0) {
+                        $('#emptyState').removeClass('hidden');
+                        $('.dataTables_wrapper').addClass('hidden');
+                    }
                 }
             });
 
@@ -301,9 +281,9 @@
             $('#statusFilter').on('change', function() {
                 const value = this.value;
                 if (value) {
-                    table.column(3).search(value).draw();
+                    table.column(4).search(value).draw(); // Status is now column 4
                 } else {
-                    table.column(3).search('').draw();
+                    table.column(4).search('').draw();
                 }
             });
         });
@@ -312,8 +292,8 @@
             const productId = $(this).data('id');
 
             Swal.fire({
-                title: 'Hapus Konten?',
-                text: 'Apakah Anda yakin ingin menghapus barang ini? Tindakan ini tidak dapat dibatalkan.',
+                title: 'Hapus Produk?',
+                text: 'Apakah Anda yakin ingin menghapus produk ini? Tindakan ini tidak dapat dibatalkan.',
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonText: 'Ya, Hapus',
@@ -350,7 +330,7 @@
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Berhasil',
-                                text: 'Barang berhasil dihapus.',
+                                text: 'Produk berhasil dihapus.',
                                 timer: 2000,
                                 showConfirmButton: false,
                             });
@@ -362,8 +342,6 @@
                             Swal.showValidationMessage(error.message);
                         });
                 }
-            });
-
         });
     </script>
 @endpush
