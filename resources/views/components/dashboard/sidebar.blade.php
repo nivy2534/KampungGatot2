@@ -30,7 +30,7 @@
             <i class="fas fa-box w-4 text-center mr-3 text-white"></i>
             <span class="text-sm text-white">Kelola Produk</span>
         </a>
-        <a href="#" class="flex items-center px-3 py-2.5 hover:bg-primary rounded-md transition-colors duration-200 group text-white">
+        <a href="{{ url('/dashboard/galery') }}" class="flex items-center px-3 py-2.5 hover:bg-primary rounded-md transition-colors duration-200 group text-white">
             <i class="fa-solid fa-image mr-2.5 flex-shrink-0 text-sm text-white"></i> 
             <span class="truncate text-sm text-white">Kelola Galeri</span>
         </a>

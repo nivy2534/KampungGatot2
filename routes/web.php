@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\GaleryController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\BlogController;
@@ -55,6 +56,14 @@ Route::middleware(['auth'])->group(
           Route::post('/products/update', [ProductController::class, 'update'])->name("products.update");
           Route::delete('/products/delete/{id}', [ProductController::class, 'destroy'])->name("products.delete");
           Route::delete('/product-images/{id}', [ProductImageController::class, 'destroy']);
+
+          // Galery related
+          Route::get('/galery', [GaleryController::class, 'index']);
+          Route::post('/galery', [GaleryController::class, 'index']);
+          Route::get('/galery/create', [GaleryController::class, 'create']);
+          Route::post('/galery/create',[GaleryController::class, 'store']);
+          Route::put('/galery/{id}', [GaleryController::class, 'update']);
+          Route::delete('/galery/{id}',[GaleryController::class, 'destroy']);
         });
     }
 );
