@@ -1,29 +1,29 @@
 @extends('layouts.app_dashboard')
 
 @section('content')
-<div class="max-w-6xl mx-auto bg-white rounded-lg shadow">
-    <div class="bg-gray-200 px-4 py-2 border-b">
-        <h2 class="font-semibold text-sm text-gray-800">Tambah Barang</h2>
+<div class="bg-white rounded-lg shadow-sm border border-gray-200 mb-6 mx-2 md:mx-0">
+    <div class="p-3 md:p-4 border-b border-gray-200">
+        <h2 class="text-lg font-semibold text-gray-900">Edit Barang</h2>
     </div>
 
     <div class="p-6">
         <div class="flex flex-col md:flex-row gap-6">
             {{-- Upload Thumbnail --}}
             <div class="md:w-1/3">
-            <label class="block mb-2 font-medium">Gambar Produk</label>
+            <label class="block mb-2 text-sm font-medium text-gray-700">Gambar Produk</label>
 
             <!-- Input dan preview utama -->
             <div
-                class="relative flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-md h-64 bg-gray-50 text-gray-500 text-center mb-4 overflow-hidden"
+                class="relative flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-lg h-64 bg-gray-50 text-gray-500 text-center mb-4 overflow-hidden"
                 id="imageUploadContainer"
             >
                 <img id="previewImage" src="" alt="Preview"
                 class="hidden absolute inset-0 w-full h-full object-cover z-0" />
 
                 <div id="uploadPlaceholder" class="z-10 flex flex-col items-center">
-                <i class="fa-solid fa-image fa-2xl text-primary"></i>
+                <i class="fa-solid fa-image fa-2xl text-[#1B3A6D]"></i>
                 <label for="imageInput"
-                    class="cursor-pointer bg-primary text-white px-3 py-1 mt-4 rounded-lg hover:bg-primary-600 transition-colors">
+                    class="cursor-pointer bg-[#1B3A6D] text-white px-3 py-2 mt-3 rounded-lg hover:bg-[#1B3A6D]/90 transition-colors text-sm">
                     Pilih Gambar
                 </label>
                 <p class="text-sm mt-1">atau seret foto ke sini</p>
@@ -41,7 +41,7 @@
                 <input name="images[]" type="file" id="imageInput" class="hidden" accept="image/*" multiple />
             </div>
 
-            <p class="text-xs text-gray-400 mb-4">Maksimal 1MB per gambar</p>
+            <p class="text-xs text-gray-500 mt-2">Lampirkan gambar. Ukuran file tidak boleh lebih dari 1MB</p>
 
             <!-- Daftar thumbnail preview -->
             <div id="imagePreviewList" class="flex flex-wrap gap-2"></div>
@@ -53,44 +53,44 @@
             <div class="md:w-2/3 space-y-4">
                 <!-- Nama Barang -->
                 <div>
-                    <label class="block mb-1 font-medium">Nama Barang</label>
+                    <label class="block mb-2 text-sm font-medium text-gray-700">Nama Barang</label>
                     <input id="nama" type="text" placeholder="Masukkan nama barang..."
-                        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B3A6D] focus:border-[#1B3A6D]" />
                 </div>
 
                 <!-- Harga Barang -->
                 <div>
-                    <label class="block mb-1 font-medium">Harga Barang</label>
+                    <label class="block mb-2 text-sm font-medium text-gray-700">Harga Barang</label>
                     <input id="harga" type="number" placeholder="Masukkan harga barang..."
-                        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B3A6D] focus:border-[#1B3A6D]" />
                 </div>
 
                 <!-- Nama Penjual -->
                 <div>
-                    <label class="block mb-1 font-medium">Nama Penjual</label>
+                    <label class="block mb-2 text-sm font-medium text-gray-700">Nama Penjual</label>
                     <input id="seller_name" type="text" placeholder="Masukkan nama penjual..."
-                        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B3A6D] focus:border-[#1B3A6D]" />
                 </div>
 
                 <!-- Nomor WhatsApp -->
                 <div>
-                    <label class="block mb-1 font-medium">Nomor WhatsApp</label>
+                    <label class="block mb-2 text-sm font-medium text-gray-700">Nomor WhatsApp</label>
                     <input id="contact_person" type="text" placeholder="08xxxx..."
-                        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B3A6D] focus:border-[#1B3A6D]" />
                 </div>
 
                 <!-- Deskripsi -->
                 <div>
-                    <label class="block mb-1 font-medium">Deskripsi Barang</label>
+                    <label class="block mb-2 text-sm font-medium text-gray-700">Deskripsi Barang</label>
                     <textarea id="deskripsi" rows="4" placeholder="Masukkan deskripsi..."
-                        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B3A6D] focus:border-[#1B3A6D] resize-vertical"></textarea>
                 </div>
 
                 <!-- Status -->
                 <div>
-                    <label class="block mb-1 font-medium">Status</label>
+                    <label class="block mb-2 text-sm font-medium text-gray-700">Status</label>
                     <select id="status"
-                        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B3A6D] focus:border-[#1B3A6D]">
                         <option value="ready">Ready</option>
                         <option value="habis">Habis</option>
                         <option value="preorder">Pre-Order</option>
@@ -98,20 +98,21 @@
                 </div>
 
                 <!-- Tombol -->
-                <div class="flex gap-2">
+                <div class="flex flex-col md:flex-row gap-3 md:gap-4 pt-6 border-t border-gray-200 mt-6">
                     <button id="submitBarangBtn"
-                        class="bg-primary text-white px-4 py-2 rounded hover:bg-blue-800 transition">
-                        Simpan
+                        class="bg-[#1B3A6D] text-white px-4 py-2 rounded-lg hover:bg-[#1B3A6D]/90 transition text-sm font-medium w-full md:w-auto">
+                        <i class="fas fa-save mr-2"></i>
+                        Update Barang
                     </button>
-                    <a href="{{ url('products') }}"
-                        class="bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300 transition">
-                        Kembali
+                    <a href="{{ url('dashboard/products') }}"
+                        class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition text-sm font-medium text-center w-full md:w-auto">
+                        <i class="fas fa-times mr-2"></i>
+                        Batal
                     </a>
                 </div>
             </div>
         </div>
     </div>
-</div>
 @endsection
 
 @push('addon-script')

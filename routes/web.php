@@ -16,15 +16,15 @@ Route::get('/', [HomepageController::class, 'index']);
 
 Route::get('/login', function () {
     return view('auth.login');
-})->name('login');
+})->name('login')->middleware('guest');
 
-Route::post('/login-post', [AuthController::class, 'login']);
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/logout', [AuthController::class, 'logout'])->name("logout");
+Route::post('/login-post', [AuthController::class, 'login'])->middleware('guest');
+Route::post('/register', [AuthController::class, 'register'])->middleware('guest');
+Route::post('/logout', [AuthController::class, 'logout'])->name("logout")->middleware('auth');
 
 Route::get('/register', function () {
     return view('auth.register');
-})->name('register');
+})->name('register')->middleware('guest');
 
 // Ordinary people
 Route::get('/blog', [BlogPageController::class, 'index'])->name('blog');

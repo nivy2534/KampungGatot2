@@ -2,8 +2,8 @@
 
 @section('content')
     <!-- Header -->
-    <div class="mb-4 md:mb-6">
-        <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between md:gap-0 px-3 md:px-0">
+    <div class="mb-4 md:mb-6 px-2 md:px-0">
+        <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between md:gap-0">
             <div class="flex-1 min-w-0">
                 <h1 class="text-xl md:text-2xl font-bold text-gray-900 mb-1">
                     {{ isset($blog) ? 'Edit Blog' : 'Tambah Blog' }}
@@ -22,9 +22,9 @@
         </div>
     </div>
 
-    <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-sm border border-gray-200 mb-8 mx-2 md:mx-auto">
-        <div class="bg-gray-50 px-4 md:px-6 py-3 md:py-4 border-b border-gray-200">
-            <h2 class="font-semibold text-base text-gray-800">
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 mb-6 mx-2 md:mx-0">
+        <div class="p-3 md:p-4 border-b border-gray-200">
+            <h2 class="text-lg font-semibold text-gray-900">
                 {{ isset($blog) ? 'Form Edit Blog' : 'Form Blog Baru' }}
             </h2>
         </div>
@@ -39,9 +39,9 @@
                         class="hidden absolute inset-0 w-full h-full object-cover z-0" />
 
                     <div id="uploadPlaceholder" class="z-10 flex flex-col items-center">
-                        <i class="fa-solid fa-image text-2xl md:text-3xl text-primary"></i>
+                        <i class="fa-solid fa-image text-2xl md:text-3xl text-[#1B3A6D]"></i>
                         <label for="imageInput"
-                            class="cursor-pointer bg-primary text-white px-3 py-2 mt-3 rounded-lg hover:bg-primary/90 transition-colors text-sm">
+                            class="cursor-pointer bg-[#1B3A6D] text-white px-3 py-2 mt-3 rounded-lg hover:bg-[#1B3A6D]/90 transition-colors text-sm">
                             Pilih Gambar
                         </label>
                         <p class="text-xs mt-2">atau seret foto ke sini</p>
@@ -49,7 +49,7 @@
 
                     <div id="imageActions" class="absolute bottom-3 left-3 z-10 gap-2" style="display: none;">
                         <label for="imageInput"
-                            class="inline-block bg-primary text-white px-3 py-1 text-sm rounded hover:bg-primary/90 cursor-pointer mr-2">
+                            class="inline-block bg-[#1B3A6D] text-white px-3 py-1 text-sm rounded hover:bg-[#1B3A6D]/90 cursor-pointer mr-2">
                             Ganti
                         </label>
                         <button id="removeImageBtn" type="button"
@@ -69,7 +69,7 @@
                 <div class="mb-4">
                     <label class="block mb-2 text-sm font-medium text-gray-700">Status</label>
                     <select id="kategori"
-                        class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B3A6D] focus:border-[#1B3A6D]">
                         <option value="">Pilih Status</option>
                         <option value="draft" {{ isset($blog) && $blog->status == 'draft' ? 'selected' : '' }}>Draft</option>
                         <option value="published" {{ isset($blog) && $blog->status == 'published' ? 'selected' : '' }}>
@@ -82,7 +82,7 @@
                 <div class="mb-4">
                     <label class="block mb-2 text-sm font-medium text-gray-700">Tag</label>
                     <select name="tag" id="tag"
-                        class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B3A6D] focus:border-[#1B3A6D]">
                         <option value="">Pilih Tag</option>
                         <option value="sejarah" {{ isset($blog) && $blog->tag == 'sejarah' ? 'selected' : '' }}>Sejarah</option>
                         <option value="potensi_desa" {{ isset($blog) && $blog->tag == 'potensi_desa' ? 'selected' : '' }}>Potensi Desa</option>
@@ -97,7 +97,7 @@
                 <label class="block mb-2 text-sm font-medium text-gray-700">Judul Berita</label>
                 <input type="hidden" name="blogId" id="blogId" value="{{ isset($blog) ? $blog->id : '' }}">
                 <input id="judul" type="text" placeholder="Masukkan judul berita..."
-                    class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B3A6D] focus:border-[#1B3A6D]"
                     value="{{ isset($blog) ? $blog->name : '' }}" />
             </div>
 
@@ -105,19 +105,19 @@
             <div class="mb-6">
                                 <label class="block mb-2 text-sm font-medium text-gray-700">Deskripsi</label>
                 <textarea id="deskripsi" rows="4" placeholder="Masukkan deskripsi berita..."
-                    class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-vertical">{{ isset($blog) ? $blog->description : '' }}</textarea>
+                    class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B3A6D] focus:border-[#1B3A6D] resize-vertical">{{ isset($blog) ? $blog->description : '' }}</textarea>
             </div>
 
             <!-- Konten Blog -->
             <div class="mb-6">
                 <label class="block mb-2 text-sm font-medium text-gray-700">Konten Blog</label>
                 <textarea id="konten" rows="8" placeholder="Tulis konten blog di sini..."
-                    class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-vertical">{{ isset($blog) ? $blog->content : '' }}</textarea>
+                    class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B3A6D] focus:border-[#1B3A6D] resize-vertical">{{ isset($blog) ? $blog->content : '' }}</textarea>
             </div>
 
             <!-- Tombol -->
             <div class="flex flex-col md:flex-row gap-3 md:gap-4 pt-6 border-t border-gray-200 mt-6">
-                <button id="submitBtn" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition text-sm font-medium w-full md:w-auto">
+                <button id="submitBtn" class="bg-[#1B3A6D] text-white px-4 py-2 rounded-lg hover:bg-[#1B3A6D]/90 transition text-sm font-medium w-full md:w-auto">
                     <i class="fas fa-save mr-2"></i>
                     {{ isset($blog) ? 'Update Blog' : 'Simpan Blog' }}
                 </button>
@@ -125,9 +125,6 @@
                     <i class="fas fa-times mr-2"></i>
                     Batal
                 </a>
-            </div>
-        </div>
-    </div>
             </div>
         </div>
     </div>
@@ -226,7 +223,7 @@
                                 customClass: {
                                     popup: 'rounded-xl px-6 py-8',
                                     title: 'text-black text-base font-bold',
-                                    confirmButton: 'bg-blue-800 hover:bg-blue-900 text-white text-sm px-6 py-3 rounded-lg focus:outline-none'
+                                    confirmButton: 'bg-[#1B3A6D]/90 hover:bg-blue-900 text-white text-sm px-6 py-3 rounded-lg focus:outline-none'
                                 },
                                 buttonsStyling: false,
                             });

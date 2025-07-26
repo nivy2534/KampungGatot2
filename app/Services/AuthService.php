@@ -7,6 +7,7 @@ use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use App\Repositories\Contracts\AuthRepositoryInterface;
 
 class AuthService
@@ -24,8 +25,11 @@ class AuthService
     {
         $user = $this->authRepository->findByEmail($request->email);
 
-        if (!$user || !password_verify($request->password, $user->password)) {
-            return $this->error('Invalid credentials');
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return response()->json([
+                "success" => false,
+                "message" => 'Email atau kata sandi salah',
+            ], 401);
         }
 
         Auth::login($user);
@@ -41,22 +45,33 @@ class AuthService
     {
         $user = $this->authRepository->register($data);
 
-        return $this->success(new UserResource($user), 'Data ditemukan');
+        Auth::login($user);
+
+        return response()->json([
+            "success" => true,
+            "message" => 'Pendaftaran berhasil',
+            'data' => new UserResource($user),
+        ]);
     }
 
     public function logout(Request $request)
     {
         if (!Auth::check()) {
-            return $this->error('Unauthorized');
+            return response()->json([
+                "success" => false,
+                "message" => 'Unauthorized',
+            ], 401);
         }
 
         Auth::logout();
 
-        // Hapus session
-        //$request->session()->invalidate();
-        //$request->session()->regenerateToken();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
-        return $this->success([], 'Logout berhasil');
+        return response()->json([
+            "success" => true,
+            "message" => 'Logout berhasil',
+        ]);
     }
 
     public function getUser()

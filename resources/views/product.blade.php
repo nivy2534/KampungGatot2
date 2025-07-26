@@ -25,13 +25,13 @@
       <div>
         <h1 class="text-2xl font-bold mb-1">Event Kampung Gatot</h1>
         <p class="text-gray-500 mb-2">24 – 28 Sep 2025</p>
-        <p class="text-blue-600 text-xl font-bold mb-4">Rp 275.000</p>
+        <p class="text-primary text-xl font-bold mb-4">Rp 275.000</p>
         <p class="text-gray-700 mb-6 leading-relaxed">
           A stylish solid tone casual set featuring a sleeveless tank top with a square neckline and an outerwear,
           paired with a high-rise midi skirt with ruffle details. Designed for a regular fit, the top offers a
           slip-on style, while the skirt comes with a zip and hook fastening.
         </p>
-        <a href="#" class="inline-flex items-center bg-blue-700 text-white px-6 py-2 rounded-lg hover:bg-blue-800 transition">
+        <a href="#" class="inline-flex items-center bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary/90 transition">
           Hubungi Penjual
         </a>
 
@@ -39,7 +39,7 @@
         <div class="mt-6">
           <p class="font-medium mb-2">Bagikan</p>
           <div class="flex gap-3 text-2xl text-gray-500">
-            <a href="#"><i class="fab fa-facebook-square hover:text-blue-600"></i></a>
+            <a href="#"><i class="fab fa-facebook-square hover:text-primary"></i></a>
             <a href="#"><i class="fab fa-instagram hover:text-pink-600"></i></a>
             <a href="#"><i class="fab fa-tiktok hover:text-black"></i></a>
             <a href="#"><i class="fab fa-youtube hover:text-red-600"></i></a>
@@ -61,7 +61,7 @@
               <span class="bg-green-100 text-green-700 text-xs font-semibold px-2 py-1 rounded">BIG DEALS</span>
               <p class="text-sm text-gray-500 mt-2">24 – 28 Sep 2025</p>
               <h3 class="font-semibold mt-1">Jakarta – Surabaya</h3>
-              <p class="text-blue-600 font-bold mt-1">Rp 275.000</p>
+              <p class="text-primary font-bold mt-1">Rp 275.000</p>
             </div>
           </div>
         </a>
