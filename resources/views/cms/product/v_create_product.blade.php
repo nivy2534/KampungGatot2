@@ -22,9 +22,9 @@
         </div>
     </div>
 
-<div class="max-w-6xl mx-auto bg-white rounded-lg shadow-sm border border-gray-200 mx-2 md:mx-auto">
-    <div class="bg-gray-50 px-4 md:px-6 py-3 border-b border-gray-200">
-        <h2 class="font-semibold text-base text-gray-800">
+<div class="bg-white rounded-lg shadow-sm border border-gray-200 mb-6 mx-2 md:mx-0">
+    <div class="p-3 md:p-4 border-b border-gray-200">
+        <h2 class="text-lg font-semibold text-gray-900">
             {{ isset($product) ? 'Form Edit Barang' : 'Form Barang Baru' }}
         </h2>
     </div>
@@ -126,14 +126,14 @@
                 </div>
 
                 <!-- Tombol -->
-                <div class="flex flex-col sm:flex-row gap-3 pt-6 mt-6 border-t border-gray-200">
+                <div class="flex flex-col md:flex-row gap-3 md:gap-4 pt-6 border-t border-gray-200 mt-6">
                     <button id="submitBarangBtn"
-                        class="bg-[#1B3A6D] text-white px-4 py-2 rounded-lg hover:bg-[#1B3A6D]/90 transition text-sm font-medium">
+                        class="bg-[#1B3A6D] text-white px-4 py-2 rounded-lg hover:bg-[#1B3A6D]/90 transition text-sm font-medium w-full md:w-auto">
                         <i class="fas fa-save mr-2"></i>
                         {{ isset($product) ? 'Update Barang' : 'Simpan Barang' }}
                     </button>
                     <a href="{{ url('dashboard/products') }}"
-                        class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition text-sm font-medium text-center">
+                        class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition text-sm font-medium text-center w-full md:w-auto">
                         <i class="fas fa-times mr-2"></i>
                         Batal
                     </a>
@@ -141,7 +141,6 @@
             </div>
         </div>
     </div>
-</div>
 @endsection
 
 @push('addon-script')
