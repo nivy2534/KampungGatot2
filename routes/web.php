@@ -28,7 +28,7 @@ Route::get('/register', function () {
 
 // Ordinary people
 Route::get('/blog', [BlogPageController::class, 'index'])->name('blog');
-Route::get('/galeri', [GaleriPageController::class, 'index'])->name('galeri');
+Route::get('/gallery', [GaleriPageController::class, 'index'])->name('galeri');
 Route::get('/event', [EventPageController::class, 'index'])->name('event');
 
 Route::middleware(['auth'])->group(
@@ -58,12 +58,12 @@ Route::middleware(['auth'])->group(
           Route::delete('/product-images/{id}', [ProductImageController::class, 'destroy']);
 
           // Galery related
-          Route::get('/galery', [GaleryController::class, 'index']);
-          Route::post('/galery', [GaleryController::class, 'index']);
-          Route::get('/galery/create', [GaleryController::class, 'create']);
-          Route::post('/galery/create',[GaleryController::class, 'store']);
-          Route::put('/galery/{id}', [GaleryController::class, 'update']);
-          Route::delete('/galery/{id}',[GaleryController::class, 'destroy']);
+          Route::get('/gallery', [GaleryController::class, 'index']);
+          Route::post('/gallery', [GaleryController::class, 'index']);
+          Route::get('/gallery/create', [GaleryController::class, 'create']);
+          Route::post('/gallery/create',[GaleryController::class, 'store']);
+          Route::put('/gallery/{id}', [GaleryController::class, 'update']);
+          Route::delete('/gallery/{id}',[GaleryController::class, 'destroy']);
         });
     }
 );
