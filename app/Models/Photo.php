@@ -13,8 +13,7 @@ class Photo extends Model
         'photo_name',
         'photo_description',
         'photo_date',
-        'event_id',
-        'production_id',
-        'blog_id'
+        'category',
+        'image_path'
     ];
 }

@@ -19,11 +19,11 @@
     {{-- Main Content --}}
     <section class="py-6 lg:py-8 px-4 sm:px-6 lg:px-8 bg-gray-50 min-h-screen">
         <div class="max-w-6xl mx-auto">
-            
+
             {{-- Search & Filter Container --}}
             <div class="bg-white rounded-lg shadow-sm border border-gray-100 p-4 mb-6">
                 <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-                    
+
                     {{-- Search Input --}}
                     <div class="flex-1 max-w-sm">
                         <label for="search-gallery" class="sr-only">Cari foto</label>
@@ -33,10 +33,10 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                                 </svg>
                             </div>
-                            <input 
-                                type="text" 
+                            <input
+                                type="text"
                                 id="search-gallery"
-                                placeholder="Cari foto..." 
+                                placeholder="Cari foto..."
                                 class="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B3A6D] focus:border-transparent transition-colors duration-200 text-sm"
                             >
                         </div>
@@ -66,8 +66,8 @@
                     <div class="photo-card transition-all duration-300" data-category="{{ strtolower(str_replace(' ', '_', $photo->category ?? 'uncategorized')) }}">
                         <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 group">
                             <div class="relative h-48 bg-gray-200 overflow-hidden">
-                                <img src="{{ asset('storage/photos/' . ($photo->photo_name ?? 'default.jpg')) }}" 
-                                     alt="{{ $photo->photo_description ?? 'Foto' }}" 
+                                <img src="{{ asset('storage/' . ($photo->image_path ?? '/assets/img/blogthumb.png')) }}" 
+                                     alt="{{ $photo->photo_description ?? 'Foto' }}"
                                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                                 <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300"></div>
                             </div>
@@ -121,7 +121,7 @@
                             </svg>
                             Sebelumnya
                         </button>
-                        
+
                         <button class="inline-flex items-center px-2.5 py-1.5 rounded text-xs font-medium bg-[#1B3A6D] text-white shadow-sm">
                             1
                         </button>
@@ -134,7 +134,7 @@
                         <span class="inline-flex items-center px-1.5 py-1.5 text-xs font-medium text-gray-500">
                             ...
                         </span>
-                        
+
                         <button class="inline-flex items-center px-2 py-1.5 rounded text-xs font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50 transition-colors duration-200">
                             Selanjutnya
                             <svg class="h-3 w-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -148,28 +148,28 @@
     </section>
 
     @include('components.footer')
-    
+
 <script>
 document.addEventListener("DOMContentLoaded", function () {
     const filterButtons = document.querySelectorAll(".filter-btn");
     const photoCards = document.querySelectorAll(".photo-card");
     const searchInput = document.getElementById("search-gallery");
     const noResultsMessage = document.getElementById("no-results");
-    
+
     let currentFilter = "all";
     let currentSearch = "";
 
     // Filter functionality
     function filterCards() {
         let visibleCount = 0;
-        
+
         photoCards.forEach(card => {
             const cardCategory = card.getAttribute("data-category");
             const cardText = card.textContent.toLowerCase();
-            
+
             const matchesFilter = currentFilter === "all" || cardCategory === currentFilter;
             const matchesSearch = currentSearch === "" || cardText.includes(currentSearch);
-            
+
             if (matchesFilter && matchesSearch) {
                 card.style.display = "block";
                 card.classList.remove("fade-out");
@@ -185,7 +185,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 }, 150);
             }
         });
-        
+
         // Show/hide no results message
         if (visibleCount === 0 && photoCards.length > 0) {
             noResultsMessage.classList.remove("hidden");
@@ -198,16 +198,16 @@ document.addEventListener("DOMContentLoaded", function () {
     filterButtons.forEach(btn => {
         btn.addEventListener("click", () => {
             currentFilter = btn.getAttribute("data-category");
-            
+
             // Update button states
             filterButtons.forEach(b => {
                 b.classList.remove("bg-[#1B3A6D]", "text-white");
                 b.classList.add("border-gray-300", "text-gray-700");
             });
-            
+
             btn.classList.remove("border-gray-300", "text-gray-700");
             btn.classList.add("bg-[#1B3A6D]", "text-white");
-            
+
             filterCards();
         });
     });
@@ -218,7 +218,7 @@ document.addEventListener("DOMContentLoaded", function () {
             currentSearch = this.value.toLowerCase().trim();
             filterCards();
         });
-        
+
         // Clear search on escape
         searchInput.addEventListener("keydown", function(e) {
             if (e.key === "Escape") {
@@ -235,11 +235,11 @@ document.addEventListener("DOMContentLoaded", function () {
         .fade-in {
             animation: fadeIn 0.3s ease-in-out;
         }
-        
+
         .fade-out {
             animation: fadeOut 0.15s ease-in-out;
         }
-        
+
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -250,7 +250,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 transform: translateY(0);
             }
         }
-        
+
         @keyframes fadeOut {
             from {
                 opacity: 1;
@@ -261,15 +261,15 @@ document.addEventListener("DOMContentLoaded", function () {
                 transform: translateY(-5px);
             }
         }
-        
+
         .photo-card {
             transition: transform 0.2s ease-in-out;
         }
-        
+
         .photo-card:hover {
             transform: translateY(-2px);
         }
-        
+
         .line-clamp-2 {
             display: -webkit-box;
             -webkit-line-clamp: 2;

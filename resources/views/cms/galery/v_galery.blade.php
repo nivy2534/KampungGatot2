@@ -112,8 +112,8 @@
                     }
                 },
                 columns: [{
-                        data: 'name',
-                        name: 'name',
+                        data: 'photo_name',
+                        name: 'photo_name',
                         className: "w-2/6",
                         render: function(data, type, row) {
                             return `<div class="font-medium text-gray-900 px-4 py-2">${data}</div>`;
@@ -128,8 +128,8 @@
                         }
                     },
                     {
-                        data: 'date',
-                        name: 'date',
+                        data: 'photo_date',
+                        name: 'photo_date',
                         className: "w-1/6",
                         orderable: true,
                         render: function(data) {
