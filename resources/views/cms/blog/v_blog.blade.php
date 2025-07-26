@@ -10,7 +10,7 @@
             </div>
             <div class="flex-shrink-0">
                 <a href="{{ url('dashboard/blogs/create') }}"
-                    class="w-full md:w-auto bg-primary text-white px-3 py-2 rounded-lg flex items-center justify-center gap-2 transition-colors hover:bg-primary/90 text-sm">
+                    class="w-full md:w-auto bg-[#1B3A6D] text-white px-3 py-2 rounded-lg flex items-center justify-center gap-2 transition-colors hover:bg-[#1B3A6D]/90 text-sm">
                     <span>Tambah Blog</span>
                     <i class="fas fa-plus text-xs"></i>
                 </a>
@@ -28,11 +28,11 @@
                     <div class="relative">
                         <i class="fas fa-search absolute left-2.5 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm"></i>
                         <input type="text" id="searchInput" placeholder="Cari..."
-                            class="w-full sm:w-auto pl-8 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
+                            class="w-full sm:w-auto pl-8 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B3A6D] focus:border-[#1B3A6D] outline-none">
                     </div>
                     <!-- Status Filter -->
                     <select id="statusFilter"
-                        class="w-full sm:w-auto px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none bg-white">
+                        class="w-full sm:w-auto px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B3A6D] focus:border-[#1B3A6D] outline-none bg-white">
                         <option value="">All Status</option>
                         <option value="published">Published</option>
                         <option value="draft">Draft</option>
@@ -77,7 +77,7 @@
             </div>
             <h3 class="text-base font-semibold text-gray-700">Masih Kosong Nih!</h3>
             <p class="text-sm text-gray-500 mt-2">Belum ada data blog di sini.<br>Klik tombol di atas untuk mulai menambahkan blog pertamamu.</p>
-            <a href="{{ url('dashboard/blogs/create') }}" class="inline-block mt-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors text-sm font-medium">
+            <a href="{{ url('dashboard/blogs/create') }}" class="inline-block mt-4 bg-[#1B3A6D] hover:bg-[#1B3A6D] text-white px-4 py-2 rounded-lg transition-colors text-sm font-medium">
                 Tambah Blog Baru
             </a>
         </div>
@@ -173,15 +173,15 @@
                     <div class="flex flex-col items-center justify-center py-8 text-center">
                         <img src="/assets/img/empty_data.png" alt="Empty" class="w-40 h-28 mb-4" />
                         <h3 class="text-base font-semibold text-gray-700">Masih Kosong Nih!</h3>
-                        <p class="text-sm text-gray-500 mt-2">Belum ada data produk di sini.<br>
-                        Klik tombol di bawah untuk mulai menambahkan produk pertamamu.</p>
+                        <p class="text-sm text-gray-500 mt-2">Belum ada data blog di sini.<br>
+                        Klik tombol di atas untuk mulai menambahkan blog pertamamu.</p>
                     </div>`,
                     zeroRecords: `
                     <div class="flex flex-col items-center justify-center py-8 text-center">
                         <img src="/assets/img/empty_data.png" alt="Empty" class="w-40 h-28 mb-4" />
                         <h3 class="text-base font-semibold text-gray-700">Masih Kosong Nih!</h3>
-                        <p class="text-sm text-gray-500 mt-2">Belum ada data produk di sini.<br>
-                        Klik tombol di bawah untuk mulai menambahkan produk pertamamu.</p>
+                        <p class="text-sm text-gray-500 mt-2">Belum ada data blog di sini.<br>
+                        Klik tombol di atas untuk mulai menambahkan blog pertamamu.</p>
                     </div>`,
                     info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
                     infoEmpty: "Menampilkan 0 sampai 0 dari 0 entri",
@@ -201,7 +201,7 @@
                     $('.dataTables_paginate .paginate_button').addClass(
                         'px-2 py-1 mx-0.5 border rounded text-sm hover:bg-gray-50 transition-colors');
                     $('.dataTables_paginate .paginate_button.current').addClass(
-                        'bg-blue-600 text-white border-blue-600 hover:bg-blue-700');
+                        'bg-[#1B3A6D] text-white border-[#1B3A6D] hover:bg-[#1B3A6D]');
                     
                     // Style info dan length menu
                     $('.dataTables_info').addClass('text-xs text-gray-600');
