@@ -144,7 +144,7 @@
                         name: 'name',
                         className: "w-2/6",
                         render: function(data, type, row) {
-                            let imageUrl = row.image_path ? `{{ asset('storage/') }}/${row.image_path}` : '/assets/img/default-product.jpg';
+                            let imageUrl = row.image_path ? '{{ asset("storage/") }}/' + row.image_path : '/assets/img/default-product.jpg';
                             return `
                                 <div class="flex items-center space-x-3">
                                     <img src="${imageUrl}" alt="${data}" class="w-10 h-10 rounded-lg object-cover">
@@ -228,10 +228,10 @@
                         <p class="text-sm text-gray-500 mt-2">Belum ada data produk di sini.<br>
                         Klik tombol di atas untuk mulai menambahkan produk pertamamu.</p>
                     </div>`,
-                    info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
+                    info: "Menampilkan START sampai END dari TOTAL entri",
                     infoEmpty: "Menampilkan 0 sampai 0 dari 0 entri",
-                    infoFiltered: "(difilter dari _MAX_ total entri)",
-                    lengthMenu: "Tampilkan _MENU_ entri",
+                    infoFiltered: "(difilter dari MAX total entri)",
+                    lengthMenu: "Tampilkan MENU entri",
                     search: "Cari:",
                     loadingRecords: `<div class="px-3 py-2 text-gray-600 text-sm text-center">Memuat...</div>`,
                 },

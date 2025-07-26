@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\GaleryController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\BlogController;
@@ -27,8 +28,10 @@ Route::get('/register', function () {
 
 // Ordinary people
 Route::get('/blog', [BlogPageController::class, 'index'])->name('blog');
+Route::get('/blog/{slug}', [BlogPageController::class, 'show'])->name('blog.show');
 Route::get('/galeri', [GaleriPageController::class, 'index'])->name('galeri');
 Route::get('/event', [EventPageController::class, 'index'])->name('event');
+Route::get('/event/{slug}', [EventPageController::class, 'show'])->name('event.show');
 
 Route::middleware(['auth'])->group(
     function () {
@@ -54,7 +57,15 @@ Route::middleware(['auth'])->group(
           Route::post('/products/save', [ProductController::class, 'store'])->name("products.save");
           Route::post('/products/update', [ProductController::class, 'update'])->name("products.update");
           Route::delete('/products/delete/{id}', [ProductController::class, 'destroy'])->name("products.delete");
-          // Route::delete('/product-images/{id}', [ProductImageController::class, 'destroy']);
+          Route::delete('/product-images/{id}', [ProductImageController::class, 'destroy']);
+
+          // Galery related
+          Route::get('/galery', [GaleryController::class, 'index']);
+          Route::post('/galery', [GaleryController::class, 'index']);
+          Route::get('/galery/create', [GaleryController::class, 'create']);
+          Route::post('/galery/create',[GaleryController::class, 'store']);
+          Route::put('/galery/{id}', [GaleryController::class, 'update']);
+          Route::delete('/galery/{id}',[GaleryController::class, 'destroy']);
         });
     }
 );

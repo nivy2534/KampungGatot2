@@ -2,22 +2,23 @@
 
 namespace App\Repositories;
 
+use App\Models\Photo;
 use App\Models\Product;
+use App\Repositories\Contracts\GaleryRepositoryInterface;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use App\Repositories\Contracts\ProductRepositoryInterface;
 
-class ProductRepository implements ProductRepositoryInterface
+class GaleryRepository implements GaleryRepositoryInterface
 {
     public function index(Request $request)
     {
         $limit = $request->length == "" ? '10' : $request->length;
         $offset = $request->start == "" ? '0' : $request->start;
 
-        $query = Product::orderBy("created_at", "ASC");
+        $query = Photo::orderBy("created_at", "ASC");
 
         if ($request->status_filter != "") {
             $query->where("status", $request->status_filter);
@@ -56,9 +57,6 @@ class ProductRepository implements ProductRepositoryInterface
                             </div>
                         ';
             })
-            ->editColumn('created_at', function ($item) {
-                return $item->created_at->format('d M Y');
-            })
             ->rawColumns(['actions'])
             ->addIndexColumn()
             ->make();
@@ -79,7 +77,7 @@ class ProductRepository implements ProductRepositoryInterface
         $data['author_name'] = Auth::user()->name;
         $data['excerpt'] = $data['description'];
 
-        $product = Product::create($data);
+        $product = Photo::create($data);
 
         // Upload semua gambar tambahan (termasuk utama juga bisa disimpan di sini)
         foreach ($images as $img) {
@@ -97,9 +95,7 @@ class ProductRepository implements ProductRepositoryInterface
 
     public function update(array $data)
     {
-        $product = Product::findOrFail($data["id"]);
-
-        // Gambar utama (image) tetap digunakan jika ada
+        $product = Photo::findOrFail($data["id"]);
         if (isset($data['image'])) {
             if ($product->image_path && Storage::exists($product->image_path)) {
                 Storage::delete($product->image_path);
@@ -115,27 +111,13 @@ class ProductRepository implements ProductRepositoryInterface
         $data['author_name'] = Auth::user()->name;
         $data['excerpt'] = $data['description'];
 
-        $product->update($data);
-
-        // ✅ Upload semua gambar baru
-        if (isset($data['images']) && is_array($data['images'])) {
-            foreach ($data['images'] as $img) {
-                $uploaded = $this->uploadThumbnail($img);
-                $product->images()->create([
-                    'image_path' => $uploaded['image_path'],
-                    'image_url' => $uploaded['image_url'],
-                ]);
-            }
-        }
-
-        return $product;
+        return $product->update($data);
     }
-
 
 
     public function delete($id)
     {
-        $product = Product::findOrFail($id);
+        $product = Photo::findOrFail($id);
         // Hapus file thumbnail jika ada dan file-nya masih ada di storage
         if ($product->image_path && Storage::exists($product->image_path)) {
             Storage::delete($product->image_path);
@@ -150,28 +132,14 @@ class ProductRepository implements ProductRepositoryInterface
 
     private function uploadThumbnail($image)
     {
-        $path = $image->store('products', 'public'); // simpan di storage/app/public/products
+        $path = $image->store('photo', 'public'); // simpan di storage/app/public/products
         return [
             'image_path' => $path,
-            'image_url' => Storage::url($path), // hasilnya: /storage/products/xxx.jpg
+            'image_url' => Storage::url($path), // hasilnya: /storage/blogs/xxx.jpg
         ];
     }
 
-    private function generateUniqueSlug($name)
-    {
-        $slug = Str::slug($name);
-        $originalSlug = $slug;
-        $counter = 1;
-
-        while (Product::where('slug', $slug)->exists()) {
-            $slug = $originalSlug . '-' . $counter;
-            $counter++;
-        }
-
-        return $slug;
-    }
-
     public function getAllProducts(){
-        return Product::latest()->get();
+        return Photo::latest()->get();
     }
 }
