@@ -145,6 +145,7 @@
 
 @push('addon-script')
 <script>
+  const isEdit = {{ isset($product) ? 'true' : 'false' }};
   const imageInput = document.getElementById("imageInput");
   const previewImage = document.getElementById("previewImage");
   const uploadPlaceholder = document.getElementById("uploadPlaceholder");

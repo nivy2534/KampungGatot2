@@ -219,7 +219,7 @@
                                 </p>`,
                                 confirmButtonText: 'Oke, Lihat Dashboard',
                                 allowOutsideClick: false,
-                                preConfirm: () => window.location.href = '/blogs',
+                                preConfirm: () => window.location.href = '/dashboard/blogs',
                                 customClass: {
                                     popup: 'rounded-xl px-6 py-8',
                                     title: 'text-black text-base font-bold',
