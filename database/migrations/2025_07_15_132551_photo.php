@@ -16,7 +16,8 @@ return new class extends Migration
             $table->id();
             $table->string('photo_name');
             $table->text('photo_description')->nullable();
-            $table->date('photo_date');
+            $table->date('photo_date')->nullable();
+            $table->string('image_path')->nullable(); // kolom untuk nama file gambar
             $table->unsignedBigInteger('event_id')->nullable();
             $table->unsignedBigInteger('product_id')->nullable();
             $table->unsignedBigInteger('blog_id')->nullable();
@@ -29,7 +30,7 @@ return new class extends Migration
             $table->foreign('event_id')->references('id')->on('events')->onDelete('cascade');
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
             $table->foreign('blog_id')->references('id')->on('blogs')->onDelete('cascade');
-            $table->foreign('author_id')->references('id')->on('users')->onDelete('set null');
+
         });
     }
 

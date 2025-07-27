@@ -39,9 +39,9 @@
                         class="hidden absolute inset-0 w-full h-full object-cover z-0" />
 
                     <div id="uploadPlaceholder" class="z-10 flex flex-col items-center">
-                        <i class="fa-solid fa-image text-2xl md:text-3xl text-[#1B3A6D]"></i>
+                        <i class="fa-solid fa-image text-2xl md:text-3xl text-primary"></i>
                         <label for="imageInput"
-                            class="cursor-pointer bg-[#1B3A6D] text-white px-3 py-2 mt-3 rounded-lg hover:bg-[#1B3A6D]/90 transition-colors text-sm">
+                            class="cursor-pointer bg-primary text-white px-3 py-2 mt-3 rounded-lg hover:bg-primary/90 transition-colors text-sm">
                             Pilih Gambar
                         </label>
                         <p class="text-xs mt-2">atau seret foto ke sini</p>
@@ -49,7 +49,7 @@
 
                     <div id="imageActions" class="absolute bottom-3 left-3 z-10 gap-2" style="display: none;">
                         <label for="imageInput"
-                            class="inline-block bg-[#1B3A6D] text-white px-3 py-1 text-sm rounded hover:bg-[#1B3A6D]/90 cursor-pointer mr-2">
+                            class="inline-block bg-primary text-white px-3 py-1 text-sm rounded hover:bg-primary/90 cursor-pointer mr-2">
                             Ganti
                         </label>
                         <button id="removeImageBtn" type="button"
@@ -69,7 +69,7 @@
                 <div class="mb-4">
                     <label class="block mb-2 text-sm font-medium text-gray-700">Status</label>
                     <select id="kategori"
-                        class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B3A6D] focus:border-[#1B3A6D]">
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary">
                         <option value="">Pilih Status</option>
                         <option value="draft" {{ isset($blog) && $blog->status == 'draft' ? 'selected' : '' }}>Draft</option>
                         <option value="published" {{ isset($blog) && $blog->status == 'published' ? 'selected' : '' }}>
@@ -82,7 +82,7 @@
                 <div class="mb-4">
                     <label class="block mb-2 text-sm font-medium text-gray-700">Tag</label>
                     <select name="tag" id="tag"
-                        class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B3A6D] focus:border-[#1B3A6D]">
+                        class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary">
                         <option value="">Pilih Tag</option>
                         <option value="sejarah" {{ isset($blog) && $blog->tag == 'sejarah' ? 'selected' : '' }}>Sejarah</option>
                         <option value="potensi_desa" {{ isset($blog) && $blog->tag == 'potensi_desa' ? 'selected' : '' }}>Potensi Desa</option>
@@ -97,7 +97,7 @@
                 <label class="block mb-2 text-sm font-medium text-gray-700">Judul Berita</label>
                 <input type="hidden" name="blogId" id="blogId" value="{{ isset($blog) ? $blog->id : '' }}">
                 <input id="judul" type="text" placeholder="Masukkan judul berita..."
-                    class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B3A6D] focus:border-[#1B3A6D]"
+                    class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
                     value="{{ isset($blog) ? $blog->name : '' }}" />
             </div>
 
@@ -105,19 +105,19 @@
             <div class="mb-6">
                                 <label class="block mb-2 text-sm font-medium text-gray-700">Deskripsi</label>
                 <textarea id="deskripsi" rows="4" placeholder="Masukkan deskripsi berita..."
-                    class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B3A6D] focus:border-[#1B3A6D] resize-vertical">{{ isset($blog) ? $blog->description : '' }}</textarea>
+                    class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary resize-vertical">{{ isset($blog) ? $blog->description : '' }}</textarea>
             </div>
 
             <!-- Konten Blog -->
             <div class="mb-6">
                 <label class="block mb-2 text-sm font-medium text-gray-700">Konten Blog</label>
                 <textarea id="konten" rows="8" placeholder="Tulis konten blog di sini..."
-                    class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B3A6D] focus:border-[#1B3A6D] resize-vertical">{{ isset($blog) ? $blog->content : '' }}</textarea>
+                    class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary resize-vertical">{{ isset($blog) ? $blog->content : '' }}</textarea>
             </div>
 
             <!-- Tombol -->
             <div class="flex flex-col md:flex-row gap-3 md:gap-4 pt-6 border-t border-gray-200 mt-6">
-                <button id="submitBtn" class="bg-[#1B3A6D] text-white px-4 py-2 rounded-lg hover:bg-[#1B3A6D]/90 transition text-sm font-medium w-full md:w-auto">
+                <button id="submitBtn" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition text-sm font-medium w-full md:w-auto">
                     <i class="fas fa-save mr-2"></i>
                     {{ isset($blog) ? 'Update Blog' : 'Simpan Blog' }}
                 </button>
@@ -181,8 +181,32 @@
                 const judul = $('#judul').val();
                 const deskripsi = $('#deskripsi').val();
 
-                if (!judul || !deskripsi || !kategori || !file) {
-                    alert('Semua field wajib diisi!');
+                // Validasi khusus untuk update - image tidak wajib jika sedang edit
+                const isEdit = blogId && blogId !== '';
+                if (!judul || !deskripsi || !kategori || !tag) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Lengkapi Form',
+                        text: 'Harap isi semua field yang diperlukan!',
+                        customClass: {
+                            confirmButton: 'bg-primary hover:bg-primary/90 text-white px-6 py-2 rounded-lg'
+                        },
+                        buttonsStyling: false
+                    });
+                    return;
+                }
+
+                // Untuk create, image wajib diisi
+                if (!isEdit && !file) {
+                    Swal.fire({
+                        icon: 'warning', 
+                        title: 'Gambar Diperlukan',
+                        text: 'Harap pilih gambar untuk artikel!',
+                        customClass: {
+                            confirmButton: 'bg-primary hover:bg-primary/90 text-white px-6 py-2 rounded-lg'
+                        },
+                        buttonsStyling: false
+                    });
                     return;
                 }
 
@@ -190,8 +214,8 @@
                 $button.html('<i class="fas fa-spinner fa-spin mr-2"></i>Proses Simpan ...').prop(
                     'disabled', true);
 
-                formData.append('id', blogId);
-                formData.append('image', file);
+                if (blogId) formData.append('id', blogId);
+                if (file) formData.append('image', file);
                 formData.append('status', kategori);
                 formData.append('tag', tag);
                 formData.append('name', judul);
@@ -200,8 +224,10 @@
                 const createUrl = "{{ route('blogs.save') }}";
                 const updateUrl = "{{ route('blogs.update') }}";
 
+                const targetUrl = (blogId && blogId !== "") ? updateUrl : createUrl;
+
                 $.ajax({
-                    url: (blogId == "") ? createUrl : updateUrl,
+                    url: targetUrl,
                     method: "POST",
                     data: formData,
                     processData: false,

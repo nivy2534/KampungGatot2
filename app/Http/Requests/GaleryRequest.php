@@ -20,12 +20,11 @@ class GaleryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id' => 'nullable',
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'status' => 'required|in:draft,published,archived', // sesuaikan enum
-            'tag' => 'required|in:sejarah,potensi_desa,kabar_warga,umkm_lokal',
-            'image' => 'nullable',
+            'photo_name' => 'required|string|max:255',
+            'photo_description' => 'nullable|string',
+            'category' => 'required|string|max:50',
+            'photo_date' => 'nullable|date|date_format:Y-m-d',
+            'image' => 'nullable|image|max:1024', // max 1MB
         ];
     }
 }

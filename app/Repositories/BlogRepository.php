@@ -41,6 +41,7 @@ class BlogRepository implements BlogRepositoryInterface
             ])
             ->addColumn("actions", function ($item) {
                 $editUrl = route('blogs.edit', $item->id);
+                $visitUrl = url("/blog/{$item->slug}");
                 return '    <div class="flex gap-2">
                                 <a href="' . $editUrl . '" class="text-blue-600 hover:text-blue-800 p-1">
                                     <i class="fas fa-edit"></i>
@@ -53,6 +54,9 @@ class BlogRepository implements BlogRepositoryInterface
                                 >
                                     <i class="fas fa-trash"></i>
                                 </button>
+                                <a href="' . $visitUrl . '" class="text-blue-600 hover:text-blue-800 p-1">
+                                    <i class="fas fa-blog"></i>
+                                </a>
                             </div>
                         ';
             })

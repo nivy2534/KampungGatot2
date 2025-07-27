@@ -63,55 +63,41 @@ class GaleryRepository implements GaleryRepositoryInterface
     }
     public function store(array $data)
     {
-        $images = $data['images'] ?? []; // tangkap semua file
-
-        // Upload thumbnail utama (pertama)
-        if (isset($images[0])) {
-            $uploaded = $this->uploadThumbnail($images[0]);
-            $data['image_path'] = $uploaded['image_path'];
-            $data['image_url'] = $uploaded['image_url'];
+        // Tangkap file gambar dari request
+        $image = $data['image'] ?? null;
+        if ($image) {
+            $path = $image->store('photo', 'public');
+            $data['image_path'] = $path;
         }
-
-        $data['slug'] = $data['slug'] ?? Str::slug($data['name']);
-        $data['author_id'] = Auth::user()->id;
-        $data['author_name'] = Auth::user()->name;
-        $data['excerpt'] = $data['description'];
-
-        $product = Photo::create($data);
-
-        // Upload semua gambar tambahan (termasuk utama juga bisa disimpan di sini)
-        foreach ($images as $img) {
-            $uploaded = $this->uploadThumbnail($img);
-            $product->images()->create([
-                'image_path' => $uploaded['image_path'],
-                'image_url' => $uploaded['image_url'],
-            ]);
-        }
-
-        return $product;
+        // Isi otomatis photo_date dengan hari ini
+        $photo = Photo::create([
+            'photo_name' => $data['photo_name'],
+            'photo_description' => $data['photo_description'] ?? null,
+            'category' => $data['category'],
+            'image_path' => $data['image_path'] ?? null,
+            'photo_date' => date('Y-m-d'),
+        ]);
+        return $photo;
     }
-
-
 
     public function update(array $data)
     {
-        $product = Photo::findOrFail($data["id"]);
+        $photo = Photo::findOrFail($data["id"]);
+        // Jika ada file gambar baru, upload dan update image_path
         if (isset($data['image'])) {
-            if ($product->image_path && Storage::exists($product->image_path)) {
-                Storage::delete($product->image_path);
+            if ($photo->image_path && Storage::exists('public/' . $photo->image_path)) {
+                Storage::delete('public/' . $photo->image_path);
             }
-
-            $uploaded = $this->uploadThumbnail($data['image']);
-            $data['image_path'] = $uploaded['image_path'];
-            $data['image_url'] = $uploaded['image_url'];
+            $path = $data['image']->store('photo', 'public');
+            $data['image_path'] = $path;
         }
-
-        $data['slug'] = $data['slug'] ?? Str::slug($data['name']);
-        $data['author_id'] = Auth::user()->id;
-        $data['author_name'] = Auth::user()->name;
-        $data['excerpt'] = $data['description'];
-
-        return $product->update($data);
+        $photo->update([
+            'photo_name' => $data['photo_name'],
+            'photo_description' => $data['photo_description'] ?? null,
+            'category' => $data['category'],
+            'image_path' => $data['image_path'] ?? $photo->image_path,
+        ]);
+        return $photo;
     }
 
 
@@ -132,11 +118,8 @@ class GaleryRepository implements GaleryRepositoryInterface
 
     private function uploadThumbnail($image)
     {
-        $path = $image->store('photo', 'public'); // simpan di storage/app/public/products
-        return [
-            'image_path' => $path,
-            'image_url' => Storage::url($path), // hasilnya: /storage/blogs/xxx.jpg
-        ];
+        // Tidak dipakai lagi, logic upload langsung di store/update
+        return null;
     }
 
     public function getAllProducts(){
