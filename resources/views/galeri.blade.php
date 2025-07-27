@@ -63,13 +63,29 @@
             {{-- Photos Grid --}}
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-8">
                 @forelse ($photos as $photo)
-                    <div class="photo-card transition-all duration-300" data-category="{{ strtolower(str_replace(' ', '_', $photo->category ?? 'uncategorized')) }}">
+                    <div class="photo-card transition-all duration-300 cursor-pointer" 
+                         data-category="{{ strtolower(str_replace(' ', '_', $photo->category ?? 'uncategorized')) }}"
+                         onclick="openPhotoModal({{ json_encode([
+                             'id' => $photo->id,
+                             'photo_name' => $photo->photo_name ?? 'Foto Galeri',
+                             'photo_description' => $photo->photo_description ?? 'Deskripsi foto',
+                             'image_path' => $photo->image_path ?? '/assets/img/blogthumb.png',
+                             'photo_date' => \Carbon\Carbon::parse($photo->photo_date ?? now())->translatedFormat('d F Y'),
+                             'category' => ucfirst(str_replace('_', ' ', $photo->category ?? 'Galeri')),
+                             'author' => $photo->author->name ?? 'Admin'
+                         ]) }})">
                         <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 group">
                             <div class="relative h-48 bg-gray-200 overflow-hidden">
                                 <img src="{{ asset('storage/' . ($photo->image_path ?? '/assets/img/blogthumb.png')) }}" 
                                      alt="{{ $photo->photo_description ?? 'Foto' }}"
                                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                                 <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300"></div>
+                                <div class="absolute top-2 right-2 bg-white/90 backdrop-blur-sm rounded-full p-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                    <svg class="w-4 h-4 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                    </svg>
+                                </div>
                             </div>
                             <div class="p-4">
                                 <h3 class="text-sm font-semibold text-gray-900 mb-1 line-clamp-2">
@@ -148,6 +164,71 @@
     </section>
 
     @include('components.footer')
+
+    {{-- Photo Modal --}}
+    <div id="photoModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-hidden">
+            <div class="flex flex-col lg:flex-row">
+                {{-- Image Section --}}
+                <div class="lg:w-2/3 bg-gray-100">
+                    <div class="relative h-64 lg:h-96">
+                        <img id="modalImage" src="" alt="" class="w-full h-full object-contain">
+                        <button onclick="closePhotoModal()" class="absolute top-4 right-4 bg-white/80 hover:bg-white rounded-full p-2 transition-colors duration-200">
+                            <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                
+                {{-- Details Section --}}
+                <div class="lg:w-1/3 p-6 flex flex-col">
+                    <div class="flex-1">
+                        <h3 id="modalTitle" class="text-xl font-bold text-gray-900 mb-4">
+                            <!-- Photo title will be inserted here -->
+                        </h3>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <h4 class="text-sm font-semibold text-gray-700 mb-1">Deskripsi</h4>
+                                <p id="modalDescription" class="text-sm text-gray-600 leading-relaxed">
+                                    <!-- Photo description will be inserted here -->
+                                </p>
+                            </div>
+                            
+                            <div>
+                                <h4 class="text-sm font-semibold text-gray-700 mb-1">Dipublikasikan oleh</h4>
+                                <p id="modalAuthor" class="text-sm text-gray-600">
+                                    <!-- Author name will be inserted here -->
+                                </p>
+                            </div>
+                            
+                            <div>
+                                <h4 class="text-sm font-semibold text-gray-700 mb-1">Tanggal</h4>
+                                <p id="modalDate" class="text-sm text-gray-600">
+                                    <!-- Photo date will be inserted here -->
+                                </p>
+                            </div>
+                            
+                            <div>
+                                <h4 class="text-sm font-semibold text-gray-700 mb-1">Kategori</h4>
+                                <span id="modalCategory" class="inline-block px-3 py-1 bg-[#1B3A6D] text-white text-xs rounded-full">
+                                    <!-- Photo category will be inserted here -->
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {{-- Close Button --}}
+                    <div class="mt-6 pt-4 border-t border-gray-200">
+                        <button onclick="closePhotoModal()" class="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-lg transition-colors duration-200">
+                            Tutup
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
@@ -278,6 +359,50 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     `;
     document.head.appendChild(style);
+});
+
+// Photo Modal Functions
+function openPhotoModal(photoData) {
+    const modal = document.getElementById('photoModal');
+    const modalImage = document.getElementById('modalImage');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalDescription = document.getElementById('modalDescription');
+    const modalAuthor = document.getElementById('modalAuthor');
+    const modalDate = document.getElementById('modalDate');
+    const modalCategory = document.getElementById('modalCategory');
+
+    // Set modal content
+    modalImage.src = '/storage/' + photoData.image_path;
+    modalImage.alt = photoData.photo_name;
+    modalTitle.textContent = photoData.photo_name;
+    modalDescription.textContent = photoData.photo_description;
+    modalAuthor.textContent = photoData.author;
+    modalDate.textContent = photoData.photo_date;
+    modalCategory.textContent = photoData.category;
+
+    // Show modal
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+}
+
+function closePhotoModal() {
+    const modal = document.getElementById('photoModal');
+    modal.classList.add('hidden');
+    document.body.style.overflow = 'auto';
+}
+
+// Close modal when clicking outside
+document.getElementById('photoModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closePhotoModal();
+    }
+});
+
+// Close modal with Escape key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closePhotoModal();
+    }
 });
 </script>
 @endsection

@@ -9,7 +9,7 @@ class GaleriPageController extends Controller
 {
     public function index()
     {
-        $photos = Photo::orderBy('photo_date', 'desc')->get();
+        $photos = Photo::with('author')->orderBy('photo_date', 'desc')->get();
 
         return view('galeri', [
             'title' => 'Galeri Kampung Gatot',
