@@ -35,38 +35,43 @@
             <div class="lg:w-1/3">
                 <label class="block mb-2 text-sm font-medium text-gray-700">Gambar Produk</label>
 
-                <!-- Input dan preview utama -->
-                <div
-                    class="relative flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-lg h-48 md:h-64 bg-gray-50 text-gray-500 text-center mb-4 overflow-hidden"
-                    id="imageUploadContainer"
-                >
-                    <img id="previewImage" src="" alt="Preview"
-                    class="hidden absolute inset-0 w-full h-full object-cover z-0" />
+                <!-- Area Upload Utama -->
+                <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center bg-gray-50 mb-4" id="uploadArea">
+                    <div class="relative">
+                        <!-- Icon dan Tombol Upload -->
+                        <div id="uploadPlaceholder" class="flex flex-col items-center py-8">
+                            <div class="w-16 h-16 bg-[#1B3A6D] rounded-lg flex items-center justify-center mb-4">
+                                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                                </svg>
+                            </div>
+                            <button type="button" onclick="document.getElementById('imageInput').click()" 
+                                class="bg-[#1B3A6D] text-white px-6 py-2 rounded-lg hover:bg-[#1B3A6D]/90 transition-colors mb-2">
+                                Pilih Gambar
+                            </button>
+                            <p class="text-sm text-gray-600 mb-1">atau seret foto ke sini</p>
+                            <p class="text-xs text-gray-500">(Maksimal 10 foto)</p>
+                        </div>
 
-                    <div id="uploadPlaceholder" class="z-10 flex flex-col items-center">
-                        <i class="fa-solid fa-image text-2xl md:text-3xl text-[#1B3A6D]"></i>
-                        <label for="imageInput"
-                            class="cursor-pointer bg-[#1B3A6D] text-white px-3 py-2 mt-3 rounded-lg hover:bg-[#1B3A6D]/90 transition-colors text-sm">
-                            Pilih Gambar
-                        </label>
-                        <p class="text-xs mt-2">atau seret foto ke sini</p>
+                        <!-- Preview Image Utama -->
+                        <div id="mainPreview" class="hidden">
+                            <img id="previewImage" src="" alt="Preview" class="w-full h-64 object-contain rounded-lg bg-gray-100">
+                            <div class="absolute top-2 right-2">
+                                <button type="button" id="removeMainBtn" class="bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-colors">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
                     </div>
-
-                    <!-- Tombol aksi untuk preview utama -->
-                    <div id="imageActions" class="absolute bottom-3 left-3 z-10 gap-2" style="display: none;">
-                        <button id="removePreviewBtn" type="button"
-                            class="bg-red-500 text-white px-3 py-1 text-sm rounded hover:bg-red-600">
-                            <i class="fa-solid fa-trash text-xs"></i>
-                        </button>
-                    </div>
-
-                    <input name="images[]" type="file" id="imageInput" class="hidden" accept="image/*" multiple />
+                    <input type="file" id="imageInput" class="hidden" accept="image/*" multiple>
                 </div>
 
-                <p class="text-xs text-gray-500 mb-4">Maksimal 1MB per gambar</p>
+                <p class="text-xs text-gray-500 mb-4">Tip: Geser urutan foto untuk mengubah foto sampul.</p>
 
-                <!-- Daftar thumbnail preview -->
-                <div id="imagePreviewList" class="flex flex-wrap gap-2"></div>
+                <!-- Grid Thumbnail dengan Drag & Drop -->
+                <div id="thumbnailGrid" class="grid grid-cols-3 gap-2"></div>
             </div>
 
             {{-- Form Input --}}
@@ -76,7 +81,7 @@
                 <div>
                     <label class="block mb-2 text-sm font-medium text-gray-700">Nama Barang</label>
                     <input id="nama" type="text" placeholder="Masukkan nama barang..."
-                        value="{{ isset($product) ? $product->nama : '' }}"
+                        value="{{ isset($product) ? $product->name : '' }}"
                         class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B3A6D] focus:border-[#1B3A6D]" />
                 </div>
 
@@ -84,7 +89,7 @@
                 <div>
                     <label class="block mb-2 text-sm font-medium text-gray-700">Harga Barang</label>
                     <input id="harga" type="number" placeholder="Masukkan harga barang..."
-                        value="{{ isset($product) ? $product->harga : '' }}"
+                        value="{{ isset($product) ? $product->price : '' }}"
                         class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B3A6D] focus:border-[#1B3A6D]" />
                 </div>
 
@@ -110,7 +115,7 @@
                     <div class="md:col-span-2">
                         <label class="block mb-2 text-sm font-medium text-gray-700">Deskripsi Barang</label>
                         <textarea id="deskripsi" rows="4" placeholder="Masukkan deskripsi..."
-                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B3A6D] focus:border-[#1B3A6D] resize-vertical">{{ isset($product) ? $product->deskripsi : '' }}</textarea>
+                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B3A6D] focus:border-[#1B3A6D] resize-vertical">{{ isset($product) ? $product->description : '' }}</textarea>
                     </div>
 
                     <!-- Status -->
@@ -144,75 +149,279 @@
 @endsection
 
 @push('addon-script')
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+<style>
+  .sortable-ghost {
+    opacity: 0.4;
+  }
+  
+  .sortable-chosen {
+    transform: scale(1.02);
+  }
+  
+  .upload-area-dragover {
+    border-color: #3b82f6 !important;
+    background-color: #eff6ff !important;
+  }
+</style>
 <script>
   const isEdit = {{ isset($product) ? 'true' : 'false' }};
+  const existingImages = @json(isset($product) && $product->images ? $product->images->toArray() : []);
+  
   const imageInput = document.getElementById("imageInput");
   const previewImage = document.getElementById("previewImage");
   const uploadPlaceholder = document.getElementById("uploadPlaceholder");
-  const imageActions = document.getElementById("imageActions");
-  const removePreviewBtn = document.getElementById("removePreviewBtn");
-  const imagePreviewList = document.getElementById("imagePreviewList");
+  const mainPreview = document.getElementById("mainPreview");
+  const thumbnailGrid = document.getElementById("thumbnailGrid");
+  const uploadArea = document.getElementById("uploadArea");
 
   let imageFiles = [];
+  let imageOrder = [];
+
+  // Initialize drag and drop
+  uploadArea.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    uploadArea.classList.add('upload-area-dragover');
+  });
+
+  uploadArea.addEventListener('dragleave', (e) => {
+    e.preventDefault();
+    uploadArea.classList.remove('upload-area-dragover');
+  });
+
+  uploadArea.addEventListener('drop', (e) => {
+    e.preventDefault();
+    uploadArea.classList.remove('upload-area-dragover');
+    const files = Array.from(e.dataTransfer.files).filter(file => file.type.startsWith('image/'));
+    if (files.length > 0) {
+      addFiles(files);
+    }
+  });
 
   imageInput.addEventListener("change", (e) => {
     const files = Array.from(e.target.files);
-    imageFiles = [...imageFiles, ...files];
-
-    updatePreviewList();
+    addFiles(files);
   });
 
-  function updatePreviewList() {
-    imagePreviewList.innerHTML = "";
-    imageFiles.forEach((file, index) => {
+  function addFiles(files) {
+    if (imageFiles.length + files.length > 10) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Terlalu Banyak Gambar',
+        text: 'Maksimal 10 foto yang dapat diunggah!',
+        customClass: {
+          confirmButton: 'bg-primary hover:bg-primary/90 text-white px-6 py-2 rounded-lg'
+        },
+        buttonsStyling: false
+      });
+      return;
+    }
+
+    files.forEach(file => {
+      if (file.size > 1024 * 1024) { // 1MB
+        Swal.fire({
+          icon: 'warning',
+          title: 'File Terlalu Besar',
+          text: `File ${file.name} melebihi 1MB!`,
+          customClass: {
+            confirmButton: 'bg-primary hover:bg-primary/90 text-white px-6 py-2 rounded-lg'
+          },
+          buttonsStyling: false
+        });
+        return;
+      }
+      
+      imageFiles.push(file);
+      imageOrder.push(imageFiles.length - 1);
+    });
+
+    updateThumbnailGrid();
+    if (imageFiles.length > 0 && mainPreview.classList.contains('hidden')) {
+      showMainPreview(0);
+    }
+  }
+
+  function updateThumbnailGrid() {
+    thumbnailGrid.innerHTML = '';
+    
+    if (imageFiles.length === 0) {
+      uploadPlaceholder.classList.remove('hidden');
+      mainPreview.classList.add('hidden');
+      return;
+    }
+
+    uploadPlaceholder.classList.add('hidden');
+
+    imageOrder.forEach((fileIndex, position) => {
+      const file = imageFiles[fileIndex];
+      if (!file) return;
+
       const reader = new FileReader();
       reader.onload = (e) => {
-        const wrapper = document.createElement("div");
-        wrapper.className = "relative group";
+        const wrapper = document.createElement('div');
+        wrapper.className = 'relative group cursor-pointer border-2 border-transparent hover:border-blue-500 rounded-lg transition-colors';
+        wrapper.setAttribute('data-index', fileIndex);
+        
+        // Cover badge untuk gambar pertama
+        if (position === 0) {
+          const coverBadge = document.createElement('div');
+          coverBadge.className = 'absolute -top-2 -left-2 bg-gray-800 text-white text-xs px-2 py-1 rounded z-10';
+          coverBadge.textContent = 'Cover';
+          wrapper.appendChild(coverBadge);
+        }
 
-        const img = document.createElement("img");
+        const img = document.createElement('img');
         img.src = e.target.result;
-        img.className = "w-20 h-20 object-cover rounded cursor-pointer";
-        img.addEventListener("click", () => showPreview(e.target.result));
+        img.className = 'w-full h-20 object-cover rounded-lg';
+        img.addEventListener('click', () => showMainPreview(fileIndex));
 
-        const delBtn = document.createElement("button");
-        delBtn.innerHTML = "🗑️";
-        delBtn.className =
-          "absolute top-1 right-1 bg-white/80 text-red-600 text-xs rounded hover:bg-red-100 hidden group-hover:block";
-        delBtn.addEventListener("click", () => {
-            const removedSrc = e.target.result;
-
-            if(previewImage.src === removedSrc){
-                previewImage.classList.add("hidden");
-                previewImage.src = "";
-                uploadPlaceholder.classList.remove("hidden");
-                imageActions.classList.add("hidden");
-            }
-
-            imageFiles.splice(index, 1);
-            updatePreviewList();
+        const deleteBtn = document.createElement('button');
+        deleteBtn.type = 'button';
+        deleteBtn.className = 'absolute top-1 right-1 bg-white text-red-500 rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-50';
+        deleteBtn.innerHTML = `
+          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        `;
+        deleteBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          removeImage(fileIndex);
         });
 
         wrapper.appendChild(img);
-        wrapper.appendChild(delBtn);
-        imagePreviewList.appendChild(wrapper);
+        wrapper.appendChild(deleteBtn);
+        thumbnailGrid.appendChild(wrapper);
       };
       reader.readAsDataURL(file);
     });
+
+    // Initialize Sortable for drag and drop reordering
+    if (thumbnailGrid.children.length > 0) {
+      new Sortable(thumbnailGrid, {
+        animation: 150,
+        ghostClass: 'sortable-ghost',
+        chosenClass: 'sortable-chosen',
+        onEnd: function(evt) {
+          const oldIndex = evt.oldIndex;
+          const newIndex = evt.newIndex;
+          
+          // Update imageOrder array
+          const movedItem = imageOrder.splice(oldIndex, 1)[0];
+          imageOrder.splice(newIndex, 0, movedItem);
+          
+          // Update thumbnail grid to show new cover badge
+          updateThumbnailGrid();
+          
+          // Update main preview if needed
+          if (oldIndex === 0 || newIndex === 0) {
+            showMainPreview(imageOrder[0]);
+          }
+        }
+      });
+    }
   }
 
-  function showPreview(src) {
-    previewImage.src = src;
-    previewImage.classList.remove("hidden");
-    uploadPlaceholder.classList.add("hidden");
-    imageActions.classList.remove("hidden");
+  function showMainPreview(fileIndex) {
+    const file = imageFiles[fileIndex];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      previewImage.src = e.target.result;
+      mainPreview.classList.remove('hidden');
+      uploadPlaceholder.classList.add('hidden');
+    };
+    reader.readAsDataURL(file);
   }
 
-  removePreviewBtn.addEventListener("click", () => {
-    previewImage.classList.add("hidden");
-    previewImage.src = "";
-    uploadPlaceholder.classList.remove("hidden");
-    imageActions.classList.add("hidden");
+  function removeImage(fileIndex) {
+    // Remove from imageFiles array
+    imageFiles.splice(fileIndex, 1);
+    
+    // Update imageOrder array - adjust indices and remove deleted one
+    imageOrder = imageOrder
+      .map(index => index > fileIndex ? index - 1 : index)
+      .filter(index => index !== fileIndex);
+
+    updateThumbnailGrid();
+    
+    if (imageFiles.length > 0) {
+      showMainPreview(imageOrder[0]);
+    } else {
+      mainPreview.classList.add('hidden');
+      uploadPlaceholder.classList.remove('hidden');
+    }
+  }
+
+  // Remove main preview button
+  document.getElementById('removeMainBtn').addEventListener('click', () => {
+    if (imageOrder.length > 0) {
+      const mainImageIndex = imageOrder[0];
+      removeImage(mainImageIndex);
+    }
+  });
+
+  // Load existing images for edit mode
+  if (isEdit && existingImages.length > 0) {
+    // Load existing images into the interface
+    existingImages.forEach((image, index) => {
+      fetch(`{{ asset('storage/') }}/${image.image_path}`)
+        .then(response => response.blob())
+        .then(blob => {
+          const file = new File([blob], `existing_${image.id}.jpg`, { type: blob.type });
+          imageFiles.push(file);
+          imageOrder.push(imageFiles.length - 1);
+          
+          if (index === 0) {
+            showMainPreview(imageFiles.length - 1);
+          }
+          
+          updateThumbnailGrid();
+        })
+        .catch(error => {
+          console.log('Could not load existing image:', error);
+          // Fallback: show existing images as preview only
+          updateExistingImagesPreview();
+        });
+    });
+  }
+
+  function updateExistingImagesPreview() {
+    if (!isEdit || existingImages.length === 0) return;
+    
+    uploadPlaceholder.classList.add('hidden');
+    mainPreview.classList.remove('hidden');
+    previewImage.src = `{{ asset('storage/') }}/${existingImages[0].image_path}`;
+    
+    thumbnailGrid.innerHTML = '';
+    existingImages.forEach((image, index) => {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'relative group cursor-pointer border-2 border-transparent hover:border-blue-500 rounded-lg transition-colors';
+      
+      if (index === 0) {
+        const coverBadge = document.createElement('div');
+        coverBadge.className = 'absolute -top-2 -left-2 bg-gray-800 text-white text-xs px-2 py-1 rounded z-10';
+        coverBadge.textContent = 'Cover';
+        wrapper.appendChild(coverBadge);
+      }
+
+      const img = document.createElement('img');
+      img.src = `{{ asset('storage/') }}/${image.image_path}`;
+      img.className = 'w-full h-20 object-cover rounded-lg';
+      img.addEventListener('click', () => {
+        previewImage.src = img.src;
+      });
+
+      wrapper.appendChild(img);
+      thumbnailGrid.appendChild(wrapper);
+    });
+  }
+
+  // Initialize existing images display on page load
+  document.addEventListener('DOMContentLoaded', function() {
+    if (isEdit && existingImages.length > 0) {
+      updateExistingImagesPreview();
+    }
   });
 
   document.getElementById("submitBarangBtn").addEventListener("click", async function () {
@@ -252,7 +461,7 @@
     }
 
     // Validasi gambar untuk create
-    if (imageFiles.length === 0) {
+    if (!isEdit && imageFiles.length === 0) {
         Swal.fire({
             icon: 'warning',
             title: 'Gambar Diperlukan',
@@ -275,8 +484,13 @@
     formData.append("description", deskripsi);
     formData.append("status", status);
 
-    imageFiles.forEach((file) => {
+    // Add images in the correct order
+    imageOrder.forEach((fileIndex, position) => {
+      const file = imageFiles[fileIndex];
+      if (file) {
         formData.append("images[]", file);
+        formData.append("image_orders[]", position);
+      }
     });
 
     // Show loading state
@@ -286,7 +500,16 @@
     button.disabled = true;
 
     try {
-        const response = await fetch("{{ url('dashboard/products/save') }}", {
+        const url = isEdit ? 
+          `{{ url('dashboard/products/update') }}` : 
+          "{{ url('dashboard/products/save') }}";
+        
+        if (isEdit) {
+          formData.append('_method', 'PUT');
+          formData.append('id', document.getElementById('productId').value);
+        }
+
+        const response = await fetch(url, {
             method: "POST",
             headers: {
                 "Accept":"application/json",
@@ -299,7 +522,7 @@
             const result = await response.json();
             Swal.fire({
                 title: 'Berhasil!',
-                text: 'Produk telah disimpan.',
+                text: isEdit ? 'Produk telah diperbarui.' : 'Produk telah disimpan.',
                 icon: 'success',
                 customClass: {
                     confirmButton: 'bg-primary hover:bg-primary/90 text-white px-6 py-2 rounded-lg'
@@ -337,12 +560,6 @@
         button.innerHTML = originalText;
         button.disabled = false;
     }
-            alert("Gagal menyimpan produk. Cek console untuk detail.");
-        }
-    } catch (error) {
-        alert("Terjadi kesalahan saat mengirim data.");
-        console.error(error);
-    }
-});
+  });
 </script>
 @endpush

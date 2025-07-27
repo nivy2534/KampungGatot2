@@ -30,14 +30,14 @@ class GaleryController extends Controller
 
     public function create()
     {
-        return view("cms.galery.v_create_photo");
+        return view("cms.galery.v_create_galery");
     }
 
     public function edit($id)
     {
         $photo = Photo::findOrFail($id);
         $this->authorize('update', $photo);
-        return view("cms.galery.v_create_photo", compact("photo"));
+        return view("cms.galery.v_create_galery", compact("photo"));
     }
 
     public function store(GaleryRequest $request)

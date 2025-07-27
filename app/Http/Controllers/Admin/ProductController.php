@@ -41,7 +41,7 @@ class ProductController extends Controller
         $product->load(['images' => function($query) {
             $query->orderBy('order', 'asc');
         }]);
-        return view("cms.product.v_edit_product", compact("product"));
+        return view("cms.product.v_create_product", compact("product"));
     }
 
     public function store(ProductRequest $request)
