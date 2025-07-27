@@ -41,7 +41,7 @@
                 <input name="images[]" type="file" id="imageInput" class="hidden" accept="image/*" multiple />
             </div>
 
-            <p class="text-xs text-gray-500 mt-2">Lampirkan gambar. Ukuran file tidak boleh lebih dari 1MB</p>
+            <p class="text-xs text-gray-500 mt-2">Lampirkan gambar. Ukuran file tidak boleh lebih dari 5MB</p>
 
             <!-- Daftar thumbnail preview -->
             <div id="imagePreviewList" class="flex flex-wrap gap-2">
@@ -154,8 +154,24 @@
 
   imageInput.addEventListener("change", (e) => {
     const files = Array.from(e.target.files);
+    
+    // Validate file sizes
+    for (let file of files) {
+      if (file.size > 5 * 1024 * 1024) { // 5MB
+        Swal.fire({
+          icon: 'warning',
+          title: 'File Terlalu Besar',
+          text: `File ${file.name} melebihi 5MB!`,
+          customClass: {
+            confirmButton: 'bg-primary hover:bg-primary/90 text-white px-6 py-2 rounded-lg'
+          },
+          buttonsStyling: false
+        });
+        return;
+      }
+    }
+    
     imageFiles = [...imageFiles, ...files];
-
     updatePreviewList();
   });
 
