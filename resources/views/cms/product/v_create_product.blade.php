@@ -218,11 +218,11 @@
     }
 
     files.forEach(file => {
-      if (file.size > 1024 * 1024) { // 1MB
+      if (file.size > 5 * 1024 * 1024) { // 5MB
         Swal.fire({
           icon: 'warning',
           title: 'File Terlalu Besar',
-          text: `File ${file.name} melebihi 1MB!`,
+          text: `File ${file.name} melebihi 5MB!`,
           customClass: {
             confirmButton: 'bg-primary hover:bg-primary/90 text-white px-6 py-2 rounded-lg'
           },

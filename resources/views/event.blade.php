@@ -4,8 +4,13 @@
   @include('components.header')
 
   {{-- Hero Section --}}
-  <section class="relative bg-gradient-to-br from-[#1B3A6D] to-[#2563eb] h-64 px-4 sm:px-6 lg:px-8 text-white text-center overflow-hidden flex items-center justify-center">
-    <div class="absolute inset-0 bg-black/20"></div>
+  <section class="relative h-64 px-4 sm:px-6 lg:px-8 text-white text-center overflow-hidden flex items-center justify-center"
+           style="background-image: url('{{ asset('assets/img/blogheader.png') }}'); background-size: cover; background-position: center;">
+    <!-- Overlay Gradient -->
+    <div class="absolute inset-0 bg-gradient-to-br from-[#1B3A6D]/90 to-[#2563eb]/90"></div>
+    <!-- Optional: extra dark overlay -->
+    <div class="absolute inset-0 bg-black/30"></div>
+
     <div class="relative z-10 max-w-3xl mx-auto">
       <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 leading-tight">
         Event & Belanja Kampung Ngebruk
@@ -19,11 +24,11 @@
   {{-- Main Content --}}
   <section class="py-6 lg:py-8 px-4 sm:px-6 lg:px-8 bg-gray-50 min-h-screen">
     <div class="max-w-6xl mx-auto">
-      
+
       {{-- Search & Filter Container --}}
       <div class="bg-white rounded-lg shadow-sm border border-gray-100 p-4 mb-6">
         <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-          
+
           {{-- Search Input --}}
           <div class="flex-1 max-w-sm">
             <label for="search-event" class="sr-only">Cari event atau produk</label>
@@ -33,10 +38,10 @@
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                 </svg>
               </div>
-              <input 
-                type="text" 
+              <input
+                type="text"
                 id="search-event"
-                placeholder="Cari event atau produk..." 
+                placeholder="Cari event atau produk..."
                 class="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B3A6D] focus:border-transparent transition-colors duration-200 text-sm"
               >
             </div>
@@ -113,28 +118,28 @@
   </section>
 
   @include('components.footer')
-  
+
 <script>
 document.addEventListener("DOMContentLoaded", function () {
     const filterButtons = document.querySelectorAll(".filter-btn");
     const eventCards = document.querySelectorAll(".event-card");
     const searchInput = document.getElementById("search-event");
     const noResultsMessage = document.getElementById("no-results");
-    
+
     let currentFilter = "all";
     let currentSearch = "";
 
     // Filter functionality
     function filterCards() {
         let visibleCount = 0;
-        
+
         eventCards.forEach(card => {
             const cardType = card.getAttribute("data-type");
             const cardText = card.textContent.toLowerCase();
-            
+
             const matchesFilter = currentFilter === "all" || cardType === currentFilter;
             const matchesSearch = currentSearch === "" || cardText.includes(currentSearch);
-            
+
             if (matchesFilter && matchesSearch) {
                 card.style.display = "block";
                 card.classList.remove("fade-out");
@@ -150,7 +155,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 }, 150);
             }
         });
-        
+
         // Show/hide no results message
         if (visibleCount === 0 && eventCards.length > 0) {
             noResultsMessage.classList.remove("hidden");
@@ -163,16 +168,16 @@ document.addEventListener("DOMContentLoaded", function () {
     filterButtons.forEach(btn => {
         btn.addEventListener("click", () => {
             currentFilter = btn.getAttribute("data-type");
-            
+
             // Update button states
             filterButtons.forEach(b => {
                 b.classList.remove("bg-[#1B3A6D]", "text-white");
                 b.classList.add("border-gray-300", "text-gray-700");
             });
-            
+
             btn.classList.remove("border-gray-300", "text-gray-700");
             btn.classList.add("bg-[#1B3A6D]", "text-white");
-            
+
             filterCards();
         });
     });
@@ -183,7 +188,7 @@ document.addEventListener("DOMContentLoaded", function () {
             currentSearch = this.value.toLowerCase().trim();
             filterCards();
         });
-        
+
         // Clear search on escape
         searchInput.addEventListener("keydown", function(e) {
             if (e.key === "Escape") {
@@ -200,11 +205,11 @@ document.addEventListener("DOMContentLoaded", function () {
         .fade-in {
             animation: fadeIn 0.3s ease-in-out;
         }
-        
+
         .fade-out {
             animation: fadeOut 0.15s ease-in-out;
         }
-        
+
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -215,7 +220,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 transform: translateY(0);
             }
         }
-        
+
         @keyframes fadeOut {
             from {
                 opacity: 1;
@@ -226,15 +231,15 @@ document.addEventListener("DOMContentLoaded", function () {
                 transform: translateY(-5px);
             }
         }
-        
+
         .event-card {
             transition: transform 0.2s ease-in-out;
         }
-        
+
         .event-card:hover {
             transform: translateY(-2px);
         }
-        
+
         .line-clamp-2 {
             display: -webkit-box;
             -webkit-line-clamp: 2;

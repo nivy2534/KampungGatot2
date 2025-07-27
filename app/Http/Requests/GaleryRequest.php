@@ -29,9 +29,9 @@ class GaleryRequest extends FormRequest
         // Jika ini adalah request untuk create (method POST), image wajib
         // Jika ini adalah request untuk update (method PUT/PATCH), image opsional
         if ($this->isMethod('post')) {
-            $rules['image'] = 'required|image|max:1024'; // max 1MB
+            $rules['image'] = 'required|image|max:5120'; // max 5MB
         } else {
-            $rules['image'] = 'nullable|image|max:1024'; // max 1MB
+            $rules['image'] = 'nullable|image|max:5120'; // max 5MB
         }
 
         return $rules;

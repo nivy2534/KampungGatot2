@@ -7,7 +7,7 @@
   {{-- Main Content --}}
   <article class="py-8 px-4 sm:px-6 lg:px-8 bg-white min-h-screen">
     <div class="max-w-6xl mx-auto">
-      
+
       {{-- Breadcrumb --}}
       <nav class="flex items-center space-x-2 text-sm text-gray-500 mb-6">
         <a href="{{ route('event') }}" class="hover:text-[#1B3A6D] transition-colors">Produk</a>
@@ -22,26 +22,26 @@
         <div>
           @if($product->image_url)
           <div class="mb-4">
-            <img 
-              src="{{ asset($product->image_url) }}" 
+            <img
+              src="{{ asset($product->image_url) }}"
               alt="{{ $product->name }}"
               class="w-full h-96 object-cover rounded-lg shadow-sm"
               id="mainImage"
             >
           </div>
-          
+
           {{-- Additional images if available --}}
           @if($product->images && $product->images->count() > 0)
           <div class="grid grid-cols-4 gap-2">
-            <img 
-              src="{{ asset($product->image_url) }}" 
+            <img
+              src="{{ asset($product->image_url) }}"
               alt="{{ $product->name }}"
               class="w-full h-20 object-cover rounded cursor-pointer border-2 border-[#1B3A6D] thumbnail-image"
               onclick="changeMainImage('{{ asset($product->image_url) }}')"
             >
             @foreach($product->images as $image)
-            <img 
-              src="{{ asset('storage/' . $image->image_path) }}" 
+            <img
+              src="{{ asset('storage/' . $image->image_path) }}"
               alt="{{ $product->name }}"
               class="w-full h-20 object-cover rounded cursor-pointer border-2 border-transparent hover:border-[#1B3A6D] thumbnail-image"
               onclick="changeMainImage('{{ asset('storage/' . $image->image_path) }}')"
@@ -65,11 +65,11 @@
               {{ ucfirst($product->status) }}
             </span>
           </div>
-          
+
           <h1 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
             {{ $product->name }}
           </h1>
-          
+
           <div class="mb-6">
             <div class="text-3xl font-bold text-[#1B3A6D] mb-2">
               Rp {{ number_format($product->price, 0, ',', '.') }}
@@ -86,7 +86,7 @@
                 </svg>
                 <span class="text-gray-700">{{ $product->seller_name ?: $product->author_name }}</span>
               </div>
-              
+
               @if($product->contact_person)
               <div class="flex items-center gap-3">
                 <svg class="w-5 h-5 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
@@ -95,7 +95,7 @@
                 <span class="text-gray-700">{{ $product->contact_person }}</span>
               </div>
               @endif
-              
+
               <div class="flex items-center gap-3">
                 <svg class="w-5 h-5 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
                   <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
@@ -108,7 +108,7 @@
           {{-- Contact Buttons --}}
           <div class="space-y-3">
             @if($product->contact_person)
-            <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $product->contact_person) }}?text=Halo, saya tertarik dengan produk {{ $product->name }}" 
+            <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $product->contact_person) }}?text=Halo, saya tertarik dengan produk {{ $product->name }}"
                target="_blank"
                class="w-full bg-green-500 text-white py-3 px-6 rounded-lg font-semibold hover:bg-green-600 transition-colors flex items-center justify-center gap-2">
               <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -117,15 +117,6 @@
               Hubungi via WhatsApp
             </a>
             @endif
-            
-            <button 
-              onclick="copyToClipboard('{{ request()->fullUrl() }}')"
-              class="w-full border-2 border-[#1B3A6D] text-[#1B3A6D] py-3 px-6 rounded-lg font-semibold hover:bg-[#1B3A6D] hover:text-white transition-colors flex items-center justify-center gap-2">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
-              </svg>
-              Salin Link Produk
-            </button>
           </div>
         </div>
       </div>
@@ -147,15 +138,15 @@
   <section class="py-12 px-4 sm:px-6 lg:px-8 bg-gray-50">
     <div class="max-w-6xl mx-auto">
       <h2 class="text-2xl font-bold text-gray-900 mb-8">Produk Terkait</h2>
-      
+
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         @foreach($relatedProducts as $relatedProduct)
         <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow duration-300">
           <a href="{{ route('event.show', $relatedProduct->slug) }}" class="block">
             @if($relatedProduct->image_url)
             <div class="aspect-w-1 aspect-h-1">
-              <img 
-                src="{{ asset($relatedProduct->image_url) }}" 
+              <img
+                src="{{ asset($relatedProduct->image_url) }}"
                 alt="{{ $relatedProduct->name }}"
                 class="w-full h-48 object-cover"
               >
@@ -167,16 +158,16 @@
               </svg>
             </div>
             @endif
-            
+
             <div class="p-4">
               <h3 class="text-lg font-semibold text-gray-900 mb-2 line-clamp-2 hover:text-[#1B3A6D] transition-colors">
                 {{ $relatedProduct->name }}
               </h3>
-              
+
               <div class="text-xl font-bold text-[#1B3A6D] mb-2">
                 Rp {{ number_format($relatedProduct->price, 0, ',', '.') }}
               </div>
-              
+
               <div class="flex items-center justify-between text-xs text-gray-500">
                 <span>{{ $relatedProduct->seller_name ?: $relatedProduct->author_name }}</span>
                 <span class="px-2 py-1 bg-green-100 text-green-800 rounded-full">
@@ -200,29 +191,16 @@
 <script>
 function changeMainImage(src) {
   document.getElementById('mainImage').src = src;
-  
+
   // Update thumbnail borders
   document.querySelectorAll('.thumbnail-image').forEach(img => {
     img.classList.remove('border-[#1B3A6D]');
     img.classList.add('border-transparent');
   });
-  
+
   // Add border to clicked thumbnail
   event.target.classList.remove('border-transparent');
   event.target.classList.add('border-[#1B3A6D]');
-}
-
-function copyToClipboard(text) {
-  navigator.clipboard.writeText(text).then(function() {
-    // Show success message
-    const button = event.target.closest('button');
-    const originalText = button.innerHTML;
-    button.innerHTML = '<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>Tersalin!';
-    
-    setTimeout(() => {
-      button.innerHTML = originalText;
-    }, 2000);
-  });
 }
 </script>
 @endpush

@@ -32,11 +32,11 @@ class ProductRequest extends FormRequest
          if ($this->has('id') && $this->id) {
              $rules['id'] = 'required|exists:products,id';
              $rules['images'] = 'nullable|array';
-             $rules['images.*'] = 'nullable|image|max:1024';
+             $rules['images.*'] = 'nullable|image|max:5120';
          } else {
              // Jika ini adalah create, images wajib ada
              $rules['images'] = 'required|array|min:1';
-             $rules['images.*'] = 'required|image|max:1024';
+             $rules['images.*'] = 'required|image|max:5120';
          }
 
          return $rules;

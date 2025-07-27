@@ -67,7 +67,7 @@
 
                     <input name="image" type="file" id="imageInput" class="hidden" accept="image/*" />
                 </div>
-                <p class="text-xs text-gray-500 mt-2">Lampirkan gambar. Ukuran file tidak boleh lebih dari 1MB</p>
+                <p class="text-xs text-gray-500 mt-2">Lampirkan gambar. Ukuran file tidak boleh lebih dari 5MB</p>
             </div>
 
             <!-- Form Grid -->
@@ -161,6 +161,21 @@
             $imageInput.on('change', function() {
                 const file = this.files[0];
                 if (file) {
+                    // Check file size (5MB = 5 * 1024 * 1024 bytes)
+                    if (file.size > 5 * 1024 * 1024) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'File Terlalu Besar',
+                            text: 'Ukuran file tidak boleh lebih dari 5MB!',
+                            customClass: {
+                                confirmButton: 'bg-primary hover:bg-primary/90 text-white px-6 py-2 rounded-lg'
+                            },
+                            buttonsStyling: false
+                        });
+                        $(this).val(''); // Clear the input
+                        return;
+                    }
+
                     const reader = new FileReader();
                     reader.onload = function(e) {
                         $previewImage.attr('src', e.target.result).removeClass('hidden');

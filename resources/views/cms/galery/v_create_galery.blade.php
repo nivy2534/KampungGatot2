@@ -97,7 +97,7 @@
 
                     <input name="image" type="file" id="imageInput" class="hidden" accept="image/*" />
                 </div>
-                <p class="text-xs text-gray-500 mt-2">Lampirkan gambar. Ukuran file tidak boleh lebih dari 1MB</p>
+                <p class="text-xs text-gray-500 mt-2">Lampirkan gambar. Ukuran file tidak boleh lebih dari 5MB</p>
             </div>
             <!-- Judul & Deskripsi -->
             <div class="mb-6">
@@ -150,6 +150,21 @@
         imageInput.addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
+                // Check file size (5MB = 5 * 1024 * 1024 bytes)
+                if (file.size > 5 * 1024 * 1024) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'File Terlalu Besar',
+                        text: 'Ukuran file tidak boleh lebih dari 5MB!',
+                        customClass: {
+                            confirmButton: 'bg-[#1B3A6D] hover:bg-[#1B3A6D]/90 text-white px-6 py-2 rounded-lg'
+                        },
+                        buttonsStyling: false
+                    });
+                    e.target.value = ''; // Clear the input
+                    return;
+                }
+
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     previewImage.src = e.target.result;

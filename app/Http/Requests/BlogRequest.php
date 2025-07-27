@@ -29,10 +29,10 @@ class BlogRequest extends FormRequest
         // Jika ini adalah update (ada ID), image tidak wajib
         if ($this->has('id') && $this->id) {
             $rules['id'] = 'required|exists:blogs,id';
-            $rules['image'] = 'nullable|image|max:1024';
+            $rules['image'] = 'nullable|image|max:5120';
         } else {
             // Jika ini adalah create, image wajib ada
-            $rules['image'] = 'required|image|max:1024';
+            $rules['image'] = 'required|image|max:5120';
         }
 
         return $rules;
