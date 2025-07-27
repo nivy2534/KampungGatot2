@@ -85,7 +85,6 @@
                     </div>
                     <input type="file" id="imageInput" class="hidden" accept="image/*" multiple>
                 </div>
-
                 <!-- Tombol Tambah Gambar Lagi -->
                 <div id="addMoreImagesBtn" class="hidden mb-4">
                     <button type="button" onclick="document.getElementById('imageInput').click()" 
