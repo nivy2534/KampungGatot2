@@ -12,7 +12,10 @@ class EventPageController extends Controller
         $status = $request->query('status');
         $search = $request->query('search');
 
-        $products = Product::query()->where('status', 'ready');
+        $products = Product::query()->where('status', 'ready')
+            ->with(['images' => function($query) {
+                $query->orderBy('order', 'asc'); // Konsisten dengan CMS
+            }]);
 
         if ($search) {
             $products->where(function($query) use ($search) {
@@ -31,6 +34,9 @@ class EventPageController extends Controller
     {
         $product = Product::where('slug', $slug)
             ->where('status', 'ready')
+            ->with(['images' => function($query) {
+                $query->orderBy('order', 'asc'); // Urutkan berdasarkan order seperti di CMS
+            }])
             ->firstOrFail();
 
         // Ambil produk terkait (same seller atau random)

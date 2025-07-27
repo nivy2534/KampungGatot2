@@ -74,10 +74,11 @@ class ProductRepository implements ProductRepositoryInterface
     {
         $images = $data['images'] ?? []; // tangkap semua file
         $imageOrders = $data['image_orders'] ?? [];
+        $productName = $data['name'];
 
         // Upload thumbnail utama (pertama berdasarkan order)
         if (isset($images[0])) {
-            $uploaded = $this->uploadThumbnail($images[0]);
+            $uploaded = $this->uploadThumbnail($images[0], $productName);
             $data['image_path'] = $uploaded['image_path'];
             $data['image_url'] = $uploaded['image_url'];
         }
@@ -89,9 +90,9 @@ class ProductRepository implements ProductRepositoryInterface
 
         $product = Product::create($data);
 
-        // Upload semua gambar dengan order yang benar
+        // Upload semua gambar dengan order yang benar ke folder produk yang sama
         foreach ($images as $index => $img) {
-            $uploaded = $this->uploadThumbnail($img);
+            $uploaded = $this->uploadThumbnail($img, $productName);
             $order = isset($imageOrders[$index]) ? $imageOrders[$index] : $index;
             
             $product->images()->create([
@@ -106,7 +107,14 @@ class ProductRepository implements ProductRepositoryInterface
 
     public function update(array $data)
     {
-        $product = Product::findOrFail($data["id"]);
+        $product = Product::with('images')->findOrFail($data["id"]);
+        $oldProductName = $product->name;
+        $newProductName = $data['name'];
+        
+        // Check if product name changed (affects folder name)
+        $nameChanged = $oldProductName !== $newProductName;
+        $oldFolderName = Str::slug($oldProductName);
+        $newFolderName = Str::slug($newProductName);
 
         // Update data produk utama
         $updateData = [
@@ -121,6 +129,46 @@ class ProductRepository implements ProductRepositoryInterface
             'author_name' => Auth::user()->name,
             'excerpt' => Str::limit($data['description'], 200),
         ];
+
+        // Handle folder rename if product name changed
+        if ($nameChanged && Storage::exists("products/{$oldFolderName}")) {
+            // Create new folder
+            Storage::makeDirectory("products/{$newFolderName}");
+            
+            // Move all files to new folder and update database paths
+            $allImages = $product->images;
+            foreach ($allImages as $image) {
+                if ($image->image_path && Storage::exists($image->image_path)) {
+                    $fileName = basename($image->image_path);
+                    $newPath = "products/{$newFolderName}/{$fileName}";
+                    
+                    // Copy file to new location
+                    Storage::copy($image->image_path, $newPath);
+                    
+                    // Update database with new path
+                    $image->update([
+                        'image_path' => $newPath,
+                        'image_url' => Storage::url($newPath)
+                    ]);
+                    
+                    // Delete old file
+                    Storage::delete($image->image_path);
+                }
+            }
+            
+            // Update main product image path if exists
+            if ($product->image_path) {
+                $fileName = basename($product->image_path);
+                $newMainPath = "products/{$newFolderName}/{$fileName}";
+                if (Storage::exists($newMainPath)) {
+                    $updateData['image_path'] = $newMainPath;
+                    $updateData['image_url'] = Storage::url($newMainPath);
+                }
+            }
+            
+            // Remove old folder
+            Storage::deleteDirectory("products/{$oldFolderName}");
+        }
 
         // Handle delete specific images
         if (isset($data['delete_images']) && is_array($data['delete_images'])) {
@@ -137,14 +185,18 @@ class ProductRepository implements ProductRepositoryInterface
             }
         }
 
-        // Add new images
+        // Add new images to the product folder
         if (isset($data['images']) && is_array($data['images']) && !empty($data['images'])) {
             $imageOrders = $data['image_orders'] ?? [];
             
-            // Upload semua gambar baru ke tabel product_images dengan order
+            // Get the current max order to append new images properly
+            $currentMaxOrder = $product->images()->max('order') ?? -1;
+            
+            // Upload semua gambar baru ke folder produk
             foreach ($data['images'] as $index => $img) {
-                $uploaded = $this->uploadThumbnail($img);
-                $order = isset($imageOrders[$index]) ? $imageOrders[$index] : ($product->images()->max('order') ?? -1) + 1;
+                $uploaded = $this->uploadThumbnail($img, $newProductName);
+                // New images get order starting from max + 1, or use provided order
+                $order = isset($imageOrders[$index]) ? $imageOrders[$index] : ($currentMaxOrder + $index + 1);
                 
                 $product->images()->create([
                     'image_path' => $uploaded['image_path'],
@@ -154,18 +206,7 @@ class ProductRepository implements ProductRepositoryInterface
             }
         }
 
-        // Update main thumbnail jika belum ada atau jika ada gambar pertama
-        $firstImage = $product->images()->orderBy('order', 'asc')->first();
-        if ($firstImage) {
-            $updateData['image_path'] = $firstImage->image_path;
-            $updateData['image_url'] = $firstImage->image_url;
-        } else if (!$product->image_path) {
-            // Jika tidak ada gambar sama sekali, kosongkan thumbnail
-            $updateData['image_path'] = null;
-            $updateData['image_url'] = null;
-        }
-
-        // Handle image order update
+        // Handle existing image order updates
         if (isset($data['image_order']) && !empty($data['image_order'])) {
             $imageOrder = json_decode($data['image_order'], true);
             if (is_array($imageOrder)) {
@@ -177,13 +218,17 @@ class ProductRepository implements ProductRepositoryInterface
                     }
                 }
             }
+        }
 
-            // Update main thumbnail setelah reorder
-            $newFirstImage = $product->images()->orderBy('order', 'asc')->first();
-            if ($newFirstImage) {
-                $updateData['image_path'] = $newFirstImage->image_path;
-                $updateData['image_url'] = $newFirstImage->image_url;
-            }
+        // Update main thumbnail to always reflect the first image by order
+        $firstImage = $product->images()->orderBy('order', 'asc')->first();
+        if ($firstImage) {
+            $updateData['image_path'] = $firstImage->image_path;
+            $updateData['image_url'] = $firstImage->image_url;
+        } else {
+            // If no images, clear main thumbnail
+            $updateData['image_path'] = null;
+            $updateData['image_url'] = null;
         }
 
         $product->update($updateData);
@@ -192,13 +237,39 @@ class ProductRepository implements ProductRepositoryInterface
 
     public function delete($id)
     {
-        $product = Product::findOrFail($id);
-        // Hapus file thumbnail jika ada dan file-nya masih ada di storage
+        $product = Product::with('images')->findOrFail($id);
+        
+        // Get the product folder name from the first image path
+        $productFolderName = null;
+        if ($product->image_path) {
+            // Extract folder name from path like "products/product-name/image.jpg"
+            $pathParts = explode('/', $product->image_path);
+            if (count($pathParts) >= 2 && $pathParts[0] === 'products') {
+                $productFolderName = $pathParts[1];
+            }
+        }
+        
+        // Delete individual image files first (as fallback)
         if ($product->image_path && Storage::exists($product->image_path)) {
             Storage::delete($product->image_path);
         }
+        
+        // Delete all product images
+        foreach ($product->images as $image) {
+            if ($image->image_path && Storage::exists($image->image_path)) {
+                Storage::delete($image->image_path);
+            }
+        }
+        
+        // Delete the entire product folder if it exists
+        if ($productFolderName) {
+            $productFolderPath = "products/{$productFolderName}";
+            if (Storage::exists($productFolderPath)) {
+                Storage::deleteDirectory($productFolderPath);
+            }
+        }
 
-        // Hapus data dari database
+        // Delete from database (this will also delete related images due to cascade)
         return $product->delete();
     }
 
@@ -207,12 +278,18 @@ class ProductRepository implements ProductRepositoryInterface
         return Product::findOrFail($id);
     }
 
-    private function uploadThumbnail($image)
+    private function uploadThumbnail($image, $productName = null)
     {
-        $path = $image->store('products', 'public'); // simpan di storage/app/public/products
+        // Create a clean folder name from product name
+        $folderName = $productName ? Str::slug($productName) : 'temp-product-' . time();
+        
+        // Store in products/{product-name}/ folder
+        $path = $image->store("products/{$folderName}", 'public');
+        
         return [
             'image_path' => $path,
-            'image_url' => Storage::url($path), // hasilnya: /storage/products/xxx.jpg
+            'image_url' => Storage::url($path),
+            'folder_name' => $folderName
         ];
     }
 

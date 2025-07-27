@@ -47,7 +47,7 @@
                                 <li>• Pilih multiple gambar sekaligus</li>
                                 <li>• Geser untuk mengubah urutan</li>
                                 <li>• Gambar pertama = foto sampul</li>
-                                <li>• Maksimal 10 foto, masing-masing 1MB</li>
+                                <li>• Maksimal 10 foto, masing-masing 5MB</li>
                             </ul>
                         </div>
                     </div>
@@ -78,8 +78,8 @@
                                 </button>
                             </div>
                             <div class="absolute bottom-2 left-2 bg-black/70 text-white text-xs px-2 py-1 rounded backdrop-blur-sm">
-                                <i class="fas fa-crown mr-1"></i>
-                                <span id="mainImageLabel">Foto Sampul</span>
+                                <i class="fas fa-eye mr-1"></i>
+                                <span id="mainImageLabel">Preview</span>
                             </div>
                         </div>
                     </div>
@@ -312,6 +312,39 @@
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(27, 58, 109, 0.15);
   }
+
+  /* Enhanced drag handle visibility */
+  .drag-handle {
+    opacity: 0.7;
+    transition: all 0.2s ease;
+  }
+  
+  .thumbnail-wrapper:hover .drag-handle {
+    opacity: 1 !important;
+    transform: scale(1.1);
+  }
+  
+  .drag-handle:hover {
+    background-color: #0f2744 !important;
+    transform: scale(1.2) !important;
+  }
+
+  /* Better visual feedback for sortable */
+  .sortable-chosen .drag-handle {
+    opacity: 1 !important;
+    background-color: #0f2744 !important;
+  }
+
+  /* Mobile responsive drag handles */
+  @media (max-width: 768px) {
+    .drag-handle {
+      opacity: 0.8 !important;
+    }
+    
+    .thumbnail-wrapper .drag-handle {
+      opacity: 0.8 !important;
+    }
+  }
 </style>
 <script>
   const isEdit = true;
@@ -398,11 +431,11 @@
     }
 
     files.forEach(file => {
-      if (file.size > 1024 * 1024) { // 1MB
+      if (file.size > 5 * 1024 * 1024) { // 5MB
         Swal.fire({
           icon: 'warning',
           title: 'File Terlalu Besar',
-          text: `File ${file.name} melebihi 1MB!`,
+          text: `File ${file.name} melebihi 5MB!`,
           customClass: {
             confirmButton: 'bg-[#1B3A6D] hover:bg-[#152f5a] text-white px-6 py-2 rounded-lg font-medium'
           },
@@ -535,7 +568,7 @@
       const wrapper = document.createElement('div');
       wrapper.className = 'thumbnail-wrapper';
       wrapper.setAttribute('data-type', 'existing');
-      wrapper.setAttribute('data-id', image.id);
+      wrapper.setAttribute('data-image-id', image.id);
       wrapper.setAttribute('data-index', index);
       
       // Cover badge dengan styling dashboard
@@ -572,7 +605,7 @@
 
       // Enhanced drag handle
       const dragHandle = document.createElement('div');
-      dragHandle.className = 'absolute bottom-1 left-1 bg-[#1B3A6D] text-white rounded p-1.5 opacity-0 group-hover:opacity-90 transition-all cursor-move shadow-lg border border-white';
+      dragHandle.className = 'absolute bottom-1 left-1 bg-[#1B3A6D] text-white rounded p-1.5 opacity-0 group-hover:opacity-90 transition-all cursor-move shadow-lg border border-white drag-handle';
       dragHandle.innerHTML = '<i class="fas fa-grip-vertical text-xs"></i>';
       wrapper.appendChild(dragHandle);
 
@@ -591,7 +624,7 @@
         const wrapper = document.createElement('div');
         wrapper.className = 'thumbnail-wrapper';
         wrapper.setAttribute('data-type', 'new');
-        wrapper.setAttribute('data-index', fileIndex);
+        wrapper.setAttribute('data-file-index', fileIndex);
         
         // Cover badge untuk gambar baru pertama jika tidak ada existing images
         const visibleExistingCount = existingImages.filter(img => !deletedImageIds.includes(img.id)).length;
@@ -633,7 +666,7 @@
 
         // Enhanced drag handle
         const dragHandle = document.createElement('div');
-        dragHandle.className = 'absolute bottom-1 left-1 bg-[#1B3A6D] text-white rounded p-1.5 opacity-0 group-hover:opacity-90 transition-all cursor-move shadow-lg border border-white';
+        dragHandle.className = 'absolute bottom-1 left-1 bg-[#1B3A6D] text-white rounded p-1.5 opacity-0 group-hover:opacity-90 transition-all cursor-move shadow-lg border border-white drag-handle';
         dragHandle.innerHTML = '<i class="fas fa-grip-vertical text-xs"></i>';
         wrapper.appendChild(dragHandle);
 
@@ -647,19 +680,92 @@
     // Initialize Sortable for drag and drop reordering
     setTimeout(() => {
       if (thumbnailGrid.children.length > 0) {
-        new Sortable(thumbnailGrid, {
+        // Destroy existing sortable instance if it exists
+        if (thumbnailGrid.sortableInstance) {
+          thumbnailGrid.sortableInstance.destroy();
+        }
+        
+        thumbnailGrid.sortableInstance = new Sortable(thumbnailGrid, {
           animation: 150,
           ghostClass: 'sortable-ghost',
           chosenClass: 'sortable-chosen',
           dragClass: 'sortable-drag',
-          handle: '.cursor-move',
+          handle: '.drag-handle',
           onEnd: function(evt) {
+            // Get the new order based on DOM structure
+            const newOrder = Array.from(thumbnailGrid.children).map((child, index) => {
+              const imageId = child.getAttribute('data-image-id');
+              const fileIndex = child.getAttribute('data-file-index');
+              
+              // Return image data with new order
+              if (imageId) {
+                // Existing image
+                const existingImg = existingImages.find(img => img.id == imageId);
+                return { ...existingImg, order: index, isExisting: true };
+              } else if (fileIndex !== null) {
+                // New image file
+                return { fileIndex: parseInt(fileIndex), order: index, isExisting: false };
+              }
+            }).filter(Boolean);
+            
+            // Update existing images order
+            newOrder.forEach((item, index) => {
+              if (item.isExisting) {
+                const existingImg = existingImages.find(img => img.id == item.id);
+                if (existingImg) existingImg.order = index;
+              }
+            });
+            
+            // Update new images order (imageOrder array)
+            const newFileOrder = newOrder
+              .filter(item => !item.isExisting)
+              .map(item => item.fileIndex);
+            imageOrder = newFileOrder;
+            
+            // Update badges and main preview without recreating thumbnails
+            updateThumbnailBadgesEdit();
+            updateMainPreview();
+            
             showToast('Urutan foto berhasil diubah!', 'success');
-            updateImageDisplay();
           }
         });
       }
     }, 100);
+  }
+
+  function updateThumbnailBadgesEdit() {
+    // Update cover badge and order numbers without recreating thumbnails
+    Array.from(thumbnailGrid.children).forEach((wrapper, position) => {
+      // Remove existing badges (but keep drag handle)
+      const existingCoverBadge = wrapper.querySelector('.bg-green-500');
+      const existingOrderBadge = wrapper.querySelector('.bg-\\[\\#1B3A6D\\]');
+      
+      if (existingCoverBadge) existingCoverBadge.remove();
+      if (existingOrderBadge) existingOrderBadge.remove();
+      
+      // Add cover badge to first item
+      if (position === 0) {
+        const coverBadge = document.createElement('div');
+        coverBadge.className = 'absolute -top-1 -left-1 bg-green-500 text-white text-xs px-2 py-0.5 rounded-full z-20 shadow-lg border border-white';
+        coverBadge.innerHTML = '<i class="fas fa-crown mr-1"></i>Sampul';
+        wrapper.appendChild(coverBadge);
+      }
+      
+      // Add order badge
+      const orderBadge = document.createElement('div');
+      orderBadge.className = 'absolute -top-1 -right-1 bg-[#1B3A6D] text-white text-xs w-5 h-5 rounded-full flex items-center justify-center z-20 shadow-lg border border-white';
+      orderBadge.textContent = position + 1;
+      wrapper.appendChild(orderBadge);
+      
+      // Ensure drag handle is present and visible
+      let dragHandle = wrapper.querySelector('.drag-handle');
+      if (!dragHandle) {
+        dragHandle = document.createElement('div');
+        dragHandle.className = 'absolute bottom-1 left-1 bg-[#1B3A6D] text-white rounded p-1.5 opacity-0 group-hover:opacity-90 transition-all cursor-move shadow-lg border border-white drag-handle';
+        dragHandle.innerHTML = '<i class="fas fa-grip-vertical text-xs"></i>';
+        wrapper.appendChild(dragHandle);
+      }
+    });
   }
 
   function highlightThumbnail(element) {
@@ -804,6 +910,22 @@
         formData.append("image_orders[]", position);
       }
     });
+
+    // Add existing images order information
+    const allImageOrder = [];
+    Array.from(thumbnailGrid.children).forEach((child, position) => {
+      const imageId = child.getAttribute('data-image-id');
+      const fileIndex = child.getAttribute('data-file-index');
+      
+      if (imageId) {
+        // Existing image
+        allImageOrder.push({ id: parseInt(imageId), order: position });
+      }
+    });
+    
+    if (allImageOrder.length > 0) {
+      formData.append("image_order", JSON.stringify(allImageOrder));
+    }
 
     // Add deleted image IDs
     deletedImageIds.forEach(imageId => {

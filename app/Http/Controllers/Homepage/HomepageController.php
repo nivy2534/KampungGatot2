@@ -18,6 +18,9 @@ class HomepageController extends Controller
 
         // Ambil produk terbaru dengan status ready (limit 6)
         $latestProducts = Product::where('status', 'ready')
+            ->with(['images' => function($query) {
+                $query->orderBy('order', 'asc'); // Konsisten dengan CMS
+            }])
             ->orderBy('created_at', 'desc')
             ->limit(6)
             ->get();

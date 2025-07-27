@@ -71,7 +71,7 @@ class ProductController extends Controller
                 'seller_name'=>'required|string|max:255',
                 'contact_person'=>'required|string|max:20',
                 'status'=>'required|in:ready,habis,preorder',
-                'images.*' => 'nullable|image|max:1024',
+                'images.*' => 'nullable|image|max:5120',
                 'image_order' => 'nullable|string',
                 'image_orders.*' => 'nullable|integer',
                 'delete_images.*' => 'nullable|integer',

@@ -47,7 +47,7 @@
                                 <li>• Pilih multiple gambar sekaligus</li>
                                 <li>• Geser untuk mengubah urutan</li>
                                 <li>• Gambar pertama = foto sampul</li>
-                                <li>• Maksimal 10 foto, masing-masing 1MB</li>
+                                <li>• Maksimal 10 foto, masing-masing 5MB</li>
                             </ul>
                         </div>
                     </div>
@@ -78,8 +78,8 @@
                                 </button>
                             </div>
                             <div class="absolute bottom-2 left-2 bg-black/70 text-white text-xs px-2 py-1 rounded backdrop-blur-sm">
-                                <i class="fas fa-crown mr-1"></i>
-                                <span id="mainImageLabel">Foto Sampul</span>
+                                <i class="fas fa-eye mr-1"></i>
+                                <span id="mainImageLabel">Preview</span>
                             </div>
                         </div>
                     </div>
@@ -310,11 +310,11 @@
     }
 
     files.forEach(file => {
-      if (file.size > 1024 * 1024) { 
+      if (file.size > 5 * 1024 * 1024) { // 5MB 
         Swal.fire({
           icon: 'warning',
           title: 'File Terlalu Besar',
-          text: `File ${file.name} melebihi 1MB!`,
+          text: `File ${file.name} melebihi 5MB!`,
           customClass: {
             confirmButton: 'bg-[#1B3A6D] hover:bg-[#152f5a] text-white px-6 py-2 rounded-lg font-medium'
           },
@@ -366,8 +366,8 @@
   }
 
   function updateMainPreview() {
-    if (imageFiles.length > 0) {
-      showMainPreview(0);
+    if (imageOrder.length > 0) {
+      showMainPreview(imageOrder[0]); // Show the first image in order as main preview
     }
   }
 
@@ -435,11 +435,53 @@
           dragClass: 'sortable-drag',
           handle: '.cursor-move',
           onEnd: function(evt) {
-            updateImageDisplay();
+            // Update image order array based on new DOM order
+            const newOrder = [];
+            Array.from(thumbnailGrid.children).forEach((child) => {
+              const dataIndex = child.getAttribute('data-index');
+              if (dataIndex !== null) {
+                newOrder.push(parseInt(dataIndex));
+              }
+            });
+            imageOrder = newOrder;
+            
+            // Update badges without recreating thumbnails
+            updateThumbnailBadges();
+            
+            // Update main preview to show new first image
+            if (imageOrder.length > 0) {
+              showMainPreview(imageOrder[0]);
+            }
           }
         });
       }
     }, 100);
+  }
+
+  function updateThumbnailBadges() {
+    // Update cover badge and order numbers without recreating thumbnails
+    Array.from(thumbnailGrid.children).forEach((wrapper, position) => {
+      // Remove existing badges
+      const existingCoverBadge = wrapper.querySelector('.bg-green-500');
+      const existingOrderBadge = wrapper.querySelector('.bg-\\[\\#1B3A6D\\]');
+      
+      if (existingCoverBadge) existingCoverBadge.remove();
+      if (existingOrderBadge) existingOrderBadge.remove();
+      
+      // Add cover badge to first item
+      if (position === 0) {
+        const coverBadge = document.createElement('div');
+        coverBadge.className = 'absolute -top-1 -left-1 bg-green-500 text-white text-xs px-2 py-0.5 rounded-full z-20 shadow-lg border border-white';
+        coverBadge.innerHTML = '<i class="fas fa-crown mr-1"></i>Sampul';
+        wrapper.appendChild(coverBadge);
+      }
+      
+      // Add order badge
+      const orderBadge = document.createElement('div');
+      orderBadge.className = 'absolute -top-1 -right-1 bg-[#1B3A6D] text-white text-xs w-5 h-5 rounded-full flex items-center justify-center z-20 shadow-lg border border-white';
+      orderBadge.textContent = position + 1;
+      wrapper.appendChild(orderBadge);
+    });
   }
 
   function showMainPreview(fileIndex) {
@@ -454,16 +496,26 @@
   }
 
   function removeImage(fileIndex) {
+    // Find the position of this file in the order array
+    const orderPosition = imageOrder.indexOf(fileIndex);
+    
+    // Remove the file from the array
     imageFiles.splice(fileIndex, 1);
+    
+    // Update the order array:
+    // 1. Remove the deleted file index
+    // 2. Decrease all indices that are greater than the deleted index
     imageOrder = imageOrder
-      .map(index => index > fileIndex ? index - 1 : index)
-      .filter(index => index !== fileIndex);
+      .filter(index => index !== fileIndex)
+      .map(index => index > fileIndex ? index - 1 : index);
+    
     updateImageDisplay();
   }
 
   document.getElementById('removeMainBtn').addEventListener('click', () => {
-    if (imageFiles.length > 0) {
-      removeImage(0);
+    if (imageOrder.length > 0) {
+      const mainImageIndex = imageOrder[0]; // Get the first image in order (cover image)
+      removeImage(mainImageIndex);
     }
   });
 
@@ -524,7 +576,7 @@
     button.classList.add('opacity-75');
 
     try {
-        const response = await fetch("{{ url('dashboard/products/store') }}", {
+        const response = await fetch("{{ url('dashboard/products/save') }}", {
             method: "POST",
             headers: {
                 "Accept":"application/json",
