@@ -30,7 +30,7 @@ class Blog extends Model
     public function getDateAttribute(): string
     {
         return $this->created_at
-            ? $this->created_at->translatedFormat('d F Y H:i:s')
+            ? $this->created_at->translatedFormat('d F Y')
             : '';
     }
 

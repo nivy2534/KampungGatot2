@@ -35,6 +35,14 @@ class Photo extends Model
         return Carbon::parse($this->photo_date)->translatedFormat('d F Y');
     }
 
+    // Accessor untuk created_at dengan format yang konsisten
+    public function getDateAttribute(): string
+    {
+        return $this->created_at
+            ? $this->created_at->translatedFormat('d F Y')
+            : '';
+    }
+
     // Relasi ke User (author)
     public function author()
     {

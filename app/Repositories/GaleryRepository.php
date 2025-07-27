@@ -46,6 +46,9 @@ class GaleryRepository implements GaleryRepositoryInterface
             ->addColumn('author_name', function ($item) {
                 return $item->author ? $item->author->name : 'Unknown';
             })
+            ->editColumn('photo_date', function ($item) {
+                return $item->created_at->translatedFormat('d F Y');
+            })
             ->addColumn("actions", function ($item) {
                 $editUrl = route('gallery.edit', $item->id);
                 $deleteUrl = route('gallery.delete', $item->id);

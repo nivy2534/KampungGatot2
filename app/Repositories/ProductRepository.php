@@ -42,6 +42,9 @@ class ProductRepository implements ProductRepositoryInterface
                 "recordsTotal" => $count,
                 "recordsFiltered" => $count,
             ])
+            ->addColumn('author_name', function ($item) {
+                return $item->author ? $item->author->name : 'Unknown';
+            })
             ->addColumn("actions", function ($item) {
                 $editUrl = route('products.edit', $item->id);
                 return '    <div class="flex gap-2">
@@ -60,7 +63,7 @@ class ProductRepository implements ProductRepositoryInterface
                         ';
             })
             ->editColumn('created_at', function ($item) {
-                return $item->created_at->format('d M Y');
+                return $item->created_at->translatedFormat('d F Y');
             })
             ->rawColumns(['actions'])
             ->addIndexColumn()
