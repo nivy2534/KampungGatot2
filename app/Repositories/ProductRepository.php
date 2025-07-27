@@ -17,7 +17,8 @@ class ProductRepository implements ProductRepositoryInterface
         $limit = $request->length == "" ? '10' : $request->length;
         $offset = $request->start == "" ? '0' : $request->start;
 
-        $query = Product::orderBy("created_at", "ASC");
+        // Filter hanya konten milik user yang sedang login
+        $query = Product::where('author_id', Auth::id())->orderBy("created_at", "ASC");
 
         if ($request->status_filter != "") {
             $query->where("status", $request->status_filter);
@@ -197,6 +198,6 @@ class ProductRepository implements ProductRepositoryInterface
 
     public function getAllProducts()
     {
-        return Product::latest()->get();
+        return Product::where('author_id', Auth::id())->latest()->get();
     }
 }

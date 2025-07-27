@@ -60,12 +60,13 @@ Route::middleware(['auth'])->group(
           Route::delete('/product-images/{id}', [ProductImageController::class, 'destroy']);
 
           // Galery related
-          Route::get('/gallery', [GaleryController::class, 'index']);
+          Route::get('/gallery', [GaleryController::class, 'index'])->name('gallery.index');
           Route::post('/gallery', [GaleryController::class, 'index']);
-          Route::get('/gallery/create', [GaleryController::class, 'create']);
-          Route::post('/gallery/save',[GaleryController::class, 'store']);
-          Route::put('/gallery/{id}', [GaleryController::class, 'update']);
-          Route::delete('/gallery/{id}',[GaleryController::class, 'destroy']);
+          Route::get('/gallery/create', [GaleryController::class, 'create'])->name('gallery.create');
+          Route::get('/gallery/edit/{id}', [GaleryController::class, 'edit'])->name('gallery.edit');
+          Route::post('/gallery/save',[GaleryController::class, 'store'])->name('gallery.store');
+          Route::put('/gallery/{id}', [GaleryController::class, 'update'])->name('gallery.update');
+          Route::delete('/gallery/{id}',[GaleryController::class, 'destroy'])->name('gallery.delete');
         });
     }
 );

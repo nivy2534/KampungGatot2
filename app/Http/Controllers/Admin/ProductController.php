@@ -36,6 +36,7 @@ class ProductController extends Controller
 
     public function edit(Product $product)
     {
+        $this->authorize('update', $product);
         $product->load(['images' => function($query) {
             $query->orderBy('order', 'asc');
         }]);
@@ -53,6 +54,8 @@ class ProductController extends Controller
     }
 
     public function update(Request $request){
+        $product = Product::findOrFail($request->id);
+        $this->authorize('update', $product);
         Log::info('Product update request received', [
             'request_data' => $request->all(),
             'files' => $request->hasFile('images') ? 'has files' : 'no files'
@@ -132,6 +135,8 @@ class ProductController extends Controller
 
     public function destroy($id)
     {
+        $product = Product::findOrFail($id);
+        $this->authorize('delete', $product);
         $data = $this->productService->delete($id);
         return $this->success($data, 'Produk berhasil dihapus');
     }

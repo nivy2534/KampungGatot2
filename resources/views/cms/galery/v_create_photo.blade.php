@@ -13,7 +13,7 @@
                 </p>
             </div>
             <div class="flex-shrink-0">
-                <a href="{{ url('gallery/index') }}"
+                <a href="{{ route('gallery.index') }}"
                    class="w-full md:w-auto bg-gray-500 text-white px-3 py-2 rounded-lg flex items-center justify-center gap-2 transition-colors hover:bg-gray-600 text-sm">
                     <i class="fas fa-arrow-left text-xs"></i>
                     <span>Kembali</span>
@@ -23,7 +23,7 @@
     </div>
 
     <form 
-        action="{{ isset($photo) ? route('gallery.update', $photo->id) : url('/dashboard/gallery/save') }}" 
+        action="{{ isset($photo) ? route('gallery.update', $photo->id) : route('gallery.store') }}" 
         method="POST" 
         enctype="multipart/form-data" 
         class="bg-white rounded-lg shadow-sm border border-gray-200 mb-6 mx-2 md:mx-0"
@@ -40,18 +40,27 @@
         </div>
 
         <div class="p-4 md:p-6">
-            {{-- Konten form tetap seperti yang kamu punya --}}
-            <div class="bg-white rounded-lg shadow-sm border border-gray-200 mb-6 mx-2 md:mx-0">
-                <div class="p-3 md:p-4 border-b border-gray-200">
-                    <h2 class="text-lg font-semibold text-gray-900">
-                        {{ isset($photo) ? 'Form Edit Galeri' : 'Form Galeri Baru' }}
-                    </h2>
+            <!-- Pesan Error/Success -->
+            @if ($errors->any())
+                <div class="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+                    <ul class="list-disc list-inside">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
                 </div>
+            @endif
 
-        <form action="{{ isset($photo) ? url('/dashboard/gallery/'.$photo->id) : url('/dashboard/gallery/create') }}" method="POST" enctype="multipart/form-data" class="p-4 md:p-6">
-            @csrf
-            @if(isset($photo))
-                @method('PUT')
+            @if (session('success'))
+                <div class="mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded-lg">
+                    {{ session('success') }}
+                </div>
+            @endif
+
+            @if (session('error'))
+                <div class="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+                    {{ session('error') }}
+                </div>
             @endif
             <!-- Gambar Upload -->
             <div class="mb-6">
@@ -65,7 +74,7 @@
                         <img id="previewImage" src="" alt="Preview"
                              class="hidden absolute inset-0 w-full h-full object-cover z-0" />
                     @endif
-                    <div id="uploadPlaceholder" class="z-10 flex flex-col items-center">
+                    <div id="uploadPlaceholder" class="z-10 flex flex-col items-center {{ isset($photo) && $photo->image_path ? 'hidden' : '' }}">
                         <i class="fa-solid fa-image text-2xl md:text-3xl text-[#1B3A6D]"></i>
                         <label for="imageInput"
                                class="cursor-pointer bg-[#1B3A6D] text-white px-3 py-2 mt-3 rounded-lg hover:bg-[#1B3A6D]/90 transition-colors text-sm">
@@ -106,14 +115,14 @@
                     <i class="fas fa-save mr-2"></i>
                     {{ isset($photo) ? 'Update Galeri' : 'Simpan Galeri' }}
                 </button>
-                <a href="{{ url('gallery/index') }}"
+                <a href="{{ route('gallery.index') }}"
                    class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition text-sm font-medium text-center w-full md:w-auto">
                     <i class="fas fa-times mr-2"></i>
                     Batal
                 </a>
             </div>
-        </form>
-    </div>
+        </div>
+    </form>
 @endsection
 
 @push('addon-script')
@@ -132,13 +141,13 @@
                     previewImage.src = e.target.result;
                     previewImage.classList.remove('hidden');
                     previewImage.classList.add('block');
-                    uploadPlaceholder.style.display = 'none';
+                    uploadPlaceholder.classList.add('hidden');
                 }
                 reader.readAsDataURL(file);
             } else {
                 previewImage.src = '';
                 previewImage.classList.add('hidden');
-                uploadPlaceholder.style.display = 'flex';
+                uploadPlaceholder.classList.remove('hidden');
             }
         });
     });

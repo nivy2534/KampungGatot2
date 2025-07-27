@@ -36,6 +36,11 @@ class GaleryService
         return $this->galeryRepository->delete($id);
     }
 
+    public function show($id)
+    {
+        return $this->galeryRepository->show($id);
+    }
+
     public function getAllProducts()
     {
         return $this->galeryRepository->getAllProducts();

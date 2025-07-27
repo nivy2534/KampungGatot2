@@ -17,7 +17,8 @@ class BlogRepository implements BlogRepositoryInterface
         $limit = $request->length == "" ? '10' : $request->length;
         $offset = $request->start == "" ? '0' : $request->start;
 
-        $query = Blog::orderBy("created_at", "ASC");
+        // Filter hanya konten milik user yang sedang login
+        $query = Blog::where('author_id', Auth::id())->orderBy("created_at", "ASC");
 
         if ($request->status_filter != "") {
             $query->where("status", $request->status_filter);

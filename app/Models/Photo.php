@@ -14,12 +14,15 @@ class Photo extends Model
         'photo_name',
         'photo_description',
         'photo_date',
+        'image_path',
         'event_id',
-        'production_id',
+        'product_id',
         'blog_id',
+        'category',
         'kategori',
-        'status',         // published, draft, archived
-        'author_id',      // user who uploaded the photo
+        'status',
+        'author_id',
+        'is_active',
     ];
 
     protected $casts = [
@@ -50,9 +53,9 @@ class Photo extends Model
         return $this->belongsTo(Blog::class);
     }
 
-    // Opsional: relasi ke production
-    public function production()
+    // Opsional: relasi ke production/product
+    public function product()
     {
-        return $this->belongsTo(Production::class);
+        return $this->belongsTo(Product::class, 'product_id');
     }
 }
