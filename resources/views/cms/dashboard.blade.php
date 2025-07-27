@@ -55,7 +55,7 @@
                 <span class="text-xs text-green-600">+12%</span>
             </div>
             <div>
-                <h3 class="text-xl font-semibold text-gray-900 mb-1">2,847</h3>
+                <h3 class="text-xl font-semibold text-gray-900 mb-1">{{ $totalVisitor }}</h3>
                 <p class="text-sm text-gray-600">Pengunjung</p>
             </div>
         </div>
@@ -141,7 +141,7 @@
                         <span class="text-sm font-medium text-gray-900">Tambah Produk</span>
                     </a>
 
-                    <a href="{{ url('/dashboard/galery') }}" 
+                    <a href="{{ url('/dashboard/gallery') }}" 
                        class="flex items-center p-2 rounded-lg hover:bg-gray-50 transition-colors group">
                         <div class="w-7 h-7 bg-[#1B3A6D] rounded-lg flex items-center justify-center mr-3">
                             <i class="fas fa-images text-white text-xs"></i>
@@ -168,7 +168,10 @@
                             <div class="w-2 h-2 bg-green-500 rounded-full mr-3"></div>
                             <span class="text-sm text-gray-700">Database</span>
                         </div>
-                        <span class="text-xs text-green-600 font-medium">Connected</span>
+                        <span class="text-xs {{ $dbStatus === 'connected' ? 'text-green-600' : 'text-red-600'  }} font-medium">
+                            
+                            {{ ucfirst($dbStatus) }}
+                        </span>
                     </div>
 
                     <div class="flex items-center justify-between">

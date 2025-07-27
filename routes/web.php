@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\GaleryController;
+use App\Http\Middleware\LogVisitor;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\BlogController;
@@ -13,7 +14,7 @@ use App\Http\Controllers\GaleriPageController;
 
 
 
-Route::get('/', [HomepageController::class, 'index']);
+Route::get('/', [HomepageController::class, 'index'])->middleware(LogVisitor::class);
 
 Route::get('/login', function () {
     return view('auth.login');
@@ -62,7 +63,7 @@ Route::middleware(['auth'])->group(
           Route::get('/gallery', [GaleryController::class, 'index']);
           Route::post('/gallery', [GaleryController::class, 'index']);
           Route::get('/gallery/create', [GaleryController::class, 'create']);
-          Route::post('/gallery/create',[GaleryController::class, 'store']);
+          Route::post('/gallery/save',[GaleryController::class, 'store']);
           Route::put('/gallery/{id}', [GaleryController::class, 'update']);
           Route::delete('/gallery/{id}',[GaleryController::class, 'destroy']);
         });

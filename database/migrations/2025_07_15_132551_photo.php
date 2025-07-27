@@ -21,12 +21,15 @@ return new class extends Migration
             $table->unsignedBigInteger('product_id')->nullable();
             $table->unsignedBigInteger('blog_id')->nullable();
             $table->timestamps();
+            $table->string('kategori')->nullable();
+            $table->string('status')->default('draft'); // published | draft | archived
+            $table->unsignedBigInteger('author_id')->nullable();
             $table->boolean('is_active')->default(true);
 
             $table->foreign('event_id')->references('id')->on('events')->onDelete('cascade');
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
             $table->foreign('blog_id')->references('id')->on('blogs')->onDelete('cascade');
-            
+            $table->foreign('author_id')->references('id')->on('users')->onDelete('set null');
         });
     }
 

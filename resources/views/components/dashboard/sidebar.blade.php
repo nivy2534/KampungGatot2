@@ -37,8 +37,8 @@
             <span class="text-sm">Kelola Produk</span>
         </a>
 
-        <a href="{{ url('/dashboard/galery') }}"
-            class="nav-item {{ Request::is('dashboard/galery*') ? 'active' : '' }} flex items-center px-3 py-3 hover:bg-white/10 rounded-lg transition-all duration-200 group text-white">
+        <a href="{{ url('/dashboard/gallery') }}"
+            class="nav-item {{ Request::is('dashboard/gallery*') ? 'active' : '' }} flex items-center px-3 py-3 hover:bg-white/10 rounded-lg transition-all duration-200 group text-white">
             <i class="fa-solid fa-image mr-3 flex-shrink-0 text-sm"></i>
             <span class="truncate text-sm">Kelola Galeri</span>
         </a>
