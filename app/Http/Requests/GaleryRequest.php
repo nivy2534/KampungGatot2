@@ -19,12 +19,21 @@ class GaleryRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+        $rules = [
             'photo_name' => 'required|string|max:255',
             'photo_description' => 'nullable|string',
             'category' => 'required|string|max:50',
             'photo_date' => 'nullable|date|date_format:Y-m-d',
-            'image' => 'nullable|image|max:1024', // max 1MB
         ];
+
+        // Jika ini adalah request untuk create (method POST), image wajib
+        // Jika ini adalah request untuk update (method PUT/PATCH), image opsional
+        if ($this->isMethod('post')) {
+            $rules['image'] = 'required|image|max:1024'; // max 1MB
+        } else {
+            $rules['image'] = 'nullable|image|max:1024'; // max 1MB
+        }
+
+        return $rules;
     }
 }

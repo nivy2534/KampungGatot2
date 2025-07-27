@@ -39,5 +39,9 @@ class Product extends Model
         return $this->hasMany(ProductImage::class);
     }
 
-
+    // Relasi ke User (author)
+    public function author()
+    {
+        return $this->belongsTo(User::class, 'author_id');
+    }
 }

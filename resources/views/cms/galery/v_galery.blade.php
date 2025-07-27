@@ -8,7 +8,7 @@
                 <h1 class="text-3xl font-bold text-gray-900 mb-2">Kelola Galeri</h1>
                 <p class="text-gray-600">Create, edit, and manage village galery</p>
             </div>
-            <a href="{{ url('/dashboard/gallery/create') }}"
+            <a href="{{ route('gallery.create') }}"
                 class="bg-primary text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors">
                 Tambah Gambar
                 <i class="fas fa-plus"></i>
@@ -241,15 +241,12 @@
                 allowOutsideClick: () => !Swal.isLoading(),
                 preConfirm: () => {
                     Swal.showLoading(); // Munculkan spinner
-                    let _url = "{{ url('photos/delete/') }}/" + photoId;
+                    let _url = "{{ url('/dashboard/gallery/') }}/" + photoId;
                     return fetch(_url, {
                             method: 'DELETE',
                             headers: {
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-                            },
-                            data: {
-                                _method: 'DELETE',
-                                _token: '{{ csrf_token() }}' // untuk Blade, atau ganti manual jika pakai JS murni
+                                'Content-Type': 'application/json',
                             },
                         })
                         .then(response => {

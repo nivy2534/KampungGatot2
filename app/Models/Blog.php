@@ -43,4 +43,10 @@ class Blog extends Model
     {
         return $this->description;
     }
+
+    // Relasi ke User (author)
+    public function author()
+    {
+        return $this->belongsTo(User::class, 'author_id');
+    }
 }

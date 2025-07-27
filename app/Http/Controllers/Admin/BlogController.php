@@ -8,11 +8,12 @@ use App\Services\BlogService;
 use App\Http\Requests\BlogRequest;
 use App\Http\Controllers\Controller;
 use App\Traits\ApiResponse;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class BlogController extends Controller
 {
     protected $blogService;
-    use ApiResponse;
+    use ApiResponse, AuthorizesRequests;
 
     public function __construct(BlogService $blogService)
     {
@@ -34,6 +35,7 @@ class BlogController extends Controller
 
     public function edit(Blog $blog)
     {
+        $this->authorize('update', $blog);
         return view("cms.blog.v_create_blog", compact("blog"));
     }
 
@@ -49,6 +51,8 @@ class BlogController extends Controller
 
     public function update(BlogRequest $request)
     {
+        $blog = Blog::findOrFail($request->id);
+        $this->authorize('update', $blog);
         $createBlog = $this->blogService->update($request->validated());
         if ($createBlog) {
             return $this->success($createBlog, 'Berita berhasil dibuat');
@@ -59,6 +63,8 @@ class BlogController extends Controller
 
     public function destroy($id)
     {
+        $blog = Blog::findOrFail($id);
+        $this->authorize('delete', $blog);
         $data = $this->blogService->delete($id);
         return $this->success($data, 'Data berhasil dihapus');
     }

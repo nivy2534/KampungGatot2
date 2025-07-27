@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Blog;
+use App\Models\Photo;
 use Illuminate\Http\Request;
 use App\Services\GaleryService;
 use App\Http\Requests\GaleryRequest;
 use App\Http\Controllers\Controller;
 use App\Traits\ApiResponse;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class GaleryController extends Controller
 {
     protected $galeryService;
-    use ApiResponse;
+    use ApiResponse, AuthorizesRequests;
 
     public function __construct(GaleryService $galeryService)
     {
@@ -32,33 +33,55 @@ class GaleryController extends Controller
         return view("cms.galery.v_create_photo");
     }
 
-    public function edit(Blog $blog)
+    public function edit($id)
     {
-        return view("cms.blog.v_create_photo", compact("photo"));
+        $photo = Photo::findOrFail($id);
+        $this->authorize('update', $photo);
+        return view("cms.galery.v_create_photo", compact("photo"));
     }
 
     public function store(GaleryRequest $request)
     {
         $createPhoto = $this->galeryService->store($request->validated());
         if ($createPhoto) {
-            return $this->success($createPhoto, 'Foto berhasil disimpan');
+            return response()->json([
+                'success' => true,
+                'message' => 'Foto berhasil disimpan',
+                'data' => $createPhoto
+            ]);
         } else {
-            return $this->error('Foto gagal disimpan');
+            return response()->json([
+                'success' => false,
+                'message' => 'Foto gagal disimpan'
+            ], 500);
         }
     }
 
-    public function update(GaleryRequest $request)
+    public function update(GaleryRequest $request, $id)
     {
-        $createPhoto = $this->galeryService->update($request->validated());
-        if ($createPhoto) {
-            return $this->success($createPhoto, 'Berita berhasil dibuat');
+        $photo = Photo::findOrFail($id);
+        $this->authorize('update', $photo);
+        $data = $request->validated();
+        $data['id'] = $id;
+        $updatePhoto = $this->galeryService->update($data);
+        if ($updatePhoto) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Foto berhasil diperbarui',
+                'data' => $updatePhoto
+            ]);
         } else {
-            return $this->error('Berita gagal dibuat');
+            return response()->json([
+                'success' => false,
+                'message' => 'Foto gagal diperbarui'
+            ], 500);
         }
     }
 
     public function destroy($id)
     {
+        $photo = Photo::findOrFail($id);
+        $this->authorize('delete', $photo);
         $data = $this->galeryService->delete($id);
         return $this->success($data, 'Data berhasil dihapus');
     }
