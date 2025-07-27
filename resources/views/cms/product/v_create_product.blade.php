@@ -87,16 +87,7 @@
                 </div>
 
                 <!-- Grid Thumbnail dengan Drag & Drop -->
-                <div id="thumbnailContainer" class="hidden">
-                    <div class="flex items-center justify-between mb-3">
-                        <p class="text-sm font-medium text-gray-700 flex items-center">
-                            <i class="fas fa-grip-vertical text-gray-400 mr-2"></i>
-                            Semua Foto
-                        </p>
-                        <p class="text-xs text-gray-500">Geser untuk ubah urutan</p>
-                    </div>
-                    <div id="thumbnailGrid" class="grid grid-cols-3 gap-2 p-3 bg-gray-50 rounded-lg border border-gray-200"></div>
-                </div>
+                <div id="thumbnailGrid" class="grid grid-cols-3 gap-[0px]"></div>
             </div>
 
             {{-- Form Input --}}
@@ -258,325 +249,119 @@
   }
 </style>
 <script>
-  const imageInput = document.getElementById("imageInput");
-  const previewImage = document.getElementById("previewImage");
-  const uploadPlaceholder = document.getElementById("uploadPlaceholder");
-  const mainPreview = document.getElementById("mainPreview");
-  const thumbnailGrid = document.getElementById("thumbnailGrid");
-  const uploadArea = document.getElementById("uploadArea");
-  const thumbnailContainer = document.getElementById("thumbnailContainer");
-  const imageCounter = document.getElementById("imageCounter");
-
   let imageFiles = [];
-  let imageOrder = [];
+  let mainImageIndex = 0;
 
-  // Drag and drop handlers
-  uploadArea.addEventListener('dragover', (e) => {
-    e.preventDefault();
-    uploadArea.classList.add('upload-area-dragover');
-  });
-
-  uploadArea.addEventListener('dragleave', (e) => {
-    e.preventDefault();
-    uploadArea.classList.remove('upload-area-dragover');
-  });
-
-  uploadArea.addEventListener('drop', (e) => {
-    e.preventDefault();
-    uploadArea.classList.remove('upload-area-dragover');
-    const files = Array.from(e.dataTransfer.files).filter(file => file.type.startsWith('image/'));
-    if (files.length > 0) {
-      addFiles(files);
-    }
-  });
+  const imageInput = document.getElementById("imageInput");
+  const mainPreview = document.getElementById("mainPreview");
+  const previewImage = document.getElementById("previewImage");
+  const thumbnailGrid = document.getElementById("thumbnailGrid");
+  const removeMainBtn = document.getElementById("removeMainBtn");
+  const uploadPlaceholder = document.getElementById("uploadPlaceholder");
 
   imageInput.addEventListener("change", (e) => {
     const files = Array.from(e.target.files);
-    addFiles(files);
+    imageFiles = [...imageFiles, ...files];
+    updatePreviewList();
   });
 
-  function addFiles(files) {
-    if (imageFiles.length + files.length > 10) {
-      Swal.fire({
-        icon: 'warning',
-        title: 'Terlalu Banyak Gambar',
-        text: 'Maksimal 10 foto yang dapat diunggah!',
-        customClass: {
-          confirmButton: 'bg-[#1B3A6D] hover:bg-[#152f5a] text-white px-6 py-2 rounded-lg font-medium'
-        },
-        buttonsStyling: false
-      });
-      return;
-    }
+  function updatePreviewList() {
+    thumbnailGrid.innerHTML = "";
 
-    files.forEach(file => {
-      if (file.size > 1024 * 1024) { 
-        Swal.fire({
-          icon: 'warning',
-          title: 'File Terlalu Besar',
-          text: `File ${file.name} melebihi 1MB!`,
-          customClass: {
-            confirmButton: 'bg-[#1B3A6D] hover:bg-[#152f5a] text-white px-6 py-2 rounded-lg font-medium'
-          },
-          buttonsStyling: false
-        });
-        return;
-      }
-      
-      imageFiles.push(file);
-      imageOrder.push(imageFiles.length - 1);
+    imageFiles.forEach((file, index) => {
+        const readerThumb = new FileReader();
+        readerThumb.onload = (e) => {
+            const wrapper = document.createElement("div");
+            wrapper.className = "relative w-20 h-20 flex flex-col items-center justify-center shrink-0";
+            wrapper.dataset.index = index;
+
+            const img = document.createElement("img");
+            img.src = e.target.result;
+            img.className = "w-full h-full object-cover rounded cursor-pointer";
+            img.onclick = () => {
+                previewImage.src = e.target.result;
+                mainImageIndex = index;
+                mainPreview.classList.remove("hidden");
+                uploadPlaceholder.classList.add("hidden");
+                updatePreviewList(); // refresh label cover
+            };
+
+            const removeBtn = document.createElement("button");
+            removeBtn.type = "button";
+            removeBtn.className = "absolute top-0 right-0 bg-red-500 text-white w-5 h-5 flex items-center justify-center rounded-full text-xs hover:bg-red-600 -mt-1 -mr-1 shadow";
+            removeBtn.innerHTML = "&times;";
+            removeBtn.onclick = (ev) => {
+                ev.stopPropagation();
+
+                imageFiles.splice(index, 1);
+
+                if (index === mainImageIndex) {
+                    mainImageIndex = 0;
+                } else if (index < mainImageIndex) {
+                    mainImageIndex -= 1;
+                }
+
+                updatePreviewList();
+            };
+
+            wrapper.appendChild(img);
+            wrapper.appendChild(removeBtn);
+
+            // Label cover hanya untuk yang saat ini jadi cover
+            if (index === mainImageIndex) {
+                const coverLabel = document.createElement("span");
+                coverLabel.innerText = "Cover";
+                coverLabel.className = "absolute bottom-1 left-1 bg-blue-600 text-white text-xs px-1.5 py-0.5 rounded shadow";
+                wrapper.appendChild(coverLabel);
+            }
+
+            thumbnailGrid.appendChild(wrapper);
+
+            // Tampilkan preview utama sesuai cover (sekali di sini saja)
+            if (index === mainImageIndex) {
+                previewImage.src = e.target.result;
+                mainPreview.classList.remove("hidden");
+                uploadPlaceholder.classList.add("hidden");
+            }
+        };
+        readerThumb.readAsDataURL(file);
     });
 
-    updateImageDisplay();
-  }
-
-  function updateImageDisplay() {
-    updateImageCounter();
-    updateThumbnailGrid();
-    updateMainPreview();
-    toggleUIElements();
-  }
-
-  function updateImageCounter() {
-    const totalImages = imageFiles.length;
-    if (imageCounter) {
-      imageCounter.textContent = `${totalImages}/10 foto`;
-      if (totalImages >= 8) {
-        imageCounter.className = 'text-xs text-orange-600 bg-orange-100 px-2 py-1 rounded-md font-medium border border-orange-200';
-      } else if (totalImages >= 5) {
-        imageCounter.className = 'text-xs text-blue-600 bg-blue-100 px-2 py-1 rounded-md font-medium border border-blue-200';
-      } else {
-        imageCounter.className = 'text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-md font-medium';
-      }
-    }
-  }
-
-  function toggleUIElements() {
-    const hasImages = imageFiles.length > 0;
-    
-    if (hasImages) {
-      uploadPlaceholder.classList.add('hidden');
-      mainPreview.classList.remove('hidden');
-      thumbnailContainer.classList.remove('hidden');
-    } else {
-      uploadPlaceholder.classList.remove('hidden');
-      mainPreview.classList.add('hidden');
-      thumbnailContainer.classList.add('hidden');
-    }
-  }
-
-  function updateMainPreview() {
-    if (imageFiles.length > 0) {
-      showMainPreview(0);
-    }
-  }
-
-  function updateThumbnailGrid() {
-    thumbnailGrid.innerHTML = '';
-    
+    // Jika tidak ada file, sembunyikan preview
     if (imageFiles.length === 0) {
-      return;
+        mainPreview.classList.add("hidden");
+        uploadPlaceholder.classList.remove("hidden");
     }
+}
 
-    imageOrder.forEach((fileIndex, position) => {
-      const file = imageFiles[fileIndex];
-      if (!file) return;
 
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const wrapper = document.createElement('div');
-        wrapper.className = 'thumbnail-wrapper group';
-        wrapper.setAttribute('data-index', fileIndex);
-        
-        if (position === 0) {
-          const coverBadge = document.createElement('div');
-          coverBadge.className = 'absolute -top-1 -left-1 bg-green-500 text-white text-xs px-2 py-0.5 rounded-full z-20 shadow-lg border border-white';
-          coverBadge.innerHTML = '<i class="fas fa-crown mr-1"></i>Sampul';
-          wrapper.appendChild(coverBadge);
+
+    new Sortable(thumbnailGrid, {
+        animation: 150,
+        ghostClass: "sortable-ghost",
+        onEnd: function () {
+            const newOrder = Array.from(thumbnailGrid.children).map((child) => {
+                const index = parseInt(child.dataset.index);
+                return imageFiles[index];
+            });
+
+            imageFiles = newOrder;
+            mainImageIndex = 0; // ← Cover selalu index 0
+            updatePreviewList();
         }
-
-        const orderBadge = document.createElement('div');
-        orderBadge.className = 'absolute -top-1 -right-1 bg-[#1B3A6D] text-white text-xs w-5 h-5 rounded-full flex items-center justify-center z-20 shadow-lg border border-white';
-        orderBadge.textContent = position + 1;
-        wrapper.appendChild(orderBadge);
-
-        const img = document.createElement('img');
-        img.src = e.target.result;
-        img.className = 'w-full h-20 object-cover rounded-lg cursor-pointer';
-        img.addEventListener('click', () => showMainPreview(fileIndex));
-
-        const deleteBtn = document.createElement('button');
-        deleteBtn.type = 'button';
-        deleteBtn.className = 'absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all hover:bg-red-600 shadow-lg border border-white hover:scale-110';
-        deleteBtn.innerHTML = '<i class="fas fa-trash text-xs"></i>';
-        deleteBtn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          removeImage(fileIndex);
-        });
-
-        const dragHandle = document.createElement('div');
-        dragHandle.className = 'absolute bottom-1 left-1 bg-[#1B3A6D] text-white rounded p-1.5 opacity-0 group-hover:opacity-90 transition-all cursor-move shadow-lg border border-white';
-        dragHandle.innerHTML = '<i class="fas fa-grip-vertical text-xs"></i>';
-        wrapper.appendChild(dragHandle);
-
-        wrapper.appendChild(img);
-        wrapper.appendChild(deleteBtn);
-        thumbnailGrid.appendChild(wrapper);
-      };
-      reader.readAsDataURL(file);
     });
 
-    setTimeout(() => {
-      if (thumbnailGrid.children.length > 0) {
-        new Sortable(thumbnailGrid, {
-          animation: 150,
-          ghostClass: 'sortable-ghost',
-          chosenClass: 'sortable-chosen',
-          dragClass: 'sortable-drag',
-          handle: '.cursor-move',
-          onEnd: function(evt) {
-            updateImageDisplay();
-          }
-        });
-      }
-    }, 100);
-  }
 
-  function showMainPreview(fileIndex) {
-    const file = imageFiles[fileIndex];
-    if (!file) return;
 
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      previewImage.src = e.target.result;
-    };
-    reader.readAsDataURL(file);
-  }
-
-  function removeImage(fileIndex) {
-    imageFiles.splice(fileIndex, 1);
-    imageOrder = imageOrder
-      .map(index => index > fileIndex ? index - 1 : index)
-      .filter(index => index !== fileIndex);
-    updateImageDisplay();
-  }
-
-  document.getElementById('removeMainBtn').addEventListener('click', () => {
-    if (imageFiles.length > 0) {
-      removeImage(0);
-    }
-  });
-
-  document.getElementById("submitBarangBtn").addEventListener("click", async function () {
-    const nama = document.getElementById("nama").value.trim();
-    const harga = document.getElementById("harga").value.trim();
-    const sellerName = document.getElementById("seller_name").value.trim();
-    const contactPerson = document.getElementById("contact_person").value.trim();
-    const deskripsi = document.getElementById("deskripsi").value.trim();
-    const status = document.getElementById("status").value;
-
-    if (!nama || !harga || !sellerName || !contactPerson || !deskripsi || !status) {
-        Swal.fire({
-            icon: 'warning',
-            title: 'Lengkapi Form',
-            text: 'Harap isi semua field yang diperlukan!',
-            customClass: {
-                confirmButton: 'bg-[#1B3A6D] hover:bg-[#152f5a] text-white px-6 py-2 rounded-lg font-medium'
-            },
-            buttonsStyling: false
-        });
-        return;
-    }
-
-    if (isNaN(harga) || parseFloat(harga) < 0) {
-        Swal.fire({
-            icon: 'warning',
-            title: 'Harga Tidak Valid',
-            text: 'Harap masukkan harga yang valid!',
-            customClass: {
-                confirmButton: 'bg-[#1B3A6D] hover:bg-[#152f5a] text-white px-6 py-2 rounded-lg font-medium'
-            },
-            buttonsStyling: false
-        });
-        return;
-    }
-
-    const formData = new FormData();
-    formData.append("name", nama);
-    formData.append("price", harga);
-    formData.append("seller_name", sellerName);
-    formData.append("contact_person", contactPerson);
-    formData.append("description", deskripsi);
-    formData.append("status", status);
-
-    imageOrder.forEach((fileIndex, position) => {
-      const file = imageFiles[fileIndex];
-      if (file) {
-        formData.append("images[]", file);
-        formData.append("image_orders[]", position);
-      }
-    });
-
-    const button = document.getElementById("submitBarangBtn");
-    const originalText = button.innerHTML;
-    button.innerHTML = '<div class="loading-spinner mr-2"></div>Menyimpan Produk...';
-    button.disabled = true;
-    button.classList.add('opacity-75');
-
-    try {
-        const response = await fetch("{{ url('dashboard/products/store') }}", {
-            method: "POST",
-            headers: {
-                "Accept":"application/json",
-                "X-CSRF-TOKEN": "{{ csrf_token() }}",
-            },
-            body: formData
-        });
-
-        if (response.ok) {
-            Swal.fire({
-                title: 'Berhasil!',
-                text: 'Produk baru telah disimpan.',
-                icon: 'success',
-                customClass: {
-                    confirmButton: 'bg-[#1B3A6D] hover:bg-[#152f5a] text-white px-6 py-2 rounded-lg font-medium'
-                },
-                buttonsStyling: false
-            }).then(() => {
-                window.location.href = "{{ url('dashboard/products') }}";
-            });
-        } else {
-            const errorData = await response.json();
-            Swal.fire({
-                icon: 'error',
-                title: 'Terjadi Kesalahan',
-                text: errorData.message || 'Terjadi kesalahan saat menyimpan produk.',
-                customClass: {
-                    confirmButton: 'bg-[#1B3A6D] hover:bg-[#152f5a] text-white px-6 py-2 rounded-lg font-medium'
-                },
-                buttonsStyling: false
-            });
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        Swal.fire({
-            icon: 'error',
-            title: 'Terjadi Kesalahan',
-            text: 'Terjadi kesalahan saat mengirim data: ' + error.message,
-            customClass: {
-                confirmButton: 'bg-[#1B3A6D] hover:bg-[#152f5a] text-white px-6 py-2 rounded-lg font-medium'
-            },
-            buttonsStyling: false
-        });
-    } finally {
-        button.innerHTML = originalText;
-        button.disabled = false;
-        button.classList.remove('opacity-75');
-    }
+  removeMainBtn.addEventListener("click", () => {
+    previewImage.src = "";
+    mainPreview.classList.add("hidden");
+    uploadPlaceholder.classList.remove("hidden");
   });
 
   document.addEventListener('DOMContentLoaded', function() {
     updateImageDisplay();
   });
 </script>
+
 @endpush
