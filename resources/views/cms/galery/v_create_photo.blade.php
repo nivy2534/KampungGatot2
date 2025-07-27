@@ -111,7 +111,7 @@
             </div>
             <!-- Tombol -->
             <div class="flex flex-col md:flex-row gap-3 md:gap-4 pt-6 border-t border-gray-200 mt-6">
-                <button type="submit" class="bg-[#1B3A6D] text-white px-4 py-2 rounded-lg hover:bg-[#1B3A6D]/90 transition text-sm font-medium w-full md:w-auto">
+                <button type="button" id="submitBtn" class="bg-[#1B3A6D] text-white px-4 py-2 rounded-lg hover:bg-[#1B3A6D]/90 transition text-sm font-medium w-full md:w-auto">
                     <i class="fas fa-save mr-2"></i>
                     {{ isset($photo) ? 'Update Galeri' : 'Simpan Galeri' }}
                 </button>
@@ -149,6 +149,132 @@
                 previewImage.classList.add('hidden');
                 uploadPlaceholder.classList.remove('hidden');
             }
+        });
+
+        // Submit form dengan AJAX
+        $('#submitBtn').on('click', function(e) {
+            e.preventDefault();
+
+            const formData = new FormData();
+            const file = $('#imageInput')[0].files[0];
+            const photoName = $('input[name="photo_name"]').val();
+            const photoDescription = $('textarea[name="photo_description"]').val();
+            const category = $('select[name="category"]').val();
+            const isEdit = {{ isset($photo) ? 'true' : 'false' }};
+
+            // Validasi
+            if (!photoName || !category) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Nama foto dan kategori wajib diisi!'
+                });
+                return;
+            }
+
+            if (!isEdit && !file) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Gambar wajib dipilih!'
+                });
+                return;
+            }
+
+            // Disable button dan tampilkan loading
+            const $button = $(this);
+            $button.html('<i class="fas fa-spinner fa-spin mr-2"></i>Memproses...').prop('disabled', true);
+
+            // Append data ke FormData
+            formData.append('photo_name', photoName);
+            formData.append('photo_description', photoDescription);
+            formData.append('category', category);
+            if (file) {
+                formData.append('image', file);
+            }
+
+            const url = isEdit ? '{{ isset($photo) ? route("gallery.update", $photo->id) : "" }}' : '{{ route("gallery.store") }}';
+            const method = isEdit ? 'POST' : 'POST';
+            
+            if (isEdit) {
+                formData.append('_method', 'PUT');
+            }
+
+            $.ajax({
+                url: url,
+                method: method,
+                data: formData,
+                processData: false,
+                contentType: false,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    if (response.success) {
+                        if (isEdit) {
+                            // SweetAlert untuk update
+                            Swal.fire({
+                                title: '<strong>🎉 Berhasil Diperbarui!</strong>',
+                                html: `<p style="color:#6b7280; font-size:14px; margin-top:8px;">
+                                    Data produk kamu sudah berhasil disimpan.<br>
+                                    Terima kasih telah memperbarui katalog.
+                                </p>`,
+                                confirmButtonText: 'Kembali ke Dashboard',
+                                allowOutsideClick: false,
+                                customClass: {
+                                    popup: 'rounded-xl px-6 py-8',
+                                    title: 'text-black text-base font-bold',
+                                    confirmButton: 'bg-blue-800 hover:bg-blue-900 text-white text-sm px-6 py-3 rounded-lg focus:outline-none'
+                                },
+                                buttonsStyling: false,
+                            }).then(() => {
+                                window.location.href = '{{ route("gallery.index") }}';
+                            });
+                        } else {
+                            // SweetAlert untuk create
+                            Swal.fire({
+                                title: '<strong>🎉 Katalog berhasil ditambahkan!</strong>',
+                                html: `<p style="color:#6b7280; font-size:14px; margin-top:8px;">
+                                    Data Katalog kamu sudah disimpan dengan sukses.<br>
+                                    Kamu akan diarahkan ke dashboard Katalog untuk melihat daftar lengkap.
+                                </p>`,
+                                confirmButtonText: 'Oke, Lihat Dashboard',
+                                allowOutsideClick: false,
+                                customClass: {
+                                    popup: 'rounded-xl px-6 py-8',
+                                    title: 'text-black text-base font-bold',
+                                    confirmButton: 'bg-blue-800 hover:bg-blue-900 text-white text-sm px-6 py-3 rounded-lg focus:outline-none'
+                                },
+                                buttonsStyling: false,
+                            }).then(() => {
+                                window.location.href = '{{ route("gallery.index") }}';
+                            });
+                        }
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: response.message || 'Terjadi kesalahan!'
+                        });
+                    }
+                },
+                error: function(xhr) {
+                    let errorMessage = 'Terjadi kesalahan saat memproses data.';
+                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                        errorMessage = xhr.responseJSON.message;
+                    }
+                    
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: errorMessage
+                    });
+                },
+                complete: function() {
+                    // Reset button
+                    $button.html('<i class="fas fa-save mr-2"></i>{{ isset($photo) ? "Update Galeri" : "Simpan Galeri" }}').prop('disabled', false);
+                }
+            });
         });
     });
 </script>

@@ -8,11 +8,12 @@ use App\Services\GaleryService;
 use App\Http\Requests\GaleryRequest;
 use App\Http\Controllers\Controller;
 use App\Traits\ApiResponse;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class GaleryController extends Controller
 {
     protected $galeryService;
-    use ApiResponse;
+    use ApiResponse, AuthorizesRequests;
 
     public function __construct(GaleryService $galeryService)
     {
@@ -43,9 +44,16 @@ class GaleryController extends Controller
     {
         $createPhoto = $this->galeryService->store($request->validated());
         if ($createPhoto) {
-            return redirect('/dashboard/gallery')->with('success', 'Foto berhasil disimpan');
+            return response()->json([
+                'success' => true,
+                'message' => 'Foto berhasil disimpan',
+                'data' => $createPhoto
+            ]);
         } else {
-            return redirect()->back()->with('error', 'Foto gagal disimpan');
+            return response()->json([
+                'success' => false,
+                'message' => 'Foto gagal disimpan'
+            ], 500);
         }
     }
 
@@ -57,9 +65,16 @@ class GaleryController extends Controller
         $data['id'] = $id;
         $updatePhoto = $this->galeryService->update($data);
         if ($updatePhoto) {
-            return redirect('/dashboard/gallery')->with('success', 'Foto berhasil diperbarui');
+            return response()->json([
+                'success' => true,
+                'message' => 'Foto berhasil diperbarui',
+                'data' => $updatePhoto
+            ]);
         } else {
-            return redirect()->back()->with('error', 'Foto gagal diperbarui');
+            return response()->json([
+                'success' => false,
+                'message' => 'Foto gagal diperbarui'
+            ], 500);
         }
     }
 

@@ -8,11 +8,12 @@ use App\Services\BlogService;
 use App\Http\Requests\BlogRequest;
 use App\Http\Controllers\Controller;
 use App\Traits\ApiResponse;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class BlogController extends Controller
 {
     protected $blogService;
-    use ApiResponse;
+    use ApiResponse, AuthorizesRequests;
 
     public function __construct(BlogService $blogService)
     {

@@ -9,11 +9,12 @@ use App\Http\Requests\ProductRequest;
 use App\Http\Controllers\Controller;
 use App\Traits\ApiResponse;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class ProductController extends Controller
 {
     protected $productService;
-    use ApiResponse;
+    use ApiResponse, AuthorizesRequests;
 
     public function __construct(ProductService $productService)
     {

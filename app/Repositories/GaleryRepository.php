@@ -18,8 +18,10 @@ class GaleryRepository implements GaleryRepositoryInterface
         $limit = $request->length == "" ? '10' : $request->length;
         $offset = $request->start == "" ? '0' : $request->start;
 
-        // Filter hanya konten milik user yang sedang login
-        $query = Photo::where('author_id', Auth::id())->orderBy("created_at", "ASC");
+        // Filter hanya konten milik user yang sedang login dengan join ke users table
+        $query = Photo::with('author')
+            ->where('author_id', Auth::id())
+            ->orderBy("created_at", "ASC");
 
         if ($request->status_filter != "") {
             $query->where("status", $request->status_filter);
@@ -41,6 +43,9 @@ class GaleryRepository implements GaleryRepositoryInterface
                 "recordsTotal" => $count,
                 "recordsFiltered" => $count,
             ])
+            ->addColumn('author_name', function ($item) {
+                return $item->author ? $item->author->name : 'Unknown';
+            })
             ->addColumn("actions", function ($item) {
                 $editUrl = route('gallery.edit', $item->id);
                 $deleteUrl = route('gallery.delete', $item->id);
