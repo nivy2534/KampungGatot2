@@ -3,12 +3,15 @@
         <div class="flex items-center justify-between h-16 lg:h-18">
             {{-- Brand Section --}}
             <div class="brand-section flex items-center gap-3 shrink-0 min-w-0">
-                <img src="{{ asset('assets/img/logo_ngebruk.png') }}" 
-                     alt="Logo Desa Ngebruk" 
+                <img src="{{ asset('assets/img/logo_tutwuri.png') }}"
+                     alt="Logo Desa Ngebruk"
                      class="w-10 h-10 lg:w-12 lg:h-12 object-contain flex-shrink-0" />
+                     <img src="{{ asset('assets/img/logo_unm.png') }}"
+                          alt="Logo Desa Ngebruk"
+                          class="w-10 h-10 lg:w-12 lg:h-12 object-contain flex-shrink-0" />
                 <div class="flex flex-col justify-center min-w-0">
                     <h1 class="text-gray-900 text-xs lg:text-sm font-bold font-['Inter'] leading-tight truncate">
-                        Desa Ngebruk
+                        Kampung Gatot
                     </h1>
                     <p class="text-gray-600 text-xs lg:text-xs font-normal font-['Inter'] leading-tight truncate">
                         Kecamatan Sumberpucung
@@ -47,7 +50,7 @@
                     <div class="hidden md:flex items-center gap-3">
                         <!-- User Profile Dropdown -->
                         <div class="relative" id="user-dropdown">
-                            <button id="user-dropdown-button" 
+                            <button id="user-dropdown-button"
                                     class="flex items-center space-x-3 px-2 py-1.5 bg-white hover:bg-gray-50 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1B3A6D] focus:ring-offset-2 transition-colors duration-200">
                                 <!-- Profile Picture -->
                                 <div class="w-8 h-8 bg-[#1B3A6D] rounded-full flex items-center justify-center">
@@ -63,7 +66,7 @@
                             </button>
 
                             <!-- Dropdown Menu -->
-                            <div id="user-dropdown-menu" 
+                            <div id="user-dropdown-menu"
                                  class="absolute right-0 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-lg z-50 hidden opacity-0 transform scale-95 transition-all duration-200">
                                 <!-- User Info Header -->
                                 <div class="px-4 py-3 border-b border-gray-100">
@@ -80,12 +83,12 @@
 
                                 <!-- Menu Items -->
                                 <div class="py-2">
-                                    <a href="{{ route('dashboard') }}" 
+                                    <a href="{{ route('dashboard') }}"
                                        class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-200">
                                         <i class="fas fa-tachometer-alt mr-3 text-[#1B3A6D]"></i>
                                         Dashboard
                                     </a>
-                                    <button id="dropdown-logout-btn" 
+                                    <button id="dropdown-logout-btn"
                                             class="w-full flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors duration-200">
                                         <i class="fas fa-sign-out-alt mr-3"></i>
                                         Logout
@@ -102,7 +105,7 @@
                 @endauth
 
                 {{-- Mobile Menu Toggle --}}
-                <button id="mobile-menu-toggle" 
+                <button id="mobile-menu-toggle"
                         class="md:hidden p-2 rounded-lg text-gray-600 hover:text-[#1B3A6D] hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#1B3A6D] transition-all duration-200"
                         aria-expanded="false"
                         aria-label="Toggle menu">
@@ -123,8 +126,8 @@
             {{-- Mobile Menu Header --}}
             <div class="flex items-center justify-between p-4 border-b border-gray-200">
                 <div class="flex items-center space-x-3">
-                    <img src="{{ asset('assets/img/logo_ngebruk.png') }}" 
-                         alt="Logo Desa Ngebruk" 
+                    <img src="{{ asset('assets/img/logo_ngebruk.png') }}"
+                         alt="Logo Desa Ngebruk"
                          class="w-8 h-8 object-contain" />
                     <div>
                         <h2 class="text-sm font-bold text-gray-900">Desa Ngebruk</h2>
@@ -141,22 +144,22 @@
             {{-- Mobile Navigation Links --}}
             <nav class="flex-1 px-4 py-6">
                 <div class="space-y-2">
-                    <a href="{{ url('/') }}" 
+                    <a href="{{ url('/') }}"
                        class="mobile-nav-link {{ Request::is('/') ? 'active' : '' }}">
                         <i class="fas fa-home text-lg"></i>
                         <span>Home</span>
                     </a>
-                    <a href="{{ route('blog') }}" 
+                    <a href="{{ route('blog') }}"
                        class="mobile-nav-link {{ Request::is('blog') ? 'active' : '' }}">
                         <i class="fas fa-blog text-lg"></i>
                         <span>Blog</span>
                     </a>
-                    <a href="{{ url('/galeri') }}" 
+                    <a href="{{ url('/galeri') }}"
                        class="mobile-nav-link {{ Request::is('galeri') ? 'active' : '' }}">
                         <i class="fas fa-images text-lg"></i>
                         <span>Galeri</span>
                     </a>
-                    <a href="{{ url('/event') }}" 
+                    <a href="{{ url('/event') }}"
                        class="mobile-nav-link {{ Request::is('event') ? 'active' : '' }}">
                         <i class="fas fa-shopping-bag text-lg"></i>
                         <span>Belanja</span>
@@ -178,12 +181,12 @@
                             </div>
                         </div>
                         <div class="space-y-2">
-                            <a href="{{ route('dashboard') }}" 
+                            <a href="{{ route('dashboard') }}"
                                class="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">
                                 <i class="fas fa-tachometer-alt mr-3 text-[#1B3A6D]"></i>
                                 Dashboard
                             </a>
-                            <button id="mobile-logout-btn" 
+                            <button id="mobile-logout-btn"
                                     class="w-full flex items-center px-4 py-3 text-red-600 hover:bg-red-50 rounded-lg transition-colors">
                                 <i class="fas fa-sign-out-alt mr-3"></i>
                                 Logout
@@ -191,7 +194,7 @@
                         </div>
                     </div>
                 @else
-                    <a href="/login" 
+                    <a href="/login"
                        class="flex items-center justify-center px-4 py-3 bg-[#1B3A6D] text-white rounded-lg hover:bg-[#0f2a4f] transition-colors">
                         <i class="fas fa-sign-in-alt mr-2"></i>
                         Login
@@ -314,37 +317,37 @@ body.mobile-menu-open {
 <script>
 (function() {
     'use strict';
-    
+
     document.addEventListener('DOMContentLoaded', function() {
         console.log('DOM loaded, initializing mobile menu...');
-        
+
         // Namespace untuk mencegah konflik
         if (window.mobileMenuInitialized) {
             console.log('Mobile menu already initialized, skipping...');
             return;
         }
-        
+
         // Mobile menu elements
         const mobileToggle = document.getElementById('mobile-menu-toggle');
         const mobileMenu = document.getElementById('mobile-menu');
         const mobileOverlay = document.getElementById('mobile-overlay');
         const mobileClose = document.getElementById('mobile-menu-close');
-        
+
         console.log('Elements found:', {
             toggle: !!mobileToggle,
-            menu: !!mobileMenu, 
+            menu: !!mobileMenu,
             overlay: !!mobileOverlay,
             close: !!mobileClose
         });
-        
+
         // Check if elements exist
         if (!mobileToggle || !mobileMenu || !mobileOverlay) {
             console.error('Required mobile menu elements not found!');
             return;
         }
-        
+
         let isMobileMenuOpen = false;
-        
+
         // Mark as initialized
         window.mobileMenuInitialized = true;
 
@@ -359,7 +362,7 @@ body.mobile-menu-open {
         mobileToggle.classList.add('active');
         document.body.style.overflow = 'hidden';
     }
-    
+
     function closeMenu() {
         console.log('Closing menu...');
         isMobileMenuOpen = false;
@@ -374,18 +377,18 @@ body.mobile-menu-open {
             }
         }, 300);
     }
-    
+
     // Single event listener for toggle dengan proteksi tambahan
     mobileToggle.addEventListener('click', function(e) {
         e.preventDefault();
         e.stopPropagation();
         e.stopImmediatePropagation(); // Prevent other handlers
-        
+
         console.log('=== TOGGLE CLICKED ===');
         console.log('Current state before:', isMobileMenuOpen);
         console.log('Event target:', e.target);
         console.log('Current target:', e.currentTarget);
-        
+
         if (isMobileMenuOpen) {
             console.log('Will close menu');
             closeMenu();
@@ -393,13 +396,13 @@ body.mobile-menu-open {
             console.log('Will open menu');
             openMenu();
         }
-        
+
         console.log('State after:', isMobileMenuOpen);
         console.log('===================');
-        
+
         return false; // Extra prevention
     }, true); // Use capture phase to get event first
-    
+
     // Close button
     if (mobileClose) {
         mobileClose.addEventListener('click', function(e) {
@@ -411,7 +414,7 @@ body.mobile-menu-open {
             }
         });
     }
-    
+
     // Overlay click - only when visible
     mobileOverlay.addEventListener('click', function(e) {
         console.log('Overlay click detected, menu open:', isMobileMenuOpen);
@@ -420,7 +423,7 @@ body.mobile-menu-open {
             closeMenu();
         }
     });
-    
+
     // Escape key
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape' && isMobileMenuOpen) {
@@ -428,7 +431,7 @@ body.mobile-menu-open {
             closeMenu();
         }
     });
-    
+
     // Resize handler
     window.addEventListener('resize', function() {
         if (window.innerWidth >= 768 && isMobileMenuOpen) {
@@ -436,7 +439,7 @@ body.mobile-menu-open {
             closeMenu();
         }
     });
-    
+
     // Nav links
     const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
     mobileNavLinks.forEach(link => {
@@ -452,13 +455,13 @@ body.mobile-menu-open {
     const userDropdownButton = document.getElementById('user-dropdown-button');
     const userDropdownMenu = document.getElementById('user-dropdown-menu');
     const dropdownArrow = document.getElementById('dropdown-arrow');
-    
+
     if (userDropdownButton && userDropdownMenu) {
         let isDropdownOpen = false;
 
         function toggleDropdown() {
             isDropdownOpen = !isDropdownOpen;
-            
+
             if (isDropdownOpen) {
                 userDropdownMenu.classList.remove('hidden', 'opacity-0', 'scale-95');
                 userDropdownMenu.classList.add('opacity-100', 'scale-100');
@@ -467,7 +470,7 @@ body.mobile-menu-open {
                 userDropdownMenu.classList.remove('opacity-100', 'scale-100');
                 userDropdownMenu.classList.add('opacity-0', 'scale-95');
                 dropdownArrow?.classList.remove('rotate-180');
-                
+
                 setTimeout(() => {
                     if (!isDropdownOpen) {
                         userDropdownMenu.classList.add('hidden');
@@ -518,16 +521,15 @@ body.mobile-menu-open {
     // Logout button event listeners
     const dropdownLogoutBtn = document.getElementById('dropdown-logout-btn');
     const mobileLogoutBtn = document.getElementById('mobile-logout-btn');
-    
+
     if (dropdownLogoutBtn) {
         dropdownLogoutBtn.addEventListener('click', handleLogout);
     }
-    
+
     if (mobileLogoutBtn) {
         mobileLogoutBtn.addEventListener('click', handleLogout);
     }
-    
+
     }); // End of DOMContentLoaded
 })(); // End of IIFE
 </script>
-

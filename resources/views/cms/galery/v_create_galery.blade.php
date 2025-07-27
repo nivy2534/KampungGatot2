@@ -74,6 +74,8 @@
                         <img id="previewImage" src="" alt="Preview"
                              class="hidden absolute inset-0 w-full h-full object-cover z-0" />
                     @endif
+                    
+                    <!-- Upload Placeholder -->
                     <div id="uploadPlaceholder" class="z-10 flex flex-col items-center {{ isset($photo) && $photo->image_path ? 'hidden' : '' }}">
                         <i class="fa-solid fa-image text-2xl md:text-3xl text-[#1B3A6D]"></i>
                         <label for="imageInput"
@@ -82,6 +84,17 @@
                         </label>
                         <p class="text-xs mt-2">atau seret foto ke sini</p>
                     </div>
+
+                    <!-- Change Image Button (appears when image is loaded) -->
+                    <div id="changeImageBtn" class="absolute inset-0 flex items-center justify-center z-20 opacity-0 hover:opacity-100 transition-opacity duration-300 {{ isset($photo) && $photo->image_path ? '' : 'hidden' }}">
+                        <div class="bg-black/50 backdrop-blur-sm rounded-lg p-3">
+                            <label for="imageInput" class="cursor-pointer text-white flex items-center gap-2 text-sm font-medium">
+                                <i class="fas fa-camera"></i>
+                                Ganti Gambar
+                            </label>
+                        </div>
+                    </div>
+
                     <input name="image" type="file" id="imageInput" class="hidden" accept="image/*" />
                 </div>
                 <p class="text-xs text-gray-500 mt-2">Lampirkan gambar. Ukuran file tidak boleh lebih dari 1MB</p>
@@ -132,6 +145,7 @@
         const imageInput = document.getElementById('imageInput');
         const previewImage = document.getElementById('previewImage');
         const uploadPlaceholder = document.getElementById('uploadPlaceholder');
+        const changeImageBtn = document.getElementById('changeImageBtn');
 
         imageInput.addEventListener('change', function(e) {
             const file = e.target.files[0];
@@ -142,12 +156,14 @@
                     previewImage.classList.remove('hidden');
                     previewImage.classList.add('block');
                     uploadPlaceholder.classList.add('hidden');
+                    changeImageBtn.classList.remove('hidden');
                 }
                 reader.readAsDataURL(file);
             } else {
                 previewImage.src = '';
                 previewImage.classList.add('hidden');
                 uploadPlaceholder.classList.remove('hidden');
+                changeImageBtn.classList.add('hidden');
             }
         });
 

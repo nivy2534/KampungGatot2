@@ -38,6 +38,7 @@
                     <img id="previewImage" src="" alt="Preview"
                         class="hidden absolute inset-0 w-full h-full object-cover z-0" />
 
+                    <!-- Upload Placeholder -->
                     <div id="uploadPlaceholder" class="z-10 flex flex-col items-center">
                         <i class="fa-solid fa-image text-2xl md:text-3xl text-primary"></i>
                         <label for="imageInput"
@@ -47,14 +48,20 @@
                         <p class="text-xs mt-2">atau seret foto ke sini</p>
                     </div>
 
-                    <div id="imageActions" class="absolute bottom-3 left-3 z-10 gap-2" style="display: none;">
-                        <label for="imageInput"
-                            class="inline-block bg-primary text-white px-3 py-1 text-sm rounded hover:bg-primary/90 cursor-pointer mr-2">
-                            Ganti
-                        </label>
-                        <button id="removeImageBtn" type="button"
-                            class="bg-red-500 text-white px-3 py-1 text-sm rounded hover:bg-red-600">
-                            <i class="fa-solid fa-trash text-xs"></i>
+                    <!-- Change Image Button (appears when image is loaded) -->
+                    <div id="changeImageBtn" class="absolute inset-0 flex items-center justify-center z-20 opacity-0 hover:opacity-100 transition-opacity duration-300 hidden">
+                        <div class="bg-black/50 backdrop-blur-sm rounded-lg p-3">
+                            <label for="imageInput" class="cursor-pointer text-white flex items-center gap-2 text-sm font-medium">
+                                <i class="fas fa-camera"></i>
+                                Ganti Gambar
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Remove Button (bottom right) -->
+                    <div id="removeImageBtn" class="absolute bottom-3 right-3 z-20 hidden">
+                        <button type="button" class="bg-red-500/80 hover:bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center transition-colors">
+                            <i class="fas fa-trash text-xs"></i>
                         </button>
                     </div>
 
@@ -137,7 +144,8 @@
                 const imageUrl = "{{ asset($blog->image_url) }}";
                 $('#previewImage').attr('src', imageUrl).removeClass('hidden');
                 $('#uploadPlaceholder').addClass('hidden');
-                $('#imageActions').removeClass('hidden');
+                $('#changeImageBtn').removeClass('hidden');
+                $('#removeImageBtn').removeClass('hidden');
             });
         </script>
     @endif
@@ -147,7 +155,7 @@
             const $imageInput = $('#imageInput');
             const $previewImage = $('#previewImage');
             const $uploadPlaceholder = $('#uploadPlaceholder');
-            const $imageActions = $('#imageActions');
+            const $changeImageBtn = $('#changeImageBtn');
             const $removeImageBtn = $('#removeImageBtn');
 
             $imageInput.on('change', function() {
@@ -157,7 +165,8 @@
                     reader.onload = function(e) {
                         $previewImage.attr('src', e.target.result).removeClass('hidden');
                         $uploadPlaceholder.addClass('hidden');
-                        $imageActions.removeClass('hidden');
+                        $changeImageBtn.removeClass('hidden');
+                        $removeImageBtn.removeClass('hidden');
                     };
                     reader.readAsDataURL(file);
                 }
@@ -167,7 +176,8 @@
                 $imageInput.val('');
                 $previewImage.attr('src', '').addClass('hidden');
                 $uploadPlaceholder.removeClass('hidden');
-                $imageActions.addClass('hidden');
+                $changeImageBtn.addClass('hidden');
+                $removeImageBtn.addClass('hidden');
             });
 
             $('#submitBtn').on('click', function(e) {

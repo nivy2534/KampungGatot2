@@ -1,4 +1,4 @@
-<aside class="w-56 md:w-60 text-white flex flex-col h-screen overflow-hidden bg-[#1B3A6D] shadow-xl">
+<aside class="w-72 md:w-80 text-white flex flex-col h-screen overflow-hidden bg-[#1B3A6D] shadow-xl">
     <!-- Header with improved spacing -->
     <div class="flex items-center space-x-2 p-3 md:p-4 border-b border-white/10">
         <div class="flex space-x-1.5">
@@ -10,7 +10,7 @@
             </div>
         </div>
         <div class="min-w-0 flex-1">
-            <h1 class="text-sm md:text-base font-bold leading-tight truncate">Desa Ngebruk</h1>
+          <h1 class="text-sm md:text-base font-bold leading-tight truncate w-40 md:w-48">Kampung Gatot</h1>
             <p class="text-xs text-white/70 font-medium">Panel Admin</p>
         </div>
     </div>

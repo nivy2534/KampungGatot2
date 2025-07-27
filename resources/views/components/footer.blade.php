@@ -4,9 +4,10 @@
       {{-- Logo + Info --}}
       <div class="lg:col-span-2">
         <div class="flex items-center gap-3 mb-4">
-          <img src="{{ asset('assets/img/logo_ngebruk.png') }}" alt="Logo" class="w-12 h-12" />
+          <img src="{{ asset('assets/img/logo_tutwuri.png') }}" alt="Logo" class="w-12 h-12" />
+          <img src="{{ asset('assets/img/logo_unm.png') }}" alt="Logo" class="w-12 h-12" />
           <div>
-            <h3 class="font-bold text-lg text-gray-900">Desa Ngebruk</h3>
+            <h3 class="font-bold text-lg text-gray-900">Kampung Gatot</h3>
             <p class="text-sm text-gray-600">Kecamatan Sumberpucung</p>
           </div>
         </div>
@@ -61,7 +62,7 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
             </svg>
-            <span>Desa Ngebruk, Kecamatan Sumberpucung, Kabupaten Malang</span>
+            <span>Kampung Gatot, Desa Ngebruk, Kecamatan Sumberpucung, Kabupaten Malang</span>
           </div>
           <div class="flex items-center gap-2">
             <svg class="w-4 h-4 text-[#1B3A6D] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
