@@ -113,7 +113,7 @@
                 <!-- Tombol -->
                 <div class="flex flex-col md:flex-row gap-3 md:gap-4 pt-6 border-t border-gray-200 mt-6">
                     <button id="submitBarangBtn"
-                        class="bg-[#1B3A6D] text-white px-4 py-2 rounded-lg hover:bg-[#1B3A6D]/90 transition text-sm font-medium w-full md:w-auto">
+                        class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition text-sm font-medium w-full md:w-auto">
                         <i class="fas fa-save mr-2"></i>
                         Update Barang
                     </button>
@@ -211,26 +211,79 @@
     imageActions.classList.add("hidden");
   });
 
-  document.getElementById("submitBarangBtn").addEventListener("click", async function () {
+  document.getElementById("submitBarangBtn").addEventListener("click", async function (e) {
+    e.preventDefault(); // Prevent any default form submission
+    console.log("Update button clicked - event triggered");
+    
+    // Validasi form
+    const nama = document.getElementById("nama").value.trim();
+    const harga = document.getElementById("harga").value.trim();
+    const sellerName = document.getElementById("seller_name").value.trim();
+    const contactPerson = document.getElementById("contact_person").value.trim();
+    const deskripsi = document.getElementById("deskripsi").value.trim();
+    const status = document.getElementById("status").value;
+
+    console.log("Form data:", { nama, harga, sellerName, contactPerson, deskripsi, status });
+
+    if (!nama || !harga || !sellerName || !contactPerson || !deskripsi || !status) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Lengkapi Form',
+            text: 'Harap isi semua field yang diperlukan!',
+            customClass: {
+                confirmButton: 'bg-primary hover:bg-primary/90 text-white px-6 py-2 rounded-lg'
+            },
+            buttonsStyling: false
+        });
+        return;
+    }
+
+    // Validasi harga adalah angka
+    if (isNaN(harga) || parseFloat(harga) < 0) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Harga Tidak Valid',
+            text: 'Harap masukkan harga yang valid!',
+            customClass: {
+                confirmButton: 'bg-primary hover:bg-primary/90 text-white px-6 py-2 rounded-lg'
+            },
+            buttonsStyling: false
+        });
+        return;
+    }
+
     const formData = new FormData();
-    const imageFile = imageFiles[0]; // hanya ambil satu gambar utama
 
     // Ambil nilai dari input
-    formData.append("name", document.getElementById("nama").value);
-    formData.append("price", document.getElementById("harga").value);
-    formData.append("seller_name", document.getElementById("seller_name").value);
-    formData.append("contact_person", document.getElementById("contact_person").value);
-    formData.append("description", document.getElementById("deskripsi").value);
-    formData.append("status", document.getElementById("status").value);
+    formData.append("name", nama);
+    formData.append("price", harga);
+    formData.append("seller_name", sellerName);
+    formData.append("contact_person", contactPerson);
+    formData.append("description", deskripsi);
+    formData.append("status", status);
     formData.append("id", "{{ $product->id }}");
+
+    console.log("Product ID:", "{{ $product->id }}");
 
     // Add image order data
     const imageOrder = getImageOrder();
     formData.append("image_order", JSON.stringify(imageOrder));
 
-    if (imageFile) {
-        formData.append("images[]", imageFile);
+    // Add new images if any
+    if (imageFiles && imageFiles.length > 0) {
+        imageFiles.forEach((file, index) => {
+            formData.append("images[]", file);
+        });
+        console.log("Adding images:", imageFiles.length);
     }
+
+    // Show loading state
+    const button = document.getElementById("submitBarangBtn");
+    const originalText = button.innerHTML;
+    button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Memperbarui...';
+    button.disabled = true;
+
+    console.log("Sending request to:", "{{ url('dashboard/products/update') }}");
 
     try {
         const response = await fetch("{{ url('dashboard/products/update') }}", {
@@ -242,18 +295,60 @@
             body: formData
         });
 
+        console.log("Response status:", response.status);
+        console.log("Response ok:", response.ok);
+
         if (response.ok) {
             const result = await response.json();
-            alert("Produk berhasil diperbarui!");
-            window.location.href = "{{ url('dashboard/products') }}";
+            console.log("Success response:", result);
+            Swal.fire({
+                title: 'Berhasil!',
+                text: 'Produk telah diperbarui.',
+                icon: 'success',
+                customClass: {
+                    confirmButton: 'bg-primary hover:bg-primary/90 text-white px-6 py-2 rounded-lg'
+                },
+                buttonsStyling: false
+            }).then(() => {
+                window.location.href = "{{ url('dashboard/products') }}";
+            });
         } else {
-            const text = await response.text();
-            console.error("Gagal memperbarui produk. Isi response:", text);
-            alert("Gagal memperbarui produk. Cek console untuk detail.");
+            const errorText = await response.text();
+            console.error("Error response text:", errorText);
+            
+            let errorData;
+            try {
+                errorData = JSON.parse(errorText);
+            } catch (e) {
+                errorData = { message: errorText };
+            }
+            
+            console.error("Gagal memperbarui produk:", errorData);
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal Memperbarui',
+                text: errorData.message || 'Terjadi kesalahan saat memperbarui produk.',
+                customClass: {
+                    confirmButton: 'bg-primary hover:bg-primary/90 text-white px-6 py-2 rounded-lg'
+                },
+                buttonsStyling: false
+            });
         }
     } catch (error) {
-        alert("Terjadi kesalahan saat mengirim data.");
-        console.error(error);
+        console.error("Fetch error:", error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Terjadi Kesalahan',
+            text: 'Terjadi kesalahan saat mengirim data: ' + error.message,
+            customClass: {
+                confirmButton: 'bg-primary hover:bg-primary/90 text-white px-6 py-2 rounded-lg'
+            },
+            buttonsStyling: false
+        });
+    } finally {
+        // Restore button
+        button.innerHTML = originalText;
+        button.disabled = false;
     }
 });
 
@@ -296,6 +391,22 @@ document.getElementById('modalImagePreview').addEventListener('click', function(
     }
 });
 
+// Function to get image order
+function getImageOrder() {
+    const imageElements = document.querySelectorAll('#imagePreviewList [data-image-id]');
+    const orderData = [];
+    imageElements.forEach((element, index) => {
+        const imageId = element.getAttribute('data-image-id');
+        if (imageId) {
+            orderData.push({
+                id: imageId,
+                order: index
+            });
+        }
+    });
+    return orderData;
+}
+
 // Initialize Sortable for drag & drop
 document.addEventListener('DOMContentLoaded', function() {
     const imagePreviewList = document.getElementById('imagePreviewList');
@@ -307,7 +418,7 @@ document.addEventListener('DOMContentLoaded', function() {
             dragClass: 'sortable-drag',
             onEnd: function(evt) {
                 // Update order numbers after drag
-                updateOrderNumbers();
+                console.log('Image order changed');
             }
         });
     }
@@ -325,7 +436,7 @@ function updateOrderNumbers() {
     });
 }
 
-// Function to get current order of images
+// Function to get current order of images  
 function getImageOrder() {
     const imageItems = document.querySelectorAll('#imagePreviewList [data-image-id]');
     const order = [];

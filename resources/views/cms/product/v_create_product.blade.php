@@ -128,7 +128,7 @@
                 <!-- Tombol -->
                 <div class="flex flex-col md:flex-row gap-3 md:gap-4 pt-6 border-t border-gray-200 mt-6">
                     <button id="submitBarangBtn"
-                        class="bg-[#1B3A6D] text-white px-4 py-2 rounded-lg hover:bg-[#1B3A6D]/90 transition text-sm font-medium w-full md:w-auto">
+                        class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition text-sm font-medium w-full md:w-auto">
                         <i class="fas fa-save mr-2"></i>
                         {{ isset($product) ? 'Update Barang' : 'Simpan Barang' }}
                     </button>
@@ -216,19 +216,74 @@
   });
 
   document.getElementById("submitBarangBtn").addEventListener("click", async function () {
+    // Validasi form
+    const nama = document.getElementById("nama").value.trim();
+    const harga = document.getElementById("harga").value.trim();
+    const sellerName = document.getElementById("seller_name").value.trim();
+    const contactPerson = document.getElementById("contact_person").value.trim();
+    const deskripsi = document.getElementById("deskripsi").value.trim();
+    const status = document.getElementById("status").value;
+
+    if (!nama || !harga || !sellerName || !contactPerson || !deskripsi || !status) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Lengkapi Form',
+            text: 'Harap isi semua field yang diperlukan!',
+            customClass: {
+                confirmButton: 'bg-primary hover:bg-primary/90 text-white px-6 py-2 rounded-lg'
+            },
+            buttonsStyling: false
+        });
+        return;
+    }
+
+    // Validasi harga adalah angka
+    if (isNaN(harga) || parseFloat(harga) < 0) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Harga Tidak Valid',
+            text: 'Harap masukkan harga yang valid!',
+            customClass: {
+                confirmButton: 'bg-primary hover:bg-primary/90 text-white px-6 py-2 rounded-lg'
+            },
+            buttonsStyling: false
+        });
+        return;
+    }
+
+    // Validasi gambar untuk create
+    if (imageFiles.length === 0) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Gambar Diperlukan',
+            text: 'Harap pilih minimal satu gambar produk!',
+            customClass: {
+                confirmButton: 'bg-primary hover:bg-primary/90 text-white px-6 py-2 rounded-lg'
+            },
+            buttonsStyling: false
+        });
+        return;
+    }
+
     const formData = new FormData();
 
     // Ambil nilai dari input
-    formData.append("name", document.getElementById("nama").value);
-    formData.append("price", document.getElementById("harga").value);
-    formData.append("seller_name", document.getElementById("seller_name").value);
-    formData.append("contact_person", document.getElementById("contact_person").value);
-    formData.append("description", document.getElementById("deskripsi").value);
-    formData.append("status", document.getElementById("status").value);
+    formData.append("name", nama);
+    formData.append("price", harga);
+    formData.append("seller_name", sellerName);
+    formData.append("contact_person", contactPerson);
+    formData.append("description", deskripsi);
+    formData.append("status", status);
 
     imageFiles.forEach((file) => {
         formData.append("images[]", file);
     });
+
+    // Show loading state
+    const button = document.getElementById("submitBarangBtn");
+    const originalText = button.innerHTML;
+    button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Menyimpan...';
+    button.disabled = true;
 
     try {
         const response = await fetch("{{ url('dashboard/products/save') }}", {
@@ -242,11 +297,46 @@
 
         if (response.ok) {
             const result = await response.json();
-            alert(isEdit ? "Produk berhasil diperbarui!" : "Produk berhasil disimpan!");
-            window.location.href = "{{ url('dashboard/products') }}";
+            Swal.fire({
+                title: 'Berhasil!',
+                text: 'Produk telah disimpan.',
+                icon: 'success',
+                customClass: {
+                    confirmButton: 'bg-primary hover:bg-primary/90 text-white px-6 py-2 rounded-lg'
+                },
+                buttonsStyling: false
+            }).then(() => {
+                window.location.href = "{{ url('dashboard/products') }}";
+            });
         } else {
-            const text = await response.text();
-            console.error("Gagal menyimpan produk. Isi response:", text);
+            const errorData = await response.json();
+            console.error("Gagal menyimpan produk:", errorData);
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal Menyimpan',
+                text: errorData.message || 'Terjadi kesalahan saat menyimpan produk.',
+                customClass: {
+                    confirmButton: 'bg-primary hover:bg-primary/90 text-white px-6 py-2 rounded-lg'
+                },
+                buttonsStyling: false
+            });
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Terjadi Kesalahan',
+            text: 'Terjadi kesalahan saat mengirim data.',
+            customClass: {
+                confirmButton: 'bg-primary hover:bg-primary/90 text-white px-6 py-2 rounded-lg'
+            },
+            buttonsStyling: false
+        });
+    } finally {
+        // Reset button state
+        button.innerHTML = originalText;
+        button.disabled = false;
+    }
             alert("Gagal menyimpan produk. Cek console untuk detail.");
         }
     } catch (error) {
