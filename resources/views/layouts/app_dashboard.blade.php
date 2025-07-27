@@ -10,8 +10,8 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    @vite(['resources/css/app.css'])
-
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    
     <style>
         /* Prevent horizontal overflow */
         html, body {
