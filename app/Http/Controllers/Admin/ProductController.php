@@ -41,7 +41,7 @@ class ProductController extends Controller
         $product->load(['images' => function($query) {
             $query->orderBy('order', 'asc');
         }]);
-        return view("cms.product.v_create_product", compact("product"));
+        return view("cms.product.v_edit_product", compact("product"));
     }
 
     public function store(ProductRequest $request)
@@ -73,11 +73,18 @@ class ProductController extends Controller
                 'status'=>'required|in:ready,habis,preorder',
                 'images.*' => 'nullable|image|max:1024',
                 'image_order' => 'nullable|string',
+                'image_orders.*' => 'nullable|integer',
+                'delete_images.*' => 'nullable|integer',
             ]);
 
             Log::info('Validation passed', $validated);
 
             $validated['images'] = $request->file('images');
+            $validated['delete_images'] = $request->input('delete_images', []);
+            $validated['image_orders'] = $request->input('image_orders', []);
+
+            // Log the delete_images data
+            Log::info('Delete images data', ['delete_images' => $validated['delete_images']]);
 
             $updateProduct = $this->productService->update($validated);
             if ($updateProduct) {

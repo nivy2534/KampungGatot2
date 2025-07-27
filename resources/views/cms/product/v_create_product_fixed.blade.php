@@ -66,7 +66,7 @@
                                 <i class="fas fa-plus mr-2"></i>Pilih Gambar
                             </button>
                             <p class="text-sm text-gray-600 mb-1">atau seret foto ke sini</p>
-                            <p class="text-xs text-gray-500">(Maksimal 10 foto, masing-masing 5MB)</p>
+                            <p class="text-xs text-gray-500">Bisa pilih banyak sekaligus</p>
                         </div>
 
                         <!-- Preview Image Utama -->

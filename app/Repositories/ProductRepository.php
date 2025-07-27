@@ -122,38 +122,67 @@ class ProductRepository implements ProductRepositoryInterface
             'excerpt' => Str::limit($data['description'], 200),
         ];
 
-        // Update thumbnail utama jika ada gambar baru
+        // Handle delete specific images
+        if (isset($data['delete_images']) && is_array($data['delete_images'])) {
+            foreach ($data['delete_images'] as $imageId) {
+                $imageToDelete = $product->images()->find($imageId);
+                if ($imageToDelete) {
+                    // Delete file from storage
+                    if ($imageToDelete->image_path && Storage::exists($imageToDelete->image_path)) {
+                        Storage::delete($imageToDelete->image_path);
+                    }
+                    // Delete from database
+                    $imageToDelete->delete();
+                }
+            }
+        }
+
+        // Add new images
         if (isset($data['images']) && is_array($data['images']) && !empty($data['images'])) {
             $imageOrders = $data['image_orders'] ?? [];
             
-            // Hapus thumbnail lama jika ada
-            if ($product->image_path && Storage::exists($product->image_path)) {
-                Storage::delete($product->image_path);
-            }
-
-            // Hapus semua gambar lama dari product_images
-            foreach ($product->images as $oldImage) {
-                if ($oldImage->image_path && Storage::exists($oldImage->image_path)) {
-                    Storage::delete($oldImage->image_path);
-                }
-            }
-            $product->images()->delete();
-
-            // Upload thumbnail baru (gambar pertama)
-            $uploaded = $this->uploadThumbnail($data['images'][0]);
-            $updateData['image_path'] = $uploaded['image_path'];
-            $updateData['image_url'] = $uploaded['image_url'];
-
             // Upload semua gambar baru ke tabel product_images dengan order
             foreach ($data['images'] as $index => $img) {
                 $uploaded = $this->uploadThumbnail($img);
-                $order = isset($imageOrders[$index]) ? $imageOrders[$index] : $index;
+                $order = isset($imageOrders[$index]) ? $imageOrders[$index] : ($product->images()->max('order') ?? -1) + 1;
                 
                 $product->images()->create([
                     'image_path' => $uploaded['image_path'],
                     'image_url' => $uploaded['image_url'],
                     'order' => $order,
                 ]);
+            }
+        }
+
+        // Update main thumbnail jika belum ada atau jika ada gambar pertama
+        $firstImage = $product->images()->orderBy('order', 'asc')->first();
+        if ($firstImage) {
+            $updateData['image_path'] = $firstImage->image_path;
+            $updateData['image_url'] = $firstImage->image_url;
+        } else if (!$product->image_path) {
+            // Jika tidak ada gambar sama sekali, kosongkan thumbnail
+            $updateData['image_path'] = null;
+            $updateData['image_url'] = null;
+        }
+
+        // Handle image order update
+        if (isset($data['image_order']) && !empty($data['image_order'])) {
+            $imageOrder = json_decode($data['image_order'], true);
+            if (is_array($imageOrder)) {
+                foreach ($imageOrder as $orderData) {
+                    if (isset($orderData['id']) && isset($orderData['order'])) {
+                        $product->images()
+                            ->where('id', $orderData['id'])
+                            ->update(['order' => $orderData['order']]);
+                    }
+                }
+            }
+
+            // Update main thumbnail setelah reorder
+            $newFirstImage = $product->images()->orderBy('order', 'asc')->first();
+            if ($newFirstImage) {
+                $updateData['image_path'] = $newFirstImage->image_path;
+                $updateData['image_url'] = $newFirstImage->image_url;
             }
         }
 
