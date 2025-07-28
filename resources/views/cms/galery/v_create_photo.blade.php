@@ -33,11 +33,11 @@
             @method('PUT')
         @endif
 
-        <div class="p-3 md:p-4 border-b border-gray-200">
-            <h2 class="text-lg font-semibold text-gray-900">
-                {{ isset($photo) ? 'Form Edit Galeri' : 'Form Galeri Baru' }}
-            </h2>
-        </div>
+    <div class="p-3 md:p-4 border-b border-gray-200">
+        <h2 class="text-lg font-semibold text-gray-900">
+            {{ isset($photo) ? 'Form Edit Galeri' : 'Form Galeri Baru' }}
+        </h2>
+    </div>
 
         <div class="p-4 md:p-6">
             <!-- Pesan Error/Success -->
@@ -127,17 +127,18 @@
 
 @push('addon-script')
 <script>
-    // Preview gambar setelah memilih file
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         const imageInput = document.getElementById('imageInput');
         const previewImage = document.getElementById('previewImage');
         const uploadPlaceholder = document.getElementById('uploadPlaceholder');
+        const form = document.getElementById('photoForm');
 
-        imageInput.addEventListener('change', function(e) {
+        // Preview gambar
+        imageInput.addEventListener('change', function (e) {
             const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = function (e) {
                     previewImage.src = e.target.result;
                     previewImage.classList.remove('hidden');
                     previewImage.classList.add('block');
