@@ -6,12 +6,12 @@
         <div class="flex justify-between items-start mb-4">
             <div>
                 <h1 class="text-3xl font-bold text-gray-900 mb-2">Kelola Galeri</h1>
-                <p class="text-gray-600">Create, edit, and manage village galery</p>
+                <p class="text-gray-600">Create, edit, and manage village gallery</p>
             </div>
             <a href="{{ route('gallery.create') }}"
-                class="bg-primary text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors">
+                class="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-6 py-3 rounded-lg flex items-center gap-2 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105">
+                <i class="fas fa-plus w-4 h-4"></i>
                 Tambah Gambar
-                <i class="fas fa-plus"></i>
             </a>
         </div>
     </div>
