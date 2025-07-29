@@ -105,13 +105,23 @@
                     </div>
 
                     <!-- Change Image Overlay -->
-                    <div id="changeImageOverlay" class="hidden absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity cursor-pointer"
-                         onclick="document.getElementById('imageInput').click()">
-                        <div class="bg-white rounded-lg px-4 py-2 shadow-lg">
-                            <i class="fas fa-camera mr-2 text-[#1B3A6D]"></i>
-                            <span class="text-sm font-medium text-gray-800">Ganti Gambar</span>
+                    @if(isset($photo) && $photo->image_path)
+                        <div id="changeImageOverlay" class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 hover:opacity-100 transition-all duration-300 cursor-pointer group/overlay"
+                             onclick="document.getElementById('imageInput').click()">
+                            <div class="bg-white/90 backdrop-blur-sm rounded-xl px-6 py-3 shadow-xl transform scale-95 group-hover/overlay:scale-100 transition-all duration-200">
+                                <i class="fas fa-camera mr-2 text-[#1B3A6D] text-lg"></i>
+                                <span class="text-sm font-semibold text-gray-800">Ganti Gambar</span>
+                            </div>
                         </div>
-                    </div>
+                    @else
+                        <div id="changeImageOverlay" style="display: none;" class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 hover:opacity-100 transition-all duration-300 cursor-pointer group/overlay"
+                             onclick="document.getElementById('imageInput').click()">
+                            <div class="bg-white/90 backdrop-blur-sm rounded-xl px-6 py-3 shadow-xl transform scale-95 group-hover/overlay:scale-100 transition-all duration-200">
+                                <i class="fas fa-camera mr-2 text-[#1B3A6D] text-lg"></i>
+                                <span class="text-sm font-semibold text-gray-800">Ganti Gambar</span>
+                            </div>
+                        </div>
+                    @endif
 
                     <input type="file" id="imageInput" name="image" class="hidden" accept="image/*" />
                 </div>
@@ -315,7 +325,7 @@ document.addEventListener('DOMContentLoaded', function() {
             previewImage.src = e.target.result;
             previewImage.classList.remove('hidden');
             uploadPlaceholder.classList.add('hidden');
-            changeImageOverlay.classList.remove('hidden');
+            changeImageOverlay.style.display = 'flex';
             
             // Add animation
             previewImage.classList.add('animate-slide-in');
@@ -332,6 +342,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const deskripsi = document.getElementById('deskripsi').value.trim();
         const category = document.getElementById('category').value;
         const hasImage = !previewImage.classList.contains('hidden') || imageInput.files.length > 0;
+        const isEdit = {{ isset($photo) ? 'true' : 'false' }};
 
         // Validate required fields
         if (!judul) {
@@ -396,10 +407,94 @@ document.addEventListener('DOMContentLoaded', function() {
         submitBtn.innerHTML = '<div class="loading-spinner mr-2"></div>{{ isset($photo) ? "Memperbarui..." : "Mengunggah..." }}';
         submitBtn.disabled = true;
 
-        // Submit form
-        setTimeout(() => {
-            submitBtn.closest('form').submit();
-        }, 500);
+        // Prepare form data
+        const formData = new FormData();
+        const file = imageInput.files[0];
+
+        formData.append('photo_name', judul);
+        formData.append('photo_description', deskripsi);
+        formData.append('category', category);
+        if (file) {
+            formData.append('image', file);
+        }
+
+        const url = isEdit ? '{{ isset($photo) ? route("gallery.update", $photo->id) : "" }}' : '{{ route("gallery.store") }}';
+        
+        if (isEdit) {
+            formData.append('_method', 'PUT');
+        }
+
+        // Submit with AJAX
+        fetch(url, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                if (isEdit) {
+                    // SweetAlert untuk update
+                    Swal.fire({
+                        title: '<strong>🎉 Berhasil Diperbarui!</strong>',
+                        html: `<p style="color:#6b7280; font-size:14px; margin-top:8px;">
+                            Data galeri kamu sudah berhasil disimpan.<br>
+                            Terima kasih telah memperbarui galeri.
+                        </p>`,
+                        confirmButtonText: 'Kembali ke Dashboard',
+                        allowOutsideClick: false,
+                        customClass: {
+                            popup: 'rounded-xl px-6 py-8',
+                            title: 'text-black text-base font-bold',
+                            confirmButton: 'bg-blue-800 hover:bg-blue-900 text-white text-sm px-6 py-3 rounded-lg focus:outline-none'
+                        },
+                        buttonsStyling: false,
+                    }).then(() => {
+                        window.location.href = '{{ route("gallery.index") }}';
+                    });
+                } else {
+                    // SweetAlert untuk create
+                    Swal.fire({
+                        title: '<strong>🎉 Galeri berhasil ditambahkan!</strong>',
+                        html: `<p style="color:#6b7280; font-size:14px; margin-top:8px;">
+                            Data galeri kamu sudah disimpan dengan sukses.<br>
+                            Kamu akan diarahkan ke dashboard galeri untuk melihat daftar lengkap.
+                        </p>`,
+                        confirmButtonText: 'Oke, Lihat Dashboard',
+                        allowOutsideClick: false,
+                        customClass: {
+                            popup: 'rounded-xl px-6 py-8',
+                            title: 'text-black text-base font-bold',
+                            confirmButton: 'bg-blue-800 hover:bg-blue-900 text-white text-sm px-6 py-3 rounded-lg focus:outline-none'
+                        },
+                        buttonsStyling: false,
+                    }).then(() => {
+                        window.location.href = '{{ route("gallery.index") }}';
+                    });
+                }
+            } else {
+                throw new Error(data.message || 'Terjadi kesalahan!');
+            }
+        })
+        .catch(error => {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: error.message || 'Terjadi kesalahan saat memproses data.',
+                customClass: {
+                    confirmButton: 'bg-[#1B3A6D] hover:bg-[#152f5a] text-white px-6 py-2 rounded-lg font-medium'
+                },
+                buttonsStyling: false
+            });
+        })
+        .finally(() => {
+            // Reset button
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+        });
     });
 
     // Show success message with nice animation
@@ -439,167 +534,5 @@ function showToast(message, type = 'info') {
         setTimeout(() => toast.remove(), 300);
     }, 4000);
 }
-</script>
-@endpush
-            const file = e.target.files[0];
-            if (file) {
-                // Check file size (5MB = 5 * 1024 * 1024 bytes)
-                if (file.size > 5 * 1024 * 1024) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'File Terlalu Besar',
-                        text: 'Ukuran file tidak boleh lebih dari 5MB!',
-                        customClass: {
-                            confirmButton: 'bg-[#1B3A6D] hover:bg-[#1B3A6D]/90 text-white px-6 py-2 rounded-lg'
-                        },
-                        buttonsStyling: false
-                    });
-                    e.target.value = ''; // Clear the input
-                    return;
-                }
-
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    previewImage.src = e.target.result;
-                    previewImage.classList.remove('hidden');
-                    previewImage.classList.add('block');
-                    uploadPlaceholder.classList.add('hidden');
-                    changeImageBtn.classList.remove('hidden');
-                }
-                reader.readAsDataURL(file);
-            } else {
-                previewImage.src = '';
-                previewImage.classList.add('hidden');
-                uploadPlaceholder.classList.remove('hidden');
-                changeImageBtn.classList.add('hidden');
-            }
-        });
-
-        // Submit form dengan AJAX
-        $('#submitBtn').on('click', function(e) {
-            e.preventDefault();
-
-            const formData = new FormData();
-            const file = $('#imageInput')[0].files[0];
-            const photoName = $('input[name="photo_name"]').val();
-            const photoDescription = $('textarea[name="photo_description"]').val();
-            const category = $('select[name="category"]').val();
-            const isEdit = {{ isset($photo) ? 'true' : 'false' }};
-
-            // Validasi
-            if (!photoName || !category) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Nama foto dan kategori wajib diisi!'
-                });
-                return;
-            }
-
-            if (!isEdit && !file) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Gambar wajib dipilih!'
-                });
-                return;
-            }
-
-            // Disable button dan tampilkan loading
-            const $button = $(this);
-            $button.html('<i class="fas fa-spinner fa-spin mr-2"></i>Memproses...').prop('disabled', true);
-
-            // Append data ke FormData
-            formData.append('photo_name', photoName);
-            formData.append('photo_description', photoDescription);
-            formData.append('category', category);
-            if (file) {
-                formData.append('image', file);
-            }
-
-            const url = isEdit ? '{{ isset($photo) ? route("gallery.update", $photo->id) : "" }}' : '{{ route("gallery.store") }}';
-            const method = isEdit ? 'POST' : 'POST';
-            
-            if (isEdit) {
-                formData.append('_method', 'PUT');
-            }
-
-            $.ajax({
-                url: url,
-                method: method,
-                data: formData,
-                processData: false,
-                contentType: false,
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function(response) {
-                    if (response.success) {
-                        if (isEdit) {
-                            // SweetAlert untuk update
-                            Swal.fire({
-                                title: '<strong>🎉 Berhasil Diperbarui!</strong>',
-                                html: `<p style="color:#6b7280; font-size:14px; margin-top:8px;">
-                                    Data produk kamu sudah berhasil disimpan.<br>
-                                    Terima kasih telah memperbarui katalog.
-                                </p>`,
-                                confirmButtonText: 'Kembali ke Dashboard',
-                                allowOutsideClick: false,
-                                customClass: {
-                                    popup: 'rounded-xl px-6 py-8',
-                                    title: 'text-black text-base font-bold',
-                                    confirmButton: 'bg-blue-800 hover:bg-blue-900 text-white text-sm px-6 py-3 rounded-lg focus:outline-none'
-                                },
-                                buttonsStyling: false,
-                            }).then(() => {
-                                window.location.href = '{{ route("gallery.index") }}';
-                            });
-                        } else {
-                            // SweetAlert untuk create
-                            Swal.fire({
-                                title: '<strong>🎉 Katalog berhasil ditambahkan!</strong>',
-                                html: `<p style="color:#6b7280; font-size:14px; margin-top:8px;">
-                                    Data Katalog kamu sudah disimpan dengan sukses.<br>
-                                    Kamu akan diarahkan ke dashboard Katalog untuk melihat daftar lengkap.
-                                </p>`,
-                                confirmButtonText: 'Oke, Lihat Dashboard',
-                                allowOutsideClick: false,
-                                customClass: {
-                                    popup: 'rounded-xl px-6 py-8',
-                                    title: 'text-black text-base font-bold',
-                                    confirmButton: 'bg-blue-800 hover:bg-blue-900 text-white text-sm px-6 py-3 rounded-lg focus:outline-none'
-                                },
-                                buttonsStyling: false,
-                            }).then(() => {
-                                window.location.href = '{{ route("gallery.index") }}';
-                            });
-                        }
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: response.message || 'Terjadi kesalahan!'
-                        });
-                    }
-                },
-                error: function(xhr) {
-                    let errorMessage = 'Terjadi kesalahan saat memproses data.';
-                    if (xhr.responseJSON && xhr.responseJSON.message) {
-                        errorMessage = xhr.responseJSON.message;
-                    }
-                    
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error!',
-                        text: errorMessage
-                    });
-                },
-                complete: function() {
-                    // Reset button
-                    $button.html('<i class="fas fa-save mr-2"></i>{{ isset($photo) ? "Update Galeri" : "Simpan Galeri" }}').prop('disabled', false);
-                }
-            });
-        });
-    });
 </script>
 @endpush

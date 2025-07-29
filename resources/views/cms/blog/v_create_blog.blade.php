@@ -112,14 +112,14 @@
             <div class="mb-6">
                                 <label class="block mb-2 text-sm font-medium text-gray-700">Deskripsi</label>
                 <textarea id="deskripsi" rows="4" placeholder="Masukkan deskripsi berita..."
-                    class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary resize-vertical">{{ isset($blog) ? $blog->description : '' }}</textarea>
+                    class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary resize-vertical">{{ isset($blog) ? $blog->excerpt : '' }}</textarea>
             </div>
 
             <!-- Konten Blog -->
             <div class="mb-6">
                 <label class="block mb-2 text-sm font-medium text-gray-700">Konten Blog</label>
                 <textarea id="konten" rows="8" placeholder="Tulis konten blog di sini..."
-                    class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary resize-vertical">{{ isset($blog) ? $blog->content : '' }}</textarea>
+                    class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary resize-vertical">{{ isset($blog) ? $blog->description : '' }}</textarea>
             </div>
 
             <!-- Tombol -->
@@ -205,10 +205,11 @@
                 const tag = $('#tag').val();
                 const judul = $('#judul').val();
                 const deskripsi = $('#deskripsi').val();
+                const konten = $('#konten').val();
 
                 // Validasi khusus untuk update - image tidak wajib jika sedang edit
                 const isEdit = blogId && blogId !== '';
-                if (!judul || !deskripsi || !kategori || !tag) {
+                if (!judul || !deskripsi || !konten || !kategori || !tag) {
                     Swal.fire({
                         icon: 'warning',
                         title: 'Lengkapi Form',
@@ -245,6 +246,7 @@
                 formData.append('tag', tag);
                 formData.append('name', judul);
                 formData.append('description', deskripsi);
+                formData.append('content', konten);
 
                 const createUrl = "{{ route('blogs.save') }}";
                 const updateUrl = "{{ route('blogs.update') }}";

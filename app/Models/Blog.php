@@ -14,6 +14,7 @@ class Blog extends Model
     protected $fillable = [
         'name',
         'description',
+        'content',
         'status',
         'author_id',
         'author_name',
@@ -41,6 +42,7 @@ class Blog extends Model
 
     public function getContentAttribute()
     {
+        // Return description as content (since description stores the full content)
         return $this->description;
     }
 

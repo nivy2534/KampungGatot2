@@ -86,7 +86,15 @@ class BlogRepository implements BlogRepositoryInterface
 
         $data['author_id'] = Auth::user()->id;
         $data['author_name'] = Auth::user()->name;
+        
+        // Set excerpt from description field (ringkasan)
         $data['excerpt'] = $data['description'];
+        
+        // Set description from content field (konten penuh)
+        if (isset($data['content'])) {
+            $data['description'] = $data['content'];
+            unset($data['content']); // Remove content as it's not a DB column yet
+        }
 
         return Blog::create($data);
     }
@@ -108,7 +116,15 @@ class BlogRepository implements BlogRepositoryInterface
         $data['slug'] = $data['slug'] ?? Str::slug($data['name']);
         $data['author_id'] = Auth::user()->id;
         $data['author_name'] = Auth::user()->name;
+        
+        // Set excerpt from description field (ringkasan)
         $data['excerpt'] = $data['description'];
+        
+        // Set description from content field (konten penuh)
+        if (isset($data['content'])) {
+            $data['description'] = $data['content'];
+            unset($data['content']); // Remove content as it's not a DB column yet
+        }
 
         return $blog->update($data);
     }

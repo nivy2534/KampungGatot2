@@ -22,6 +22,7 @@ class BlogRequest extends FormRequest
         $rules = [
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
+            'content' => 'required|string',
             'status' => 'required|in:draft,published,archived',
             'tag' => 'required|in:sejarah,potensi_desa,kabar_warga,umkm_lokal',
         ];
