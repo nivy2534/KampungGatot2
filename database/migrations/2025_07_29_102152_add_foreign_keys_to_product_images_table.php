@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('blogs', function (Blueprint $table) {
-            $table->longText('content')->nullable()->after('description');
+        Schema::table('product_images', function (Blueprint $table) {
+            $table->foreign(['product_id'])->references(['id'])->on('products')->onUpdate('no action')->onDelete('cascade');
         });
     }
 
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('blogs', function (Blueprint $table) {
-            $table->dropColumn('content');
+        Schema::table('product_images', function (Blueprint $table) {
+            $table->dropForeign('product_images_product_id_foreign');
         });
     }
 };
