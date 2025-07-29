@@ -10,6 +10,7 @@ use App\Http\Controllers\ProductImageController;
 use App\Http\Controllers\Homepage\HomepageController;
 use App\Http\Controllers\BlogPageController;
 use App\Http\Controllers\EventPageController;
+use App\Http\Controllers\PageController;
 use App\Http\Controllers\GaleriPageController;
 
 
@@ -70,3 +71,6 @@ Route::middleware(['auth'])->group(
         });
     }
 );
+
+// Route fallback untuk halaman 404 - harus di paling akhir
+Route::fallback([PageController::class, 'notfound']);
