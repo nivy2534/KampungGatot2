@@ -16,7 +16,7 @@
           Temukan informasi terkini seputar kegiatan, perkembangan, dan cerita inspiratif dari Kampung Gatot
         </p>
       </div>
-      
+
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
         @include('components.article-card', [
           'title' => 'Inovasi Pertanian Organik di Kampung Gatot',
@@ -47,7 +47,7 @@
           'date' => '8 Juli 2025'
         ])
       </div>
-      
+
       <div class="text-center mt-8">
         <a href="/blog" class="inline-flex items-center gap-2 bg-[#1B3A6D] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[#0f2a4f] transition-colors">
           Lihat Semua Artikel
@@ -68,12 +68,12 @@
           Dukung ekonomi lokal dengan produk berkualitas dari pengrajin dan petani Kampung Gatot
         </p>
       </div>
-      
+
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         @for($i = 0; $i < 6; $i++)
           <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 group">
             <div class="relative h-48 bg-gray-200 overflow-hidden">
-              <img src="https://placehold.co/300x200/{{ ['e2e8f0', 'f1f5f9', 'f8fafc'][$i % 3] }}/1B3A6D?text=Produk+{{ $i + 1 }}" 
+              <img src="https://placehold.co/300x200/{{ ['e2e8f0', 'f1f5f9', 'f8fafc'][$i % 3] }}/1B3A6D?text=Produk+{{ $i + 1 }}"
                    alt="Produk UMKM" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
               <div class="absolute top-4 right-4 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold">
                 -20%
@@ -101,7 +101,7 @@
           </div>
         @endfor
       </div>
-      
+
       <div class="text-center mt-10">
         <a href="/event" class="inline-flex items-center gap-2 bg-[#1B3A6D] text-white px-8 py-4 rounded-xl font-semibold hover:bg-[#0f2a4f] transition-colors">
           Lihat Semua Produk
@@ -122,7 +122,7 @@
           Dengarkan cerita inspiratif dari warga dan pengunjung yang merasakan kebaikan Kampung Gatot
         </p>
       </div>
-      
+
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         @include('components.testimonial-card', [
           'name' => 'Siti Nurhaliza',
