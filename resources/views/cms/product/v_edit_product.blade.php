@@ -91,6 +91,7 @@
                         class="w-full border-2 border-dashed border-gray-300 rounded-lg py-3 text-center hover:border-[#1B3A6D] hover:bg-blue-50/30 transition-all group">
                         <i class="fas fa-plus text-[#1B3A6D] mr-2 group-hover:scale-110 transition-transform"></i>
                         <span class="text-sm text-gray-600 font-medium">Tambah Gambar Lagi</span>
+                        <p class="text-xs text-gray-500 mt-1">Maksimal <span id="remainingSlots">10</span> foto lagi</p>
                     </button>
                 </div>
 
@@ -465,7 +466,9 @@
 
   function updateImageCounter() {
     const totalImages = getVisibleImages().length;
+    const remainingSlots = 10 - totalImages;
     const counter = document.getElementById('imageCounter');
+    
     if (counter) {
       counter.textContent = `${totalImages}/10 foto`;
       if (totalImages >= 8) {
@@ -476,11 +479,28 @@
         counter.className = 'text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-md font-medium';
       }
     }
+    
+    // Update remaining slots counter
+    const remainingSlotsEl = document.getElementById('remainingSlots');
+    if (remainingSlotsEl) {
+      remainingSlotsEl.textContent = remainingSlots;
+    }
+    
+    // Hide "Tambah Gambar Lagi" button if limit reached
+    const addMoreBtn = document.getElementById('addMoreImagesBtn');
+    if (addMoreBtn && totalImages > 0) {
+      if (totalImages >= 10) {
+        addMoreBtn.style.display = 'none';
+      } else if (addMoreBtn.style.display === 'none' && totalImages > 0) {
+        addMoreBtn.style.display = 'block';
+      }
+    }
   }
 
   function toggleUIElements() {
     const visibleImages = getVisibleImages();
     const hasImages = visibleImages.length > 0;
+    const totalImages = visibleImages.length;
     
     // Toggle main preview
     if (hasImages) {
@@ -496,8 +516,13 @@
     const thumbnailContainer = document.getElementById('thumbnailContainer');
     
     if (hasImages) {
-      addMoreBtn.classList.remove('hidden');
       thumbnailContainer.classList.remove('hidden');
+      // Show add more button only if under limit
+      if (totalImages < 10) {
+        addMoreBtn.classList.remove('hidden');
+      } else {
+        addMoreBtn.classList.add('hidden');
+      }
     } else {
       addMoreBtn.classList.add('hidden');
       thumbnailContainer.classList.add('hidden');

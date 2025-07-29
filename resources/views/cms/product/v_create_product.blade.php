@@ -86,8 +86,18 @@
                     <input type="file" id="imageInput" class="hidden" accept="image/*" multiple>
                 </div>
 
+                <!-- Tombol Tambah Gambar Lagi -->
+                <div class="mt-4" id="addMoreImagesBtn" style="display: none;">
+                    <button type="button" onclick="document.getElementById('imageInput').click()" 
+                        class="w-full bg-white border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-[#1B3A6D] hover:bg-blue-50/30 transition-all group">
+                        <i class="fas fa-plus text-gray-400 group-hover:text-[#1B3A6D] text-lg mb-2"></i>
+                        <p class="text-sm text-gray-600 group-hover:text-[#1B3A6D] font-medium">Tambah Gambar Lagi</p>
+                        <p class="text-xs text-gray-500 mt-1">Maksimal <span id="remainingSlots">10</span> foto lagi</p>
+                    </button>
+                </div>
+
                 <!-- Grid Thumbnail dengan Drag & Drop -->
-                <div id="thumbnailContainer" class="hidden">
+                <div id="thumbnailContainer" class="hidden mt-4">
                     <div class="flex items-center justify-between mb-3">
                         <p class="text-sm font-medium text-gray-700 flex items-center">
                             <i class="fas fa-grip-vertical text-gray-400 mr-2"></i>
@@ -243,6 +253,43 @@
     box-shadow: 0 4px 12px rgba(27, 58, 109, 0.15);
   }
 
+  .drag-handle {
+    cursor: grab !important;
+    opacity: 0.7;
+    transition: all 0.2s ease;
+  }
+  
+  .drag-handle:active {
+    cursor: grabbing !important;
+  }
+  
+  .thumbnail-wrapper:hover .drag-handle {
+    opacity: 1 !important;
+    transform: scale(1.1);
+  }
+  
+  .drag-handle:hover {
+    background-color: #0f2744 !important;
+    transform: scale(1.2) !important;
+  }
+
+  /* Better visual feedback for sortable */
+  .sortable-chosen .drag-handle {
+    opacity: 1 !important;
+    background-color: #0f2744 !important;
+  }
+
+  /* Mobile responsive drag handles */
+  @media (max-width: 768px) {
+    .drag-handle {
+      opacity: 0.8 !important;
+    }
+    
+    .thumbnail-wrapper .drag-handle {
+      opacity: 0.8 !important;
+    }
+  }
+
   .loading-spinner {
     animation: spin 1s linear infinite;
     display: inline-block;
@@ -293,6 +340,8 @@
   imageInput.addEventListener("change", (e) => {
     const files = Array.from(e.target.files);
     addFiles(files);
+    // Reset input untuk memungkinkan memilih file yang sama lagi
+    e.target.value = '';
   });
 
   function addFiles(files) {
@@ -339,6 +388,8 @@
 
   function updateImageCounter() {
     const totalImages = imageFiles.length;
+    const remainingSlots = 10 - totalImages;
+    
     if (imageCounter) {
       imageCounter.textContent = `${totalImages}/10 foto`;
       if (totalImages >= 8) {
@@ -349,19 +400,38 @@
         imageCounter.className = 'text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-md font-medium';
       }
     }
+    
+    // Update remaining slots counter
+    const remainingSlotsEl = document.getElementById('remainingSlots');
+    if (remainingSlotsEl) {
+      remainingSlotsEl.textContent = remainingSlots;
+    }
+    
+    // Hide "Tambah Gambar Lagi" button if limit reached
+    const addMoreBtn = document.getElementById('addMoreImagesBtn');
+    if (addMoreBtn && totalImages > 0) {
+      if (totalImages >= 10) {
+        addMoreBtn.style.display = 'none';
+      } else {
+        addMoreBtn.style.display = 'block';
+      }
+    }
   }
 
   function toggleUIElements() {
     const hasImages = imageFiles.length > 0;
+    const addMoreBtn = document.getElementById('addMoreImagesBtn');
     
     if (hasImages) {
       uploadPlaceholder.classList.add('hidden');
       mainPreview.classList.remove('hidden');
       thumbnailContainer.classList.remove('hidden');
+      addMoreBtn.style.display = 'block';
     } else {
       uploadPlaceholder.classList.remove('hidden');
       mainPreview.classList.add('hidden');
       thumbnailContainer.classList.add('hidden');
+      addMoreBtn.style.display = 'none';
     }
   }
 
@@ -372,6 +442,12 @@
   }
 
   function updateThumbnailGrid() {
+    // Destroy existing sortable instance first
+    if (thumbnailGrid.sortableInstance) {
+      thumbnailGrid.sortableInstance.destroy();
+      thumbnailGrid.sortableInstance = null;
+    }
+    
     thumbnailGrid.innerHTML = '';
     
     if (imageFiles.length === 0) {
@@ -396,7 +472,7 @@
         }
 
         const orderBadge = document.createElement('div');
-        orderBadge.className = 'absolute -top-1 -right-1 bg-[#1B3A6D] text-white text-xs w-5 h-5 rounded-full flex items-center justify-center z-20 shadow-lg border border-white';
+        orderBadge.className = 'absolute -top-1 -right-1 bg-blue-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center z-20 shadow-lg border border-white';
         orderBadge.textContent = position + 1;
         wrapper.appendChild(orderBadge);
 
@@ -415,25 +491,35 @@
         });
 
         const dragHandle = document.createElement('div');
-        dragHandle.className = 'absolute bottom-1 left-1 bg-[#1B3A6D] text-white rounded p-1.5 opacity-0 group-hover:opacity-90 transition-all cursor-move shadow-lg border border-white';
+        dragHandle.className = 'drag-handle absolute bottom-1 left-1 bg-[#1B3A6D] text-white rounded p-1.5 opacity-0 group-hover:opacity-90 transition-all cursor-grab shadow-lg border border-white';
         dragHandle.innerHTML = '<i class="fas fa-grip-vertical text-xs"></i>';
-        wrapper.appendChild(dragHandle);
-
+        
+        // Add proper event listeners for cursor changes
+        dragHandle.addEventListener('mousedown', function() {
+          this.style.cursor = 'grabbing';
+        });
+        dragHandle.addEventListener('mouseup', function() {
+          this.style.cursor = 'grab';
+        });
+        
         wrapper.appendChild(img);
         wrapper.appendChild(deleteBtn);
+        wrapper.appendChild(dragHandle);
         thumbnailGrid.appendChild(wrapper);
       };
       reader.readAsDataURL(file);
     });
 
+    // Reinitialize Sortable after all thumbnails are created
     setTimeout(() => {
       if (thumbnailGrid.children.length > 0) {
-        new Sortable(thumbnailGrid, {
+        thumbnailGrid.sortableInstance = new Sortable(thumbnailGrid, {
           animation: 150,
           ghostClass: 'sortable-ghost',
           chosenClass: 'sortable-chosen',
           dragClass: 'sortable-drag',
-          handle: '.cursor-move',
+          handle: '.drag-handle',
+          forceFallback: false,
           onEnd: function(evt) {
             // Update image order array based on new DOM order
             const newOrder = [];
@@ -455,7 +541,7 @@
           }
         });
       }
-    }, 100);
+    }, 200);
   }
 
   function updateThumbnailBadges() {
@@ -463,10 +549,10 @@
     Array.from(thumbnailGrid.children).forEach((wrapper, position) => {
       // Remove existing badges
       const existingCoverBadge = wrapper.querySelector('.bg-green-500');
-      const existingOrderBadge = wrapper.querySelector('.bg-\\[\\#1B3A6D\\]');
+      const existingOrderBadges = wrapper.querySelectorAll('[class*="bg-blue-600"]');
       
       if (existingCoverBadge) existingCoverBadge.remove();
-      if (existingOrderBadge) existingOrderBadge.remove();
+      existingOrderBadges.forEach(badge => badge.remove());
       
       // Add cover badge to first item
       if (position === 0) {
@@ -478,11 +564,13 @@
       
       // Add order badge
       const orderBadge = document.createElement('div');
-      orderBadge.className = 'absolute -top-1 -right-1 bg-[#1B3A6D] text-white text-xs w-5 h-5 rounded-full flex items-center justify-center z-20 shadow-lg border border-white';
+      orderBadge.className = 'absolute -top-1 -right-1 bg-blue-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center z-20 shadow-lg border border-white';
       orderBadge.textContent = position + 1;
       wrapper.appendChild(orderBadge);
     });
   }
+
+
 
   function showMainPreview(fileIndex) {
     const file = imageFiles[fileIndex];
