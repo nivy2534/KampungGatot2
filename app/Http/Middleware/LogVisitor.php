@@ -8,6 +8,7 @@ use App\Models\Visitor;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
+use Stevebauman\Location\Facades\Location;
 
 class LogVisitor
 {
@@ -46,11 +47,33 @@ class LogVisitor
     }
 
     protected function getCityFromIP($ip){
-        return 'Unknown city';
+        try {
+            // Skip for local IPs
+            if ($ip === '127.0.0.1' || $ip === '::1' || strpos($ip, '192.168.') === 0 || strpos($ip, '10.') === 0) {
+                return 'Local';
+            }
+            
+            $position = Location::get($ip);
+            return $position ? $position->cityName : 'Unknown';
+        } catch (\Exception $e) {
+            Log::error('Error getting city from IP: ' . $e->getMessage());
+            return 'Unknown';
+        }
     }
 
     protected function getProvinceFromIP($ip){
-        return 'Unknown Province';
+        try {
+            // Skip for local IPs
+            if ($ip === '127.0.0.1' || $ip === '::1' || strpos($ip, '192.168.') === 0 || strpos($ip, '10.') === 0) {
+                return 'Local';
+            }
+            
+            $position = Location::get($ip);
+            return $position ? $position->regionName : 'Unknown';
+        } catch (\Exception $e) {
+            Log::error('Error getting province from IP: ' . $e->getMessage());
+            return 'Unknown';
+        }
     }
 
 }

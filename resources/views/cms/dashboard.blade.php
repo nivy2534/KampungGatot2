@@ -69,53 +69,35 @@
                 <h3 class="text-lg font-medium text-gray-900">Aktivitas Terbaru</h3>
             </div>
             <div class="p-4">
-                <div class="space-y-3">
-                    <div class="flex items-start space-x-3">
-                        <div class="w-7 h-7 bg-[#1B3A6D]/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                            <i class="fas fa-edit text-[#1B3A6D] text-xs"></i>
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <p class="text-sm text-gray-900">Artikel "Tips Berkebun di Musim Hujan" telah diperbarui</p>
-                            <p class="text-xs text-gray-500 mt-1">2 jam yang lalu</p>
-                        </div>
+                @if($recentActivities && $recentActivities->count() > 0)
+                    <div class="space-y-3">
+                        @foreach($recentActivities as $activity)
+                            <div class="flex items-start space-x-3">
+                                <div class="w-7 h-7 bg-[#1B3A6D]/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                                    <i class="{{ $activity['icon'] }} text-[#1B3A6D] text-xs"></i>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm text-gray-900">{{ $activity['title'] }}</p>
+                                    <p class="text-xs text-gray-500 mt-1">{{ $activity['time'] }}</p>
+                                </div>
+                            </div>
+                        @endforeach
                     </div>
-
-                    <div class="flex items-start space-x-3">
-                        <div class="w-7 h-7 bg-[#1B3A6D]/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                            <i class="fas fa-plus text-[#1B3A6D] text-xs"></i>
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <p class="text-sm text-gray-900">Produk "Kerajinan Anyaman" ditambahkan ke catalog</p>
-                            <p class="text-xs text-gray-500 mt-1">5 jam yang lalu</p>
-                        </div>
+                @else
+                    <div class="text-center py-8">
+                        <i class="fas fa-clock text-gray-300 text-3xl mb-3"></i>
+                        <p class="text-gray-500 text-sm">Tidak ada aktivitas tercatat.</p>
+                        <p class="text-gray-400 text-xs mt-1">Aktivitas akan muncul setelah ada pembaruan konten</p>
                     </div>
+                @endif
 
-                    <div class="flex items-start space-x-3">
-                        <div class="w-7 h-7 bg-[#1B3A6D]/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                            <i class="fas fa-image text-[#1B3A6D] text-xs"></i>
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <p class="text-sm text-gray-900">12 foto baru ditambahkan ke galeri</p>
-                            <p class="text-xs text-gray-500 mt-1">1 hari yang lalu</p>
-                        </div>
+                @if($recentActivities && $recentActivities->count() > 0)
+                    <div class="mt-4 pt-3 border-t border-gray-100">
+                        <button class="text-[#1B3A6D] hover:text-[#1B3A6D]/80 text-sm font-medium transition-colors">
+                            Lihat semua aktivitas →
+                        </button>
                     </div>
-
-                    <div class="flex items-start space-x-3">
-                        <div class="w-7 h-7 bg-[#1B3A6D]/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                            <i class="fas fa-users text-[#1B3A6D] text-xs"></i>
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <p class="text-sm text-gray-900">85 pengunjung baru minggu ini</p>
-                            <p class="text-xs text-gray-500 mt-1">3 hari yang lalu</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mt-4 pt-3 border-t border-gray-100">
-                    <button class="text-[#1B3A6D] hover:text-[#1B3A6D]/80 text-sm font-medium transition-colors">
-                        Lihat semua aktivitas →
-                    </button>
-                </div>
+                @endif
             </div>
         </div>
 
@@ -185,9 +167,40 @@
             </div>
         </div>
     </div>
+
+    <!-- Visitor Location Chart -->
+    <div class="mt-6">
+        <div class="bg-white rounded-lg border border-gray-200 shadow-sm">
+            <div class="px-6 py-4 border-b border-gray-100">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900">Sebaran Kota Pengunjung</h3>
+                        <p class="text-sm text-gray-500 mt-1">Top 5 kota pengunjung dalam 30 hari terakhir</p>
+                    </div>
+                    <div class="flex items-center space-x-2 text-sm text-gray-500">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>{{ $visitorLocations->sum('total') }} Total Pengunjung</span>
+                    </div>
+                </div>
+            </div>
+            <div class="p-6">
+                <div class="relative" style="height: 350px;">
+                    <canvas id="visitorLocationChart"></canvas>
+                </div>
+                @if($visitorLocations->isEmpty())
+                    <div class="text-center py-8">
+                        <i class="fas fa-chart-bar text-gray-300 text-4xl mb-4"></i>
+                        <p class="text-gray-500">Belum ada data pengunjung untuk ditampilkan</p>
+                        <p class="text-sm text-gray-400 mt-2">Data akan muncul setelah ada pengunjung website</p>
+                    </div>
+                @endif
+            </div>
+        </div>
+    </div>
 @endsection
 
 @push('addon-script')
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
 /* Minimal Dashboard Styles */
 .dashboard-card {
@@ -197,6 +210,18 @@
 .dashboard-card:hover {
     border-color: #1B3A6D;
     box-shadow: 0 4px 12px rgba(27, 58, 109, 0.1);
+}
+
+/* Chart container styling */
+#visitorLocationChart {
+    max-height: 350px;
+}
+
+/* Responsive chart adjustments */
+@media (max-width: 768px) {
+    #visitorLocationChart {
+        max-height: 280px;
+    }
 }
 
 .stat-number {
@@ -290,6 +315,152 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+
+    // Visitor Location Chart
+    const ctx = document.getElementById('visitorLocationChart');
+    if (ctx) {
+        const visitorLocationData = @json($visitorLocations);
+        
+        // Check if there's data to display
+        if (visitorLocationData && visitorLocationData.length > 0) {
+            const chartCtx = ctx.getContext('2d');
+            
+            // Prepare data for chart
+            const labels = [];
+            const data = [];
+            const backgroundColors = [];
+            
+            visitorLocationData.forEach((item, index) => {
+                // Create label with city and province
+                const label = item.city === item.province ? item.city : `${item.city}, ${item.province}`;
+                labels.push(label);
+                data.push(item.total);
+                
+                // Generate colors similar to the screenshot - various shades of blue
+                const colors = [
+                    '#1B3A6D',  // Dark blue (main brand color)
+                    '#2563EB',  // Blue  
+                    '#3B82F6',  // Light blue
+                    '#1E40AF',  // Blue
+                    '#1D4ED8',  // Blue
+                    '#2563EB',  // Blue
+                    '#3730A3',  // Indigo
+                    '#4338CA',  // Indigo
+                    '#5B21B6',  // Purple
+                    '#7C3AED'   // Violet
+                ];
+                backgroundColors.push(colors[index % colors.length]);
+            });
+
+            new Chart(chartCtx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Pengunjung',
+                        data: data,
+                        backgroundColor: backgroundColors,
+                        borderColor: backgroundColors.map(color => color),
+                        borderWidth: 0,
+                        borderRadius: 6,
+                        borderSkipped: false,
+                    }]
+                },
+                options: {
+                    indexAxis: 'y', // This makes it horizontal
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    layout: {
+                        padding: {
+                            top: 20,
+                            right: 40,
+                            bottom: 20,
+                            left: 20
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.9)',
+                            titleColor: '#fff',
+                            bodyColor: '#fff',
+                            borderColor: '#1B3A6D',
+                            borderWidth: 1,
+                            cornerRadius: 8,
+                            displayColors: false,
+                            titleFont: {
+                                size: 13,
+                                weight: 'bold'
+                            },
+                            bodyFont: {
+                                size: 12
+                            },
+                            padding: 12,
+                            callbacks: {
+                                title: function(context) {
+                                    return context[0].label;
+                                },
+                                label: function(context) {
+                                    const total = context.parsed.x;
+                                    const percentage = ((total / data.reduce((a, b) => a + b, 0)) * 100).toFixed(1);
+                                    return [`${total} Pengunjung`, `${percentage}% dari total`];
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.08)',
+                                lineWidth: 1
+                            },
+                            ticks: {
+                                font: {
+                                    size: 11
+                                },
+                                color: '#6B7280',
+                                padding: 10,
+                                callback: function(value) {
+                                    return value >= 1000 ? (value / 1000).toFixed(1) + 'k' : value;
+                                }
+                            },
+                            border: {
+                                display: false
+                            }
+                        },
+                        y: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                font: {
+                                    size: 12,
+                                    weight: '500'
+                                },
+                                color: '#374151',
+                                padding: 10,
+                                crossAlign: 'far'
+                            },
+                            border: {
+                                display: false
+                            }
+                        }
+                    },
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
+                    },
+                    animation: {
+                        duration: 1000,
+                        easing: 'easeOutQuart'
+                    }
+                }
+            });
+        }
+    }
 });
 </script>
 @endpush

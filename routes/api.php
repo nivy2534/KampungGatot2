@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\BlogController;
 use App\Http\Controllers\Api\PhotoController;
+use App\Http\Controllers\Admin\DashboardController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\EventController;
@@ -10,6 +11,9 @@ use App\Http\Controllers\Api\ProductController;
 Route::get('/ping', function () {
     return response()->json(['message' => 'API working!']);
 });
+
+// Visitor location data endpoint
+Route::get('/visitor-locations', [DashboardController::class, 'getVisitorLocationDataApi']);
 
 /*
 Route::post('/register', [AuthController::class, 'register']);
