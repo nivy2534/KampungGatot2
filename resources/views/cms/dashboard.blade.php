@@ -158,10 +158,12 @@
 
                     <div class="flex items-center justify-between">
                         <div class="flex items-center">
-                            <div class="w-2 h-2 bg-yellow-500 rounded-full mr-3"></div>
+                            <div class="w-2 h-2 {{ $storagePercentage < 80 ? 'bg-yellow-500' : 'bg-red-500' }} rounded-full mr-3"></div>
                             <span class="text-sm text-gray-700">Storage</span>
                         </div>
-                        <span class="text-xs text-yellow-600 font-medium">68% Used</span>
+                        <span class="text-xs {{ $storagePercentage < 80 ? 'text-yellow-600' : 'text-red-600' }} font-medium">
+                            {{ $storagePercentage }}% Used
+                        </span>
                     </div>
                 </div>
             </div>

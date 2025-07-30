@@ -26,6 +26,13 @@ class DashboardController extends Controller
         // Get recent activities
         $recentActivities = $this->getRecentActivities();
 
+        //Storage Usage
+        $path = storage_path();
+        $totalSpace = disk_total_space($path);
+        $freeSpace = disk_free_space($path);
+        $usedSpace = $totalSpace - $freeSpace;
+        $storagePercentage = round(($usedSpace / $totalSpace) * 100, 1);
+
         try{
             DB::connection()->getPdo();
             $dbStatus = 'connected';
@@ -33,7 +40,7 @@ class DashboardController extends Controller
             $dbStatus = 'Not Connected';
         }
 
-        return view('cms.dashboard', compact('blogs','products','photos', 'totalVisitor', 'todayVisitor', 'dbStatus', 'visitorLocations', 'recentActivities'));
+        return view('cms.dashboard', compact('blogs','products','photos', 'totalVisitor', 'todayVisitor', 'dbStatus', 'visitorLocations', 'recentActivities','storagePercentage'));
     }
     
     public function getVisitorLocationData() {
@@ -124,5 +131,24 @@ class DashboardController extends Controller
     public function getVisitorLocationDataApi() {
         $visitorData = $this->getVisitorLocationData();
         return response()->json($visitorData);
+    }
+
+    public function getStatus()
+    {
+        $disk = Storage::disk('public');
+
+        $path = storage_path(); 
+        $totalSpace = disk_total_space($path); 
+        $freeSpace = disk_free_space($path);   
+
+        $usedSpace = $totalSpace - $freeSpace;
+        $percentageUsed = ($usedSpace / $totalSpace) * 100;
+
+        $dbStatus = DB::connection()->getPdo() ? 'connected' : 'disconnected';
+
+        return view('dashboard.index', [
+            'storagePercentage' => round($percentageUsed, 2),
+            'dbStatus' => $dbStatus,
+        ]);
     }
 }
