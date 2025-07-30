@@ -56,6 +56,9 @@
       @include('components.gallery')
     </section>
 
+    {{-- Dokumentasi --}}
+    @include('components.documentary')
+
     {{-- Testimoni Warga --}}
     <section class="py-12 px-6 bg-white">
         <div class="container mx-auto">
