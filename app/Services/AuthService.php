@@ -32,6 +32,21 @@ class AuthService
             ], 401);
         }
 
+        // Check if user is approved
+        if (!$user->isApproved()) {
+            $message = match($user->approval_status) {
+                'pending' => 'Akun Anda masih menunggu persetujuan administrator',
+                'rejected' => 'Akun Anda telah ditolak. Silakan hubungi administrator',
+                default => 'Akun Anda tidak dapat mengakses sistem'
+            };
+            
+            return response()->json([
+                "success" => false,
+                "message" => $message,
+                "approval_status" => $user->approval_status,
+            ], 403);
+        }
+
         Auth::login($user);
 
         return response()->json([
@@ -45,12 +60,12 @@ class AuthService
     {
         $user = $this->authRepository->register($data);
 
-        Auth::login($user);
-
+        // Don't auto-login user, they need approval first
         return response()->json([
             "success" => true,
-            "message" => 'Pendaftaran berhasil',
+            "message" => 'Pendaftaran berhasil! Akun Anda akan diaktifkan setelah mendapat persetujuan dari administrator.',
             'data' => new UserResource($user),
+            'approval_status' => 'pending',
         ]);
     }
 
@@ -81,5 +96,52 @@ class AuthService
         }
         $user = Auth::user();
         return $this->success(new UserResource($user), 'Data ditemukan');
+    }
+
+    public function approveUser($userId, $adminId)
+    {
+        $user = User::findOrFail($userId);
+        
+        $user->update([
+            'approval_status' => 'approved',
+            'approved_at' => now(),
+            'approved_by' => $adminId,
+        ]);
+
+        return response()->json([
+            "success" => true,
+            "message" => 'User berhasil disetujui',
+            'data' => new UserResource($user),
+        ]);
+    }
+
+    public function rejectUser($userId, $adminId, $reason = null)
+    {
+        $user = User::findOrFail($userId);
+        
+        $user->update([
+            'approval_status' => 'rejected',
+            'approved_by' => $adminId,
+            'rejection_reason' => $reason,
+        ]);
+
+        return response()->json([
+            "success" => true,
+            "message" => 'User berhasil ditolak',
+            'data' => new UserResource($user),
+        ]);
+    }
+
+    public function getPendingUsers()
+    {
+        $users = User::where('approval_status', 'pending')
+                    ->orderBy('created_at', 'desc')
+                    ->get();
+
+        return response()->json([
+            "success" => true,
+            "message" => 'Data ditemukan',
+            'data' => $users->toArray(), // Use toArray() instead of UserResource
+        ]);
     }
 }

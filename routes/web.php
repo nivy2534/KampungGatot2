@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\UserApprovalController;
 use App\Http\Controllers\ProductImageController;
 use App\Http\Controllers\Homepage\HomepageController;
 use App\Http\Controllers\BlogPageController;
@@ -68,6 +69,11 @@ Route::middleware(['auth'])->group(
           Route::post('/gallery/save',[GaleryController::class, 'store'])->name('gallery.store');
           Route::put('/gallery/{id}', [GaleryController::class, 'update'])->name('gallery.update');
           Route::delete('/gallery/{id}',[GaleryController::class, 'destroy'])->name('gallery.delete');
+
+          // User Approval related
+          Route::get('/user-approval', [UserApprovalController::class, 'index'])->name('user-approval.index');
+          Route::post('/user-approval/{id}/approve', [UserApprovalController::class, 'approve'])->name('user-approval.approve');
+          Route::post('/user-approval/{id}/reject', [UserApprovalController::class, 'reject'])->name('user-approval.reject');
         });
     }
 );

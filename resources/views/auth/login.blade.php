@@ -344,6 +344,60 @@
                             showToast('Silakan perbaiki kesalahan pada form', 'error');
                         } else if (jqXHR.status === 401) {
                             showToast('Email atau kata sandi salah', 'error');
+                        } else if (jqXHR.status === 403) {
+                            // Handle approval status errors
+                            const response = jqXHR.responseJSON;
+                            const approvalStatus = response?.approval_status;
+                            
+                            if (approvalStatus === 'pending') {
+                                Swal.fire({
+                                    icon: 'warning',
+                                    title: 'Akun Menunggu Persetujuan',
+                                    html: `
+                                        <div class="text-left">
+                                            <p class="mb-3">${response.message}</p>
+                                            <div class="bg-orange-50 border border-orange-200 rounded-lg p-3 mb-3">
+                                                <p class="text-sm font-medium text-orange-800 mb-2">Status Akun:</p>
+                                                <div class="flex items-center text-sm text-orange-700">
+                                                    <i class="fas fa-clock mr-2"></i>
+                                                    <span>Menunggu persetujuan administrator</span>
+                                                </div>
+                                            </div>
+                                            <p class="text-sm text-gray-600">Silakan hubungi administrator jika ada pertanyaan.</p>
+                                        </div>
+                                    `,
+                                    customClass: {
+                                        confirmButton: 'bg-[#1B3A6D] hover:bg-[#152f5a] text-white px-6 py-2 rounded-lg font-medium'
+                                    },
+                                    buttonsStyling: false,
+                                    confirmButtonText: 'Mengerti'
+                                });
+                            } else if (approvalStatus === 'rejected') {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Akun Ditolak',
+                                    html: `
+                                        <div class="text-left">
+                                            <p class="mb-3">${response.message}</p>
+                                            <div class="bg-red-50 border border-red-200 rounded-lg p-3 mb-3">
+                                                <p class="text-sm font-medium text-red-800 mb-2">Status Akun:</p>
+                                                <div class="flex items-center text-sm text-red-700">
+                                                    <i class="fas fa-times mr-2"></i>
+                                                    <span>Akun telah ditolak</span>
+                                                </div>
+                                            </div>
+                                            <p class="text-sm text-gray-600">Silakan hubungi administrator untuk informasi lebih lanjut.</p>
+                                        </div>
+                                    `,
+                                    customClass: {
+                                        confirmButton: 'bg-[#1B3A6D] hover:bg-[#152f5a] text-white px-6 py-2 rounded-lg font-medium'
+                                    },
+                                    buttonsStyling: false,
+                                    confirmButtonText: 'Mengerti'
+                                });
+                            } else {
+                                showToast(response.message || 'Akses ditolak', 'error');
+                            }
                         } else if (jqXHR.status === 429) {
                             showToast('Terlalu banyak percobaan, coba lagi nanti', 'warning');
                         } else {

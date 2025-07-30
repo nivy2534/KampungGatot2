@@ -42,6 +42,24 @@
             <i class="fa-solid fa-image mr-3 flex-shrink-0 text-sm"></i>
             <span class="truncate text-sm">Kelola Galeri</span>
         </a>
+
+        <div class="text-xs font-semibold text-white/60 uppercase tracking-wider mb-3 px-2 mt-6">Manajemen User</div>
+
+        <a href="{{ url('/dashboard/user-approval') }}"
+            class="nav-item {{ Request::is('dashboard/user-approval*') ? 'active' : '' }} flex items-center px-3 py-3 hover:bg-white/10 rounded-lg transition-all duration-200 group text-white">
+            <i class="fas fa-user-check mr-3 flex-shrink-0 text-sm"></i>
+            <span class="truncate text-sm">Persetujuan User</span>
+            @php
+                try {
+                    $pendingCount = \App\Models\User::where('approval_status', 'pending')->count();
+                } catch (\Exception $e) {
+                    $pendingCount = 0;
+                }
+            @endphp
+            @if($pendingCount > 0)
+                <span class="ml-auto bg-orange-500 text-white text-xs px-2 py-0.5 rounded-full font-medium">{{ $pendingCount }}</span>
+            @endif
+        </a>
     </nav>
 
     <!-- User info section -->

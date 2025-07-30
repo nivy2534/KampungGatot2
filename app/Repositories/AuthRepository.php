@@ -19,6 +19,7 @@ class AuthRepository implements AuthRepositoryInterface
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'approval_status' => 'pending', // Set status awal pending
         ]);
     }
 }

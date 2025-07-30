@@ -407,11 +407,36 @@
                     },
                     success: function(response) {
                         if (response.success) {
-                            showToast('Pendaftaran berhasil! Mengalihkan ke halaman login...', 'success');
+                            showToast('Pendaftaran berhasil! Akun Anda akan diaktifkan setelah mendapat persetujuan dari administrator.', 'success');
                             
+                            // Show additional info about approval process
                             setTimeout(() => {
-                                window.location.href = '/login';
-                            }, 1500);
+                                Swal.fire({
+                                    icon: 'info',
+                                    title: 'Menunggu Persetujuan',
+                                    html: `
+                                        <div class="text-left">
+                                            <p class="mb-3">Pendaftaran Anda telah berhasil disubmit!</p>
+                                            <div class="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-3">
+                                                <p class="text-sm font-medium text-blue-800 mb-2">Langkah Selanjutnya:</p>
+                                                <ul class="text-sm text-blue-700 space-y-1">
+                                                    <li>• Administrator akan meninjau permintaan Anda</li>
+                                                    <li>• Anda akan mendapat konfirmasi via email</li>
+                                                    <li>• Setelah disetujui, Anda dapat login</li>
+                                                </ul>
+                                            </div>
+                                            <p class="text-sm text-gray-600">Proses persetujuan biasanya memakan waktu 1-2 hari kerja.</p>
+                                        </div>
+                                    `,
+                                    customClass: {
+                                        confirmButton: 'bg-[#1B3A6D] hover:bg-[#152f5a] text-white px-6 py-2 rounded-lg font-medium'
+                                    },
+                                    buttonsStyling: false,
+                                    confirmButtonText: 'Mengerti'
+                                }).then(() => {
+                                    window.location.href = '/login';
+                                });
+                            }, 2000);
                         } else {
                             setLoadingState(false);
                             showToast(response.message || 'Pendaftaran gagal, silakan coba lagi', 'error');
