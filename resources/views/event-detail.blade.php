@@ -28,7 +28,7 @@ use Illuminate\Support\Facades\Storage;
           @if($product->image_url)
           <div class="mb-4">
             <img
-              src="{{ $product->image_url }}"
+              src="{{ asset('storage/' . $product->image_path) }}"
               alt="{{ $product->name }}"
               class="w-full h-96 object-cover rounded-lg shadow-sm"
               id="mainImage"
@@ -45,7 +45,7 @@ use Illuminate\Support\Facades\Storage;
             // Tambahkan gambar utama jika ada dan path-nya benar-benar exists
             if($product->image_url && $product->image_path && Storage::disk('public')->exists($product->image_path)) {
               $availableImages[] = [
-                'url' => $product->image_url, // Sudah full URL dari Storage::url()
+                'url' => asset('storage/' . $product->image_path), // Sudah full URL dari Storage::url()
                 'path' => $product->image_path,
                 'is_main' => true
               ];
@@ -58,7 +58,7 @@ use Illuminate\Support\Facades\Storage;
                 if($image->image_path && Storage::disk('public')->exists($image->image_path) && 
                    $image->image_path !== $product->image_path) {
                   $availableImages[] = [
-                    'url' => $image->image_url, // Sudah full URL dari Storage::url()
+                    'url' => asset('storage/' . $image->image_path), // Sudah full URL dari Storage::url()
                     'path' => $image->image_path,
                     'is_main' => false
                   ];

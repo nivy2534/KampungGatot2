@@ -30,6 +30,8 @@
     
     <!-- Page-specific styles -->
     @stack('styles')
+
+    @stack('scripts')
     
     <!-- Page loading indicator -->
     <style>

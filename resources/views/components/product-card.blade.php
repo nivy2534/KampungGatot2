@@ -1,7 +1,14 @@
 <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 group">
   <div class="relative h-40 bg-gray-200 overflow-hidden">
-    <img src="{{ $image ?? 'https://placehold.co/280x160/e2e8f0/1B3A6D?text=Product' }}" alt="{{ $title ?? 'Product' }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-    
+    @php
+      $imagePath = isset($image)
+        ? (Str::startsWith($image, 'http') ? $image : asset('storage/products/'.$image))
+        : 'https://placehold.co/280x160/e2e8f0/1B3A6D?text=Product';
+    @endphp
+
+    <img src="{{ $imagePath }}" alt="{{ $title ?? 'Product' }}" class="..." />
+    <p class="text-xs text-red-600">{{ $image }}</p>
+
     @if(isset($status))
     <div class="absolute top-3 left-3">
       <span class="bg-green-500 text-white text-xs font-semibold px-2 py-1 rounded-full">

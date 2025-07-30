@@ -368,7 +368,7 @@ class ProductRepository implements ProductRepositoryInterface
 
         return [
             'image_path' => $path,
-            'image_url' => Storage::disk('public')->url($path),
+            'image_url' => asset('storage/' . $path),
             'folder_name' => $folderName
         ];
     }
