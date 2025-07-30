@@ -64,7 +64,7 @@ class BlogRepository implements BlogRepositoryInterface
                                     <i class="fas fa-trash"></i>
                                 </button>
                                 <a href="' . $visitUrl . '" class="text-blue-600 hover:text-blue-800 p-1">
-                                    <i class="fas fa-blog"></i>
+                                    <i class="fas fa-eye"></i>
                                 </a>
                             </div>
                         ';
@@ -86,10 +86,10 @@ class BlogRepository implements BlogRepositoryInterface
 
         $data['author_id'] = Auth::user()->id;
         $data['author_name'] = Auth::user()->name;
-        
+
         // Set excerpt from description field (ringkasan)
         $data['excerpt'] = $data['description'];
-        
+
         // Set description from content field (konten penuh)
         if (isset($data['content'])) {
             $data['description'] = $data['content'];
@@ -116,10 +116,10 @@ class BlogRepository implements BlogRepositoryInterface
         $data['slug'] = $data['slug'] ?? Str::slug($data['name']);
         $data['author_id'] = Auth::user()->id;
         $data['author_name'] = Auth::user()->name;
-        
+
         // Set excerpt from description field (ringkasan)
         $data['excerpt'] = $data['description'];
-        
+
         // Set description from content field (konten penuh)
         if (isset($data['content'])) {
             $data['description'] = $data['content'];

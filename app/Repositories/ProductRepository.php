@@ -47,6 +47,7 @@ class ProductRepository implements ProductRepositoryInterface
             })
             ->addColumn("actions", function ($item) {
                 $editUrl = route('products.edit', $item->id);
+                $visitUrl = url("/event/{$item->slug}");
                 return '    <div class="flex gap-2">
                                 <a href="' . $editUrl . '" class="text-blue-600 hover:text-blue-800 p-1">
                                     <i class="fas fa-edit"></i>
@@ -59,6 +60,9 @@ class ProductRepository implements ProductRepositoryInterface
                                 >
                                     <i class="fas fa-trash"></i>
                                 </button>
+                                <a href="' . $visitUrl . '" class="text-blue-600 hover:text-blue-800 p-1">
+                                    <i class="fas fa-eye"></i>
+                                </a>
                             </div>
                         ';
             })
@@ -69,7 +73,7 @@ class ProductRepository implements ProductRepositoryInterface
             ->addIndexColumn()
             ->make();
     }
-    
+
     public function store(array $data)
     {
         $images = $data['images'] ?? []; // tangkap semua file
@@ -94,7 +98,7 @@ class ProductRepository implements ProductRepositoryInterface
         foreach ($images as $index => $img) {
             $uploaded = $this->uploadThumbnail($img, $productName);
             $order = isset($imageOrders[$index]) ? $imageOrders[$index] : $index;
-            
+
             $product->images()->create([
                 'image_path' => $uploaded['image_path'],
                 'image_url' => $uploaded['image_url'],
@@ -110,7 +114,7 @@ class ProductRepository implements ProductRepositoryInterface
         $product = Product::with('images')->findOrFail($data["id"]);
         $oldProductName = $product->name;
         $newProductName = $data['name'];
-        
+
         // Check if product name changed (affects folder name)
         $nameChanged = $oldProductName !== $newProductName;
         $oldFolderName = Str::slug($oldProductName);
@@ -134,27 +138,27 @@ class ProductRepository implements ProductRepositoryInterface
         if ($nameChanged && Storage::disk('public')->exists("products/{$oldFolderName}")) {
             // Create new folder
             Storage::disk('public')->makeDirectory("products/{$newFolderName}");
-            
+
             // Move images to new folder
             foreach ($product->images as $image) {
                 if ($image->image_path && Storage::disk('public')->exists($image->image_path)) {
                     $fileName = basename($image->image_path);
                     $newPath = "products/{$newFolderName}/{$fileName}";
-                    
+
                     // Copy file to new location
                     Storage::disk('public')->copy($image->image_path, $newPath);
-                    
+
                     // Update database record
                     $image->update([
                         'image_path' => $newPath,
                         'image_url' => Storage::disk('public')->url($newPath)
                     ]);
-                    
+
                     // Delete old file
                     Storage::disk('public')->delete($image->image_path);
                 }
             }
-            
+
             // Update main product image path if exists
             if ($product->image_path) {
                 $fileName = basename($product->image_path);
@@ -164,7 +168,7 @@ class ProductRepository implements ProductRepositoryInterface
                     $updateData['image_url'] = Storage::disk('public')->url($newMainPath);
                 }
             }
-            
+
             // Remove old folder
             Storage::disk('public')->deleteDirectory("products/{$oldFolderName}");
         }
@@ -187,16 +191,16 @@ class ProductRepository implements ProductRepositoryInterface
         // Add new images to the product folder
         if (isset($data['images']) && is_array($data['images']) && !empty($data['images'])) {
             $imageOrders = $data['image_orders'] ?? [];
-            
+
             // Get the current max order to append new images properly
             $currentMaxOrder = $product->images()->max('order') ?? -1;
-            
+
             // Upload semua gambar baru ke folder produk
             foreach ($data['images'] as $index => $img) {
                 $uploaded = $this->uploadThumbnail($img, $newProductName);
                 // New images get order starting from max + 1, or use provided order
                 $order = isset($imageOrders[$index]) ? $imageOrders[$index] : ($currentMaxOrder + $index + 1);
-                
+
                 $product->images()->create([
                     'image_path' => $uploaded['image_path'],
                     'image_url' => $uploaded['image_url'],
@@ -237,7 +241,7 @@ class ProductRepository implements ProductRepositoryInterface
     public function delete($id)
     {
         $product = Product::with('images')->findOrFail($id);
-        
+
         // Method 1: Get folder name from product image_path
         $productFolderName = null;
         if ($product->image_path) {
@@ -247,7 +251,7 @@ class ProductRepository implements ProductRepositoryInterface
                 $productFolderName = $pathParts[1];
             }
         }
-        
+
         // Method 2: If no main image, try to get folder from product images
         if (!$productFolderName && $product->images->count() > 0) {
             $firstImage = $product->images->first();
@@ -258,50 +262,50 @@ class ProductRepository implements ProductRepositoryInterface
                 }
             }
         }
-        
+
         // Method 3: If still no folder name, generate from product name (fallback)
         if (!$productFolderName) {
             $productFolderName = Str::slug($product->name);
         }
-        
+
         // Delete individual image files first (as fallback)
         if ($product->image_path && Storage::disk('public')->exists($product->image_path)) {
             Storage::disk('public')->delete($product->image_path);
         }
-        
+
         // Delete all product images from database records
         foreach ($product->images as $image) {
             if ($image->image_path && Storage::disk('public')->exists($image->image_path)) {
                 Storage::disk('public')->delete($image->image_path);
             }
         }
-        
+
         // Delete the entire product folder if it exists
         if ($productFolderName) {
             $productFolderPath = "products/{$productFolderName}";
             if (Storage::disk('public')->exists($productFolderPath)) {
                 // Log the deletion for debugging
                 \Log::info("Deleting product folder: {$productFolderPath}");
-                
+
                 // Get all files and subdirectories in the folder
                 $files = Storage::disk('public')->allFiles($productFolderPath);
                 $directories = Storage::disk('public')->allDirectories($productFolderPath);
-                
+
                 \Log::info("Files in folder: " . count($files) . " files, " . count($directories) . " subdirectories");
-                
+
                 // Force delete all files first
                 foreach ($files as $file) {
                     Storage::disk('public')->delete($file);
                 }
-                
+
                 // Delete all subdirectories
                 foreach ($directories as $directory) {
                     Storage::disk('public')->deleteDirectory($directory);
                 }
-                
+
                 // Finally delete the main directory
                 $deleted = Storage::disk('public')->deleteDirectory($productFolderPath);
-                
+
                 if ($deleted) {
                     \Log::info("Product folder deleted successfully: {$productFolderPath}");
                 } else {
@@ -314,15 +318,15 @@ class ProductRepository implements ProductRepositoryInterface
 
         // Delete from database (this will also delete related images due to cascade)
         $result = $product->delete();
-        
+
         // Clean up empty directories in products folder
         $this->cleanupEmptyDirectories();
-        
+
         \Log::info("Product deleted: ID {$id}, Name: {$product->name}, Folder: {$productFolderName}");
-        
+
         return $result;
     }
-    
+
     /**
      * Clean up empty directories in the products folder
      */
@@ -330,15 +334,15 @@ class ProductRepository implements ProductRepositoryInterface
     {
         try {
             $productsFolderPath = 'products';
-            
+
             // Get all directories in products folder
             $directories = Storage::disk('public')->directories($productsFolderPath);
-            
+
             foreach ($directories as $directory) {
                 // Check if directory is empty
                 $files = Storage::disk('public')->allFiles($directory);
                 $subdirectories = Storage::disk('public')->allDirectories($directory);
-                
+
                 if (empty($files) && empty($subdirectories)) {
                     \Log::info("Cleaning up empty directory: {$directory}");
                     Storage::disk('public')->deleteDirectory($directory);
@@ -349,7 +353,7 @@ class ProductRepository implements ProductRepositoryInterface
         }
     }
 
-    public function show($id) 
+    public function show($id)
     {
         return Product::findOrFail($id);
     }
@@ -358,10 +362,10 @@ class ProductRepository implements ProductRepositoryInterface
     {
         // Create a clean folder name from product name
         $folderName = $productName ? Str::slug($productName) : 'temp-product-' . time();
-        
+
         // Store in products/{product-name}/ folder
         $path = $image->store("products/{$folderName}", 'public');
-        
+
         return [
             'image_path' => $path,
             'image_url' => Storage::disk('public')->url($path),
