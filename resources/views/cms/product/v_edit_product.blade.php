@@ -466,6 +466,7 @@
 
   function updateImageCounter() {
     const totalImages = getVisibleImages().length;
+    const remainingSlots = 10 - totalImages;
     const counter = document.getElementById('imageCounter');
     
     if (counter) {

@@ -51,10 +51,12 @@ use Illuminate\Support\Facades\Storage;
               ];
             }
             
-            // Tambahkan gambar tambahan yang benar-benar ada di storage
+            // Tambahkan gambar tambahan yang benar-benar ada di storage (kecuali yang sama dengan gambar utama)
             if($product->images && $product->images->count() > 0) {
               foreach($product->images as $image) {
-                if($image->image_path && Storage::disk('public')->exists($image->image_path)) {
+                // Skip gambar jika path-nya sama dengan gambar utama (untuk menghindari duplikasi)
+                if($image->image_path && Storage::disk('public')->exists($image->image_path) && 
+                   $image->image_path !== $product->image_path) {
                   $availableImages[] = [
                     'url' => $image->image_url, // Sudah full URL dari Storage::url()
                     'path' => $image->image_path,
