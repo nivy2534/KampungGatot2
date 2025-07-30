@@ -130,29 +130,28 @@ class ProductRepository implements ProductRepositoryInterface
             'excerpt' => Str::limit($data['description'], 200),
         ];
 
-        // Handle folder rename if product name changed
-        if ($nameChanged && Storage::exists("products/{$oldFolderName}")) {
+                // Handle rename/move product folder if product name changed
+        if ($nameChanged && Storage::disk('public')->exists("products/{$oldFolderName}")) {
             // Create new folder
-            Storage::makeDirectory("products/{$newFolderName}");
+            Storage::disk('public')->makeDirectory("products/{$newFolderName}");
             
-            // Move all files to new folder and update database paths
-            $allImages = $product->images;
-            foreach ($allImages as $image) {
-                if ($image->image_path && Storage::exists($image->image_path)) {
+            // Move images to new folder
+            foreach ($product->images as $image) {
+                if ($image->image_path && Storage::disk('public')->exists($image->image_path)) {
                     $fileName = basename($image->image_path);
                     $newPath = "products/{$newFolderName}/{$fileName}";
                     
                     // Copy file to new location
-                    Storage::copy($image->image_path, $newPath);
+                    Storage::disk('public')->copy($image->image_path, $newPath);
                     
-                    // Update database with new path
+                    // Update database record
                     $image->update([
                         'image_path' => $newPath,
-                        'image_url' => Storage::url($newPath)
+                        'image_url' => Storage::disk('public')->url($newPath)
                     ]);
                     
                     // Delete old file
-                    Storage::delete($image->image_path);
+                    Storage::disk('public')->delete($image->image_path);
                 }
             }
             
@@ -160,14 +159,14 @@ class ProductRepository implements ProductRepositoryInterface
             if ($product->image_path) {
                 $fileName = basename($product->image_path);
                 $newMainPath = "products/{$newFolderName}/{$fileName}";
-                if (Storage::exists($newMainPath)) {
+                if (Storage::disk('public')->exists($newMainPath)) {
                     $updateData['image_path'] = $newMainPath;
-                    $updateData['image_url'] = Storage::url($newMainPath);
+                    $updateData['image_url'] = Storage::disk('public')->url($newMainPath);
                 }
             }
             
             // Remove old folder
-            Storage::deleteDirectory("products/{$oldFolderName}");
+            Storage::disk('public')->deleteDirectory("products/{$oldFolderName}");
         }
 
         // Handle delete specific images
@@ -176,8 +175,8 @@ class ProductRepository implements ProductRepositoryInterface
                 $imageToDelete = $product->images()->find($imageId);
                 if ($imageToDelete) {
                     // Delete file from storage
-                    if ($imageToDelete->image_path && Storage::exists($imageToDelete->image_path)) {
-                        Storage::delete($imageToDelete->image_path);
+                    if ($imageToDelete->image_path && Storage::disk('public')->exists($imageToDelete->image_path)) {
+                        Storage::disk('public')->delete($imageToDelete->image_path);
                     }
                     // Delete from database
                     $imageToDelete->delete();
@@ -239,7 +238,7 @@ class ProductRepository implements ProductRepositoryInterface
     {
         $product = Product::with('images')->findOrFail($id);
         
-        // Get the product folder name from the first image path
+        // Method 1: Get folder name from product image_path
         $productFolderName = null;
         if ($product->image_path) {
             // Extract folder name from path like "products/product-name/image.jpg"
@@ -249,28 +248,105 @@ class ProductRepository implements ProductRepositoryInterface
             }
         }
         
-        // Delete individual image files first (as fallback)
-        if ($product->image_path && Storage::exists($product->image_path)) {
-            Storage::delete($product->image_path);
+        // Method 2: If no main image, try to get folder from product images
+        if (!$productFolderName && $product->images->count() > 0) {
+            $firstImage = $product->images->first();
+            if ($firstImage->image_path) {
+                $pathParts = explode('/', $firstImage->image_path);
+                if (count($pathParts) >= 2 && $pathParts[0] === 'products') {
+                    $productFolderName = $pathParts[1];
+                }
+            }
         }
         
-        // Delete all product images
+        // Method 3: If still no folder name, generate from product name (fallback)
+        if (!$productFolderName) {
+            $productFolderName = Str::slug($product->name);
+        }
+        
+        // Delete individual image files first (as fallback)
+        if ($product->image_path && Storage::disk('public')->exists($product->image_path)) {
+            Storage::disk('public')->delete($product->image_path);
+        }
+        
+        // Delete all product images from database records
         foreach ($product->images as $image) {
-            if ($image->image_path && Storage::exists($image->image_path)) {
-                Storage::delete($image->image_path);
+            if ($image->image_path && Storage::disk('public')->exists($image->image_path)) {
+                Storage::disk('public')->delete($image->image_path);
             }
         }
         
         // Delete the entire product folder if it exists
         if ($productFolderName) {
             $productFolderPath = "products/{$productFolderName}";
-            if (Storage::exists($productFolderPath)) {
-                Storage::deleteDirectory($productFolderPath);
+            if (Storage::disk('public')->exists($productFolderPath)) {
+                // Log the deletion for debugging
+                \Log::info("Deleting product folder: {$productFolderPath}");
+                
+                // Get all files and subdirectories in the folder
+                $files = Storage::disk('public')->allFiles($productFolderPath);
+                $directories = Storage::disk('public')->allDirectories($productFolderPath);
+                
+                \Log::info("Files in folder: " . count($files) . " files, " . count($directories) . " subdirectories");
+                
+                // Force delete all files first
+                foreach ($files as $file) {
+                    Storage::disk('public')->delete($file);
+                }
+                
+                // Delete all subdirectories
+                foreach ($directories as $directory) {
+                    Storage::disk('public')->deleteDirectory($directory);
+                }
+                
+                // Finally delete the main directory
+                $deleted = Storage::disk('public')->deleteDirectory($productFolderPath);
+                
+                if ($deleted) {
+                    \Log::info("Product folder deleted successfully: {$productFolderPath}");
+                } else {
+                    \Log::error("Failed to delete product folder: {$productFolderPath}");
+                }
+            } else {
+                \Log::warning("Product folder not found: {$productFolderPath}");
             }
         }
 
         // Delete from database (this will also delete related images due to cascade)
-        return $product->delete();
+        $result = $product->delete();
+        
+        // Clean up empty directories in products folder
+        $this->cleanupEmptyDirectories();
+        
+        \Log::info("Product deleted: ID {$id}, Name: {$product->name}, Folder: {$productFolderName}");
+        
+        return $result;
+    }
+    
+    /**
+     * Clean up empty directories in the products folder
+     */
+    private function cleanupEmptyDirectories()
+    {
+        try {
+            $productsFolderPath = 'products';
+            
+            // Get all directories in products folder
+            $directories = Storage::disk('public')->directories($productsFolderPath);
+            
+            foreach ($directories as $directory) {
+                // Check if directory is empty
+                $files = Storage::disk('public')->allFiles($directory);
+                $subdirectories = Storage::disk('public')->allDirectories($directory);
+                
+                if (empty($files) && empty($subdirectories)) {
+                    \Log::info("Cleaning up empty directory: {$directory}");
+                    Storage::disk('public')->deleteDirectory($directory);
+                }
+            }
+        } catch (\Exception $e) {
+            \Log::error("Error cleaning up empty directories: " . $e->getMessage());
+        }
     }
 
     public function show($id) 
@@ -288,7 +364,7 @@ class ProductRepository implements ProductRepositoryInterface
         
         return [
             'image_path' => $path,
-            'image_url' => Storage::url($path),
+            'image_url' => Storage::disk('public')->url($path),
             'folder_name' => $folderName
         ];
     }

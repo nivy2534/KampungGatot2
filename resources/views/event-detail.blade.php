@@ -1,5 +1,10 @@
 @extends('layouts.app')
 
+@php
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
+@endphp
+
 @section('content')
   {{-- Header --}}
   @include('components.header')
@@ -23,30 +28,65 @@
           @if($product->image_url)
           <div class="mb-4">
             <img
-              src="{{ asset($product->image_url) }}"
+              src="{{ $product->image_url }}"
               alt="{{ $product->name }}"
               class="w-full h-96 object-cover rounded-lg shadow-sm"
               id="mainImage"
             >
           </div>
 
-          {{-- Additional images if available --}}
-          @if($product->images && $product->images->count() > 0)
+          {{-- Thumbnail images --}}
+          @php
+            // Cek gambar yang benar-benar ada di direktori
+            $productSlug = Str::slug($product->name);
+            $productFolder = "products/{$productSlug}";
+            $availableImages = [];
+            
+            // Tambahkan gambar utama jika ada dan path-nya benar-benar exists
+            if($product->image_url && $product->image_path && Storage::disk('public')->exists($product->image_path)) {
+              $availableImages[] = [
+                'url' => $product->image_url, // Sudah full URL dari Storage::url()
+                'path' => $product->image_path,
+                'is_main' => true
+              ];
+            }
+            
+            // Tambahkan gambar tambahan yang benar-benar ada di storage
+            if($product->images && $product->images->count() > 0) {
+              foreach($product->images as $image) {
+                if($image->image_path && Storage::disk('public')->exists($image->image_path)) {
+                  $availableImages[] = [
+                    'url' => $image->image_url, // Sudah full URL dari Storage::url()
+                    'path' => $image->image_path,
+                    'is_main' => false
+                  ];
+                }
+              }
+            }
+            
+            $totalImages = count($availableImages);
+          @endphp
+          
+          @if($totalImages > 1)
           <div class="grid grid-cols-4 gap-2">
+            @foreach($availableImages as $index => $image)
             <img
-              src="{{ asset($product->image_url) }}"
+              src="{{ $image['url'] }}"
               alt="{{ $product->name }}"
-              class="w-full h-20 object-cover rounded cursor-pointer border-2 border-[#1B3A6D] thumbnail-image"
-              onclick="changeMainImage('{{ asset($product->image_url) }}')"
-            >
-            @foreach($product->images as $image)
-            <img
-              src="{{ asset('storage/' . $image->image_path) }}"
-              alt="{{ $product->name }}"
-              class="w-full h-20 object-cover rounded cursor-pointer border-2 border-transparent hover:border-[#1B3A6D] thumbnail-image"
-              onclick="changeMainImage('{{ asset('storage/' . $image->image_path) }}')"
+              class="w-full h-20 object-cover rounded cursor-pointer border-2 {{ $index === 0 ? 'border-[#1B3A6D]' : 'border-transparent hover:border-[#1B3A6D]' }} thumbnail-image"
+              onclick="changeMainImage('{{ $image['url'] }}')"
             >
             @endforeach
+          </div>
+          @elseif($totalImages == 1)
+          {{-- Jika hanya ada satu gambar, tampilkan satu thumbnail --}}
+          <div class="grid grid-cols-4 gap-2">
+            <img
+              src="{{ $availableImages[0]['url'] }}"
+              alt="{{ $product->name }}"
+              class="w-full h-20 object-cover rounded cursor-pointer border-2 border-[#1B3A6D] thumbnail-image"
+              onclick="changeMainImage('{{ $availableImages[0]['url'] }}')"
+            >
           </div>
           @endif
           @else
@@ -146,7 +186,7 @@
             @if($relatedProduct->image_url)
             <div class="aspect-w-1 aspect-h-1">
               <img
-                src="{{ asset($relatedProduct->image_url) }}"
+                src="{{ $relatedProduct->image_url }}"
                 alt="{{ $relatedProduct->name }}"
                 class="w-full h-48 object-cover"
               >
@@ -199,8 +239,11 @@ function changeMainImage(src) {
   });
 
   // Add border to clicked thumbnail
-  event.target.classList.remove('border-transparent');
-  event.target.classList.add('border-[#1B3A6D]');
+  const clickedThumbnail = document.querySelector(`.thumbnail-image[onclick="changeMainImage('${src}')"]`);
+  if (clickedThumbnail) {
+    clickedThumbnail.classList.remove('border-transparent');
+    clickedThumbnail.classList.add('border-[#1B3A6D]');
+  }
 }
 </script>
 @endpush

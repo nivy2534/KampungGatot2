@@ -145,7 +145,14 @@ class ProductController extends Controller
     {
         $product = Product::findOrFail($id);
         $this->authorize('delete', $product);
+        
+        // Log before deletion for debugging
+        \Log::info("Starting product deletion: ID {$id}, Name: {$product->name}");
+        
         $data = $this->productService->delete($id);
-        return $this->success($data, 'Produk berhasil dihapus');
+        
+        \Log::info("Product deletion completed: ID {$id}");
+        
+        return $this->success($data, 'Produk dan semua gambarnya berhasil dihapus');
     }
 }

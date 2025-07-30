@@ -466,11 +466,11 @@
 
   function updateImageCounter() {
     const totalImages = getVisibleImages().length;
-    const remainingSlots = 10 - totalImages;
     const counter = document.getElementById('imageCounter');
     
     if (counter) {
       counter.textContent = `${totalImages}/10 foto`;
+      
       if (totalImages >= 8) {
         counter.className = 'text-xs text-orange-600 bg-orange-100 px-2 py-1 rounded-md font-medium border border-orange-200';
       } else if (totalImages >= 5) {
@@ -588,7 +588,7 @@
 
     // Display existing images first
     existingImages.forEach((image, index) => {
-      if (deletedImageIds.includes(image.id)) return;
+      if (deletedImageIds.includes(image.id)) return; // Skip gambar yang ditandai untuk dihapus
       
       const wrapper = document.createElement('div');
       wrapper.className = 'thumbnail-wrapper';
@@ -625,7 +625,7 @@
       deleteBtn.innerHTML = '<i class="fas fa-trash text-xs"></i>';
       deleteBtn.addEventListener('click', (e) => {
         e.stopPropagation();
-        confirmDeleteImage(() => deleteExistingImage(image.id), `Hapus gambar "${image.image_path.split('/').pop()}"?`);
+        confirmDeleteImage(() => deleteExistingImageForLater(image.id), `Hapus gambar "${image.image_path.split('/').pop()}"? (akan dihapus saat submit)`);
       });
 
       // Enhanced drag handle
@@ -822,7 +822,7 @@
     }).then((result) => {
       if (result.isConfirmed) {
         callback();
-        showToast('Gambar berhasil dihapus!', 'success');
+        // Toast message akan ditampilkan oleh masing-masing callback function
       }
     });
   }
@@ -856,11 +856,94 @@
       .filter(index => index !== fileIndex);
 
     updateImageDisplay();
+    showToast('Gambar berhasil dihapus!', 'success');
   }
 
   function deleteExistingImage(imageId) {
     deletedImageIds.push(imageId);
     updateImageDisplay();
+  }
+
+  // Fungsi untuk menghapus gambar langsung dari server
+  async function deleteImageFromServer(imageId) {
+    try {
+      const response = await fetch(`/dashboard/product-images/${imageId}`, {
+        method: 'DELETE',
+        headers: {
+          'X-CSRF-TOKEN': '{{ csrf_token() }}',
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log('Image deleted successfully:', result);
+        return true;
+      } else {
+        const error = await response.json();
+        console.error('Failed to delete image:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Gagal Menghapus',
+          text: error.message || 'Terjadi kesalahan saat menghapus gambar.',
+          customClass: {
+            confirmButton: 'bg-[#1B3A6D] hover:bg-[#152f5a] text-white px-6 py-2 rounded-lg font-medium'
+          },
+          buttonsStyling: false
+        });
+        return false;
+      }
+    } catch (error) {
+      console.error('Error deleting image:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Gagal Menghapus',
+        text: 'Terjadi kesalahan jaringan saat menghapus gambar.',
+        customClass: {
+          confirmButton: 'bg-[#1B3A6D] hover:bg-[#152f5a] text-white px-6 py-2 rounded-lg font-medium'
+        },
+        buttonsStyling: false
+      });
+      return false;
+    }
+  }
+
+  // Fungsi untuk menandai existing image untuk dihapus nanti saat submit
+  function deleteExistingImageForLater(imageId) {
+    // Tambahkan ke array deleted images jika belum ada
+    if (!deletedImageIds.includes(imageId)) {
+      deletedImageIds.push(imageId);
+    }
+    
+    updateImageDisplay();
+    showToast('Gambar akan dihapus saat submit!', 'warning');
+  }
+
+  // Fungsi untuk menghapus existing image dengan konfirmasi dan penghapusan langsung (DEPRECATED - tidak digunakan lagi)
+  async function deleteExistingImageImmediate(imageId) {
+    const isDeleted = await deleteImageFromServer(imageId);
+    if (isDeleted) {
+      // Hapus dari array existing images
+      const imageIndex = existingImages.findIndex(img => img.id === imageId);
+      if (imageIndex > -1) {
+        existingImages.splice(imageIndex, 1);
+      }
+      
+      // Hapus dari deletedImageIds jika ada (tidak perlu lagi karena sudah dihapus)
+      const deletedIndex = deletedImageIds.indexOf(imageId);
+      if (deletedIndex > -1) {
+        deletedImageIds.splice(deletedIndex, 1);
+      }
+      
+      updateImageDisplay();
+      showToast('Gambar berhasil dihapus dari server!', 'success');
+      
+      // Reload page untuk memastikan sinkronisasi data
+      setTimeout(() => {
+        window.location.reload();
+      }, 1500);
+    }
   }
 
   // Remove main preview button
@@ -869,7 +952,7 @@
     if (visibleImages.length > 0) {
       const firstImage = visibleImages[0];
       if (firstImage.id) {
-        confirmDeleteImage(() => deleteExistingImage(firstImage.id), `Hapus gambar sampul?`);
+        confirmDeleteImage(() => deleteExistingImageForLater(firstImage.id), `Hapus gambar sampul? (akan dihapus saat submit)`);
       } else {
         confirmDeleteImage(() => removeImage(0), `Hapus gambar sampul?`);
       }
