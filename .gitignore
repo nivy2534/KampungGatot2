@@ -28,3 +28,5 @@ ip_location_demo.php
 IP_TRACKING_SUMMARY.md
 RECENT_ACTIVITIES.md
 VISITOR_TRACKING.md
+SOCIAL_MEDIA_POPUP.md
+resources/views/test-popup.blade.php

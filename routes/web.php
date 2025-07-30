@@ -72,5 +72,12 @@ Route::middleware(['auth'])->group(
     }
 );
 
+// Test route for social media popup (only in development)
+if (config('app.debug')) {
+    Route::get('/test-popup', function () {
+        return view('test-popup');
+    });
+}
+
 // Route fallback untuk halaman 404 - harus di paling akhir
 Route::fallback([PageController::class, 'notfound']);

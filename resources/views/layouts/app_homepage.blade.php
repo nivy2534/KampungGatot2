@@ -22,6 +22,9 @@
 
 <body class="font-sans text-gray-800 bg-white">
     @yield('content')
+    
+    <!-- Social Media Popup - Only show on first visit -->
+    @include('components.social-media-popup')
 
     @stack('prepend-script')
     @stack('addon-script')
