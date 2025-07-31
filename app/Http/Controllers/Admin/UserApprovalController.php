@@ -34,8 +34,8 @@ class UserApprovalController extends Controller
                          ->get()
                          ->toArray();
                          
-            // Temporary debug - comment out after fixing
-            dd($users);
+            // Debug line removed - was causing page to dump array instead of showing view
+            // dd($users);
             
             return view('cms.user-approval.index', [
                 'users' => $users
