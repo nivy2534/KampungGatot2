@@ -5,13 +5,13 @@
     <div class="mb-4 md:mb-6 px-2 md:px-0">
         <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between md:gap-0">
             <div class="flex-1 min-w-0">
-                <h1 class="text-xl md:text-2xl font-bold text-gray-900 mb-1">Kelola Produk</h1>
-                <p class="text-xs md:text-sm text-gray-600">Buat, edit, dan kelola produk desa</p>
+                <h1 class="text-xl md:text-2xl font-bold text-gray-900 mb-1">Kelola Katalog</h1>
+                <p class="text-xs md:text-sm text-gray-600">Buat, edit, dan kelola katalog produk & event desa</p>
             </div>
             <div class="flex-shrink-0">
-                <a href="{{ url('dashboard/products/create') }}"
+                <a href="{{ url('dashboard/catalogs/create') }}"
                     class="w-full md:w-auto bg-primary text-white px-3 py-2 rounded-lg flex items-center justify-center gap-2 transition-colors hover:bg-primary/90 text-sm font-medium">
-                    <span>Tambah Produk</span>
+                    <span>Tambah Katalog</span>
                     <i class="fas fa-plus text-xs"></i>
                 </a>
             </div>
@@ -88,12 +88,11 @@
                             </td>
                             <td class="px-3 md:px-4 py-3 text-sm">
                                 @php
-                                    $statusConfig = [
-                                        'ready' => ['class' => 'bg-green-100 text-green-800', 'text' => 'Ready'],
-                                        'habis' => ['class' => 'bg-red-100 text-red-800', 'text' => 'Habis'],
-                                        'preorder' => ['class' => 'bg-blue-100 text-blue-800', 'text' => 'Pre-Order'],
+                                    $typeConfig = [
+                                        'produk' => ['class' => 'bg-green-100 text-green-800', 'text' => 'Produk'],
+                                        'event' => ['class' => 'bg-blue-100 text-blue-800', 'text' => 'Event'],
                                     ];
-                                    $config = $statusConfig[$product->status] ?? $statusConfig['ready'];
+                                    $config = $typeConfig[$product->type] ?? $typeConfig['produk'];
                                 @endphp
                                 <span class="px-2 py-1 text-xs font-medium rounded-full {{ $config['class'] }}">
                                     {{ $config['text'] }}
@@ -101,7 +100,7 @@
                             </td>
                             <td class="px-3 md:px-4 py-3 text-sm">
                                 <div class="flex gap-1">
-                                    <a href="{{ route('products.edit', $product->id) }}"
+                                    <a href="{{ route('catalogs.edit', $product->id) }}"
                                        class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium px-2 py-1 rounded transition-colors">
                                         Edit
                                     </a>
@@ -150,7 +149,7 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: '/dashboard/products',
+                    url: '/dashboard/catalogs',
                     type: 'POST',
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
@@ -309,7 +308,7 @@
                 allowOutsideClick: () => !Swal.isLoading(),
                 preConfirm: () => {
                     Swal.showLoading();
-                    let _url = "{{ url('dashboard/products/delete/') }}/" + productId;
+                    let _url = "{{ url('dashboard/catalogs/delete/') }}/" + productId;
 
                     return fetch(_url, {
                         method: 'DELETE',

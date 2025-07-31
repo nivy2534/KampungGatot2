@@ -22,8 +22,8 @@ class ProductRepository implements ProductRepositoryInterface
             ->where('author_id', Auth::id())
             ->orderBy("created_at", "ASC");
 
-        if ($request->status_filter != "") {
-            $query->where("status", $request->status_filter);
+        if ($request->type_filter != "") {
+            $query->where("type", $request->type_filter);
         }
 
         if ($request->custom_search != "") {
@@ -46,8 +46,8 @@ class ProductRepository implements ProductRepositoryInterface
                 return $item->author ? $item->author->name : 'Unknown';
             })
             ->addColumn("actions", function ($item) {
-                $editUrl = route('products.edit', $item->id);
-                $visitUrl = url("/event/{$item->slug}");
+                $editUrl = route('catalogs.edit', $item->id);
+                $visitUrl = url("/catalog/{$item->slug}");
                 return '    <div class="flex gap-2">
                                 <a href="' . $editUrl . '" class="text-blue-600 hover:text-blue-800 p-1">
                                     <i class="fas fa-edit"></i>
@@ -56,7 +56,7 @@ class ProductRepository implements ProductRepositoryInterface
                                     type="button"
                                     class="btn-delete text-red-600 hover:text-red-800 p-1"
                                     data-id="' . $item->id . '"
-                                    data-url="' . route('products.delete', $item->id) . '"
+                                    data-url="' . route('catalogs.delete', $item->id) . '"
                                 >
                                     <i class="fas fa-trash"></i>
                                 </button>
@@ -127,12 +127,22 @@ class ProductRepository implements ProductRepositoryInterface
             'price' => $data['price'],
             'seller_name' => $data['seller_name'],
             'contact_person' => $data['contact_person'],
-            'status' => $data['status'],
+            'type' => $data['type'],
             'slug' => $data['slug'] ?? Str::slug($data['name']),
             'author_id' => Auth::user()->id,
             'author_name' => Auth::user()->name,
             'excerpt' => Str::limit($data['description'], 200),
         ];
+
+        // Tambahkan tanggal event jika tipe adalah event
+        if ($data['type'] === 'event') {
+            $updateData['event_start_date'] = $data['event_start_date'];
+            $updateData['event_end_date'] = $data['event_end_date'];
+        } else {
+            // Hapus tanggal event jika tipe bukan event
+            $updateData['event_start_date'] = null;
+            $updateData['event_end_date'] = null;
+        }
 
                 // Handle rename/move product folder if product name changed
         if ($nameChanged && Storage::disk('public')->exists("products/{$oldFolderName}")) {

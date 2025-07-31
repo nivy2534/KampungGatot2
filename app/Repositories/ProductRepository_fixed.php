@@ -19,8 +19,8 @@ class ProductRepository implements ProductRepositoryInterface
 
         $query = Product::orderBy("created_at", "ASC");
 
-        if ($request->status_filter != "") {
-            $query->where("status", $request->status_filter);
+        if ($request->type_filter != "") {
+            $query->where("type", $request->type_filter);
         }
 
         if ($request->custom_search != "") {

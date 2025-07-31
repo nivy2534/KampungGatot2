@@ -8,10 +8,10 @@
 
     <img src="{{ $imagePath }}" alt="{{ $title ?? 'Product' }}" class="..." />
 
-    @if(isset($status))
+    @if(isset($type))
     <div class="absolute top-3 left-3">
-      <span class="bg-green-500 text-white text-xs font-semibold px-2 py-1 rounded-full">
-        {{ strtoupper($status) }}
+      <span class="bg-{{ $type === 'event' ? 'blue' : 'green' }}-500 text-white text-xs font-semibold px-2 py-1 rounded-full">
+        {{ strtoupper($type) }}
       </span>
     </div>
     @endif

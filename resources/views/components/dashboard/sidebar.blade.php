@@ -31,10 +31,10 @@
             <span class="text-sm">Kelola Blog</span>
         </a>
 
-        <a href="{{ url('/dashboard/products') }}"
-            class="nav-item {{ Request::is('dashboard/products*') ? 'active' : '' }} flex items-center px-3 py-3 hover:bg-white/10 rounded-lg transition-all duration-200 group text-white">
-            <i class="fas fa-box mr-3 flex-shrink-0 text-sm"></i>
-            <span class="text-sm">Kelola Produk</span>
+        <a href="{{ url('/dashboard/catalogs') }}"
+            class="nav-item {{ Request::is('dashboard/catalogs*') ? 'active' : '' }} flex items-center px-3 py-3 hover:bg-white/10 rounded-lg transition-all duration-200 group text-white">
+            <i class="fas fa-store mr-3 flex-shrink-0 text-sm"></i>
+            <span class="text-sm">Kelola Katalog</span>
         </a>
 
         <a href="{{ url('/dashboard/gallery') }}"

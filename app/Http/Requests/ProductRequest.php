@@ -23,7 +23,9 @@ class ProductRequest extends FormRequest
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0',
-            'status' => 'required|in:ready,habis,preorder',
+            'type' => 'required|in:produk,event',
+            'event_start_date' => 'nullable|date|required_if:type,event',
+            'event_end_date' => 'nullable|date|required_if:type,event|after_or_equal:event_start_date',
             'seller_name' => 'required|string|max:255',
             'contact_person' => 'required|string|max:20',
          ];

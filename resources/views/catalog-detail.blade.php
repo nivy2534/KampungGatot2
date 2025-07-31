@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Storage;
 
       {{-- Breadcrumb --}}
       <nav class="flex items-center space-x-2 text-sm text-gray-500 mb-6">
-        <a href="{{ route('event') }}" class="hover:text-[#1B3A6D] transition-colors">Produk</a>
+        <a href="{{ route('catalog') }}" class="hover:text-[#1B3A6D] transition-colors">Katalog</a>
         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
           <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
         </svg>
@@ -103,34 +103,41 @@ use Illuminate\Support\Facades\Storage;
         {{-- Product Info --}}
         <div>
           <div class="mb-4">
-            <span class="px-3 py-1 {{ $product->type === 'event' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800' }} text-sm font-medium rounded-full">
-              {{ ucfirst($product->type) }}
+            <span class="px-3 py-1 bg-{{ $product->type === 'event' ? 'blue' : 'green' }}-100 text-{{ $product->type === 'event' ? 'blue' : 'green' }}-800 text-sm font-medium rounded-full">
+              {{ ucfirst($product->type ?? 'produk') }}
             </span>
-            @if($product->type === 'event' && ($product->event_start_date || $product->event_end_date))
-              <div class="mt-2 text-sm text-gray-600">
-                @if($product->event_start_date && $product->event_end_date)
-                  <i class="fas fa-calendar-alt mr-1"></i>
-                  {{ \Carbon\Carbon::parse($product->event_start_date)->format('d M Y') }} - 
-                  {{ \Carbon\Carbon::parse($product->event_end_date)->format('d M Y') }}
-                @elseif($product->event_start_date)
-                  <i class="fas fa-calendar-alt mr-1"></i>
-                  Mulai: {{ \Carbon\Carbon::parse($product->event_start_date)->format('d M Y') }}
-                @elseif($product->event_end_date)
-                  <i class="fas fa-calendar-alt mr-1"></i>
-                  Sampai: {{ \Carbon\Carbon::parse($product->event_end_date)->format('d M Y') }}
-                @endif
-              </div>
-            @endif
           </div>
 
           <h1 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
             {{ $product->name }}
           </h1>
 
+          @if($product->type === 'event' && $product->event_start_date && $product->event_end_date)
+          <div class="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+            <div class="flex items-center space-x-2 text-blue-800">
+              <i class="fas fa-calendar-alt"></i>
+              <span class="font-medium">Tanggal Event:</span>
+            </div>
+            <div class="mt-2 text-blue-700">
+              @if($product->event_start_date === $product->event_end_date)
+                {{ \Carbon\Carbon::parse($product->event_start_date)->format('d F Y') }}
+              @else
+                {{ \Carbon\Carbon::parse($product->event_start_date)->format('d F Y') }} - {{ \Carbon\Carbon::parse($product->event_end_date)->format('d F Y') }}
+              @endif
+            </div>
+          </div>
+          @endif
+
           <div class="mb-6">
+            @if($product->price > 0)
             <div class="text-3xl font-bold text-[#1B3A6D] mb-2">
               Rp {{ number_format($product->price, 0, ',', '.') }}
             </div>
+            @else
+            <div class="text-2xl font-bold text-green-600 mb-2">
+              GRATIS
+            </div>
+            @endif
           </div>
 
           {{-- Seller Info --}}

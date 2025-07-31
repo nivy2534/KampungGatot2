@@ -9,10 +9,10 @@ class EventPageController extends Controller
 {
     public function index(Request $request)
     {
-        $status = $request->query('status');
+        $type = $request->query('type');
         $search = $request->query('search');
 
-        $products = Product::query()->where('status', 'ready')
+        $products = Product::query()
             ->with(['images' => function($query) {
                 $query->orderBy('order', 'asc'); // Konsisten dengan CMS
             }]);
@@ -25,26 +25,28 @@ class EventPageController extends Controller
             });
         }
 
+        if ($type) {
+            $products->where('type', $type);
+        }
+
         $products = $products->latest()->paginate(12);
 
-        return view('event', compact('products'));
+        return view('catalog', compact('products'));
     }
 
     public function show($slug)
     {
         $product = Product::where('slug', $slug)
-            ->where('status', 'ready')
             ->with(['images' => function($query) {
                 $query->orderBy('order', 'asc'); // Urutkan berdasarkan order seperti di CMS
             }])
             ->firstOrFail();
 
         // Ambil produk terkait (same seller atau random)
-        $relatedProducts = Product::where('status', 'ready')
-            ->where('id', '!=', $product->id)
+        $relatedProducts = Product::where('id', '!=', $product->id)
             ->limit(4)
             ->get();
 
-        return view('event-detail', compact('product', 'relatedProducts'));
+        return view('catalog-detail', compact('product', 'relatedProducts'));
     }
 }

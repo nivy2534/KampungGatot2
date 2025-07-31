@@ -50,7 +50,7 @@ class RecentActivitySeeder extends Seeder
             'price' => '50000',
             'contact_person' => '081234567890',
             'seller_name' => 'Ibu Siti',
-            'status' => 'ready',
+            'type' => 'produk',
             'author_id' => 1,
             'author_name' => 'Admin',
             'slug' => 'kerajinan-anyaman-bambu',
@@ -59,16 +59,18 @@ class RecentActivitySeeder extends Seeder
         ]);
 
         Product::create([
-            'name' => 'Gula Aren Organik',
-            'description' => 'Gula aren organik murni tanpa pengawet',
-            'excerpt' => 'Gula aren organik murni berkualitas tinggi',
-            'price' => '25000',
+            'name' => 'Workshop Membatik Tradisional',
+            'description' => 'Workshop belajar membatik dengan teknik tradisional untuk umum',
+            'excerpt' => 'Belajar membatik dengan pengrajin berpengalaman',
+            'price' => '100000',
             'contact_person' => '081234567891',
-            'seller_name' => 'Pak Budi',
-            'status' => 'ready',
+            'seller_name' => 'Sanggar Batik Ngebruk',
+            'type' => 'event',
+            'event_start_date' => Carbon::now()->addDays(5)->format('Y-m-d'),
+            'event_end_date' => Carbon::now()->addDays(5)->format('Y-m-d'),
             'author_id' => 1,
             'author_name' => 'Admin',
-            'slug' => 'gula-aren-organik',
+            'slug' => 'workshop-membatik-tradisional',
             'created_at' => Carbon::now()->subDays(2),
             'updated_at' => Carbon::now()->subDays(2)
         ]);

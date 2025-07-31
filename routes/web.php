@@ -34,8 +34,8 @@ Route::get('/register', function () {
 Route::get('/blog', [BlogPageController::class, 'index'])->name('blog');
 Route::get('/blog/{slug}', [BlogPageController::class, 'show'])->name('blog.show');
 Route::get('/galeri', [GaleriPageController::class, 'index'])->name('galeri');
-Route::get('/event', [EventPageController::class, 'index'])->name('event');
-Route::get('/event/{slug}', [EventPageController::class, 'show'])->name('event.show');
+Route::get('/catalog', [EventPageController::class, 'index'])->name('catalog');
+Route::get('/catalog/{slug}', [EventPageController::class, 'show'])->name('catalog.show');
 
 Route::middleware(['auth'])->group(
     function () {
@@ -51,14 +51,14 @@ Route::middleware(['auth'])->group(
           Route::post('/blogs/update', [BlogController::class, 'update'])->name("blogs.update");
           Route::delete('/blogs/delete/{id}', [BlogController::class, 'destroy'])->name("blogs.delete");
 
-          // Produk related
-          Route::get('/products', [ProductController::class, 'index']);
-          Route::post('/products', [ProductController::class, 'index']);
-          Route::get('/products/create', [ProductController::class, 'create']);
-          Route::get('/products/edit/{product}', [ProductController::class, 'edit'])->name("products.edit");
-          Route::post('/products/save', [ProductController::class, 'store'])->name("products.save");
-          Route::post('/products/update', [ProductController::class, 'update'])->name("products.update");
-          Route::delete('/products/delete/{id}', [ProductController::class, 'destroy'])->name("products.delete");
+          // Katalog related (was Products)
+          Route::get('/catalogs', [ProductController::class, 'index']);
+          Route::post('/catalogs', [ProductController::class, 'index']);
+          Route::get('/catalogs/create', [ProductController::class, 'create']);
+          Route::get('/catalogs/edit/{product}', [ProductController::class, 'edit'])->name("catalogs.edit");
+          Route::post('/catalogs/save', [ProductController::class, 'store'])->name("catalogs.save");
+          Route::post('/catalogs/update', [ProductController::class, 'update'])->name("catalogs.update");
+          Route::delete('/catalogs/delete/{id}', [ProductController::class, 'destroy'])->name("catalogs.delete");
           Route::delete('/product-images/{id}', [ProductImageController::class, 'destroy']);
 
           // Galery related

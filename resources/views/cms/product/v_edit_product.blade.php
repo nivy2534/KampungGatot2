@@ -13,7 +13,7 @@
                 <p class="text-sm text-gray-500">Perbarui informasi dan gambar produk</p>
             </div>
         </div>
-        <a href="{{ url('dashboard/products') }}" 
+        <a href="{{ url('dashboard/catalogs') }}" 
            class="inline-flex items-center px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors">
             <i class="fas fa-arrow-left mr-2"></i>
             Kembali
@@ -181,24 +181,48 @@
                             class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B3A6D] focus:border-[#1B3A6D] transition-colors resize-vertical">{{ old('description', $product->description) }}</textarea>
                     </div>
 
-                    <!-- Status -->
+                    <!-- Tipe Produk -->
                     <div>
-                        <label class="block mb-2 text-sm font-medium text-gray-700">
-                            <i class="fas fa-toggle-on mr-1 text-gray-400"></i>
-                            Status Produk
+                        <label class="block mb-3 text-sm font-medium text-gray-700">
+                            <i class="fas fa-tags mr-1 text-gray-400"></i>
+                            Tipe Produk
                         </label>
-                        <select id="status"
-                            class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B3A6D] focus:border-[#1B3A6D] transition-colors">
-                            <option value="ready" {{ $product->status == 'ready' ? 'selected' : '' }}>
-                                <i class="fas fa-check-circle mr-2"></i>Ready
-                            </option>
-                            <option value="habis" {{ $product->status == 'habis' ? 'selected' : '' }}>
-                                <i class="fas fa-times-circle mr-2"></i>Habis
-                            </option>
-                            <option value="preorder" {{ $product->status == 'preorder' ? 'selected' : '' }}>
-                                <i class="fas fa-clock mr-2"></i>Pre-Order
-                            </option>
-                        </select>
+                        <div class="flex gap-6">
+                            <label class="flex items-center">
+                                <input type="radio" name="type" value="produk" id="type_produk" 
+                                    {{ (!isset($product->type) || $product->type == 'produk') ? 'checked' : '' }}
+                                    class="w-4 h-4 text-[#1B3A6D] border-gray-300 focus:ring-[#1B3A6D] focus:ring-2">
+                                <span class="ml-2 text-sm text-gray-700">Produk</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="type" value="event" id="type_event"
+                                    {{ (isset($product->type) && $product->type == 'event') ? 'checked' : '' }}
+                                    class="w-4 h-4 text-[#1B3A6D] border-gray-300 focus:ring-[#1B3A6D] focus:ring-2">
+                                <span class="ml-2 text-sm text-gray-700">Event</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Rentang Tanggal Event -->
+                    <div id="eventDateFields" class="{{ (!isset($product->type) || $product->type == 'produk') ? 'hidden' : '' }} space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block mb-2 text-sm font-medium text-gray-700">
+                                    <i class="fas fa-calendar-alt mr-1 text-gray-400"></i>
+                                    Tanggal Mulai Event
+                                </label>
+                                <input id="event_start_date" type="date" value="{{ old('event_start_date', $product->event_start_date) }}"
+                                    class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B3A6D] focus:border-[#1B3A6D] transition-colors" />
+                            </div>
+                            <div>
+                                <label class="block mb-2 text-sm font-medium text-gray-700">
+                                    <i class="fas fa-calendar-alt mr-1 text-gray-400"></i>
+                                    Tanggal Selesai Event
+                                </label>
+                                <input id="event_end_date" type="date" value="{{ old('event_end_date', $product->event_end_date) }}"
+                                    class="w-full border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B3A6D] focus:border-[#1B3A6D] transition-colors" />
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Tombol -->
@@ -208,7 +232,7 @@
                             <i class="fas fa-save mr-2"></i>
                             Update Produk
                         </button>
-                        <a href="{{ url('dashboard/products') }}"
+                        <a href="{{ url('dashboard/catalogs') }}"
                             class="flex items-center justify-center bg-gray-100 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-200 transition-colors text-sm font-medium">
                             <i class="fas fa-times mr-2"></i>
                             Batal
@@ -963,6 +987,23 @@
   // Initialize existing images display on page load
   document.addEventListener('DOMContentLoaded', function() {
     updateImageDisplay();
+    
+    // Handle tipe produk change
+    const typeRadios = document.querySelectorAll('input[name="type"]');
+    const eventDateFields = document.getElementById('eventDateFields');
+    
+    typeRadios.forEach(radio => {
+      radio.addEventListener('change', function() {
+        if (this.value === 'event') {
+          eventDateFields.classList.remove('hidden');
+        } else {
+          eventDateFields.classList.add('hidden');
+          // Clear event date fields when switching to produk
+          document.getElementById('event_start_date').value = '';
+          document.getElementById('event_end_date').value = '';
+        }
+      });
+    });
   });
 
   document.getElementById("submitBarangBtn").addEventListener("click", async function () {
@@ -972,9 +1013,12 @@
     const sellerName = document.getElementById("seller_name").value.trim();
     const contactPerson = document.getElementById("contact_person").value.trim();
     const deskripsi = document.getElementById("deskripsi").value.trim();
-    const status = document.getElementById("status").value;
+    const type = document.querySelector('input[name="type"]:checked').value;
+    const eventStartDate = document.getElementById("event_start_date").value;
+    const eventEndDate = document.getElementById("event_end_date").value;
 
-    if (!nama || !harga || !sellerName || !contactPerson || !deskripsi || !status) {
+    // Validasi field wajib
+    if (!nama || !harga || !sellerName || !contactPerson || !deskripsi) {
         Swal.fire({
             icon: 'warning',
             title: 'Lengkapi Form',
@@ -985,6 +1029,39 @@
             buttonsStyling: false
         });
         return;
+    }
+
+    // Validasi khusus untuk event
+    if (type === 'event' && (!eventStartDate || !eventEndDate)) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Lengkapi Tanggal Event',
+            text: 'Harap isi tanggal mulai dan selesai event!',
+            customClass: {
+                confirmButton: 'bg-[#1B3A6D] hover:bg-[#152f5a] text-white px-6 py-2 rounded-lg font-medium'
+            },
+            buttonsStyling: false
+        });
+        return;
+    }
+
+    // Validasi tanggal event
+    if (type === 'event' && eventStartDate && eventEndDate) {
+        const startDate = new Date(eventStartDate);
+        const endDate = new Date(eventEndDate);
+        
+        if (endDate < startDate) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Tanggal Tidak Valid',
+                text: 'Tanggal selesai event harus setelah tanggal mulai!',
+                customClass: {
+                    confirmButton: 'bg-[#1B3A6D] hover:bg-[#152f5a] text-white px-6 py-2 rounded-lg font-medium'
+                },
+                buttonsStyling: false
+            });
+            return;
+        }
     }
 
     if (isNaN(harga) || parseFloat(harga) < 0) {
@@ -1008,8 +1085,14 @@
     formData.append("seller_name", sellerName);
     formData.append("contact_person", contactPerson);
     formData.append("description", deskripsi);
-    formData.append("status", status);
+    formData.append("type", type);
     formData.append("id", document.getElementById('productId').value);
+    
+    // Tambahkan tanggal event jika tipe adalah event
+    if (type === 'event') {
+        formData.append("event_start_date", eventStartDate);
+        formData.append("event_end_date", eventEndDate);
+    }
 
     // Add new images in the correct order
     imageOrder.forEach((fileIndex, position) => {
@@ -1049,7 +1132,7 @@
     button.classList.add('opacity-75');
 
     try {
-        const response = await fetch("{{ url('dashboard/products/update') }}", {
+        const response = await fetch("{{ url('dashboard/catalogs/update') }}", {
             method: "POST",
             headers: {
                 "Accept":"application/json",
@@ -1069,7 +1152,7 @@
                 },
                 buttonsStyling: false
             }).then(() => {
-                window.location.href = "{{ url('dashboard/products') }}";
+                window.location.href = "{{ url('dashboard/catalogs') }}";
             });
         } else {
             const errorData = await response.json();

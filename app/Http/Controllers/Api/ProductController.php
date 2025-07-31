@@ -9,13 +9,13 @@ use App\Models\Product;
 class ProductController extends Controller
 {
     public function index(Request $request){
-        $status = $request->query('status', 'all');
+        $type = $request->query('type', 'all');
         $perPage = $request->query('pageSize', 10);
 
         $query = Product::orderBy('created_at', 'desc');
 
-        if ($status !== 'all') {
-            $query->where('status', $status);
+        if ($type !== 'all') {
+            $query->where('type', $type);
         }
 
         $products = $query->paginate($perPage);
@@ -49,7 +49,7 @@ class ProductController extends Controller
     public function getReady(Request $request){
         $limit = $request->query('limit');
 
-        $query = Product::where('status', 'ready')->orderBy('created_at', 'desc');
+        $query = Product::orderBy('created_at', 'desc');
 
         if($limit && is_numeric($limit)){
             $query->limit($limit);

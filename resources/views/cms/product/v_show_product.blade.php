@@ -22,7 +22,7 @@
         <div class="text-[32px] font-medium mb-2">{{ $product->name }}</div>
 
         <div class="text-[#1B3A6D] font-bold text-[20px] mb-1">
-          Status: <span class="uppercase">{{ $product->status }}</span>
+          Tipe: <span class="uppercase">{{ ucfirst($product->type) }}</span>
         </div>
 
         <div class="text-gray-600 text-base mb-1">

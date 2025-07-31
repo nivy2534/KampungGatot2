@@ -115,7 +115,7 @@
                         <span class="text-sm font-medium text-gray-900">Tulis Artikel</span>
                     </a>
 
-                    <a href="{{ url('/dashboard/products/create') }}"
+                    <a href="{{ url('/dashboard/catalogs/create') }}"
                        class="flex items-center p-2 rounded-lg hover:bg-gray-50 transition-colors group">
                         <div class="w-7 h-7 bg-[#1B3A6D] rounded-lg flex items-center justify-center mr-3">
                             <i class="fas fa-box text-white text-xs"></i>

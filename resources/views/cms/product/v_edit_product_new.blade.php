@@ -94,15 +94,35 @@
                         class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B3A6D] focus:border-[#1B3A6D] resize-vertical">{{ old('description', $product->description) }}</textarea>
                 </div>
 
-                <!-- Status -->
+                <!-- Tipe Produk -->
                 <div>
-                    <label class="block mb-2 text-sm font-medium text-gray-700">Status</label>
-                    <select id="status"
-                        class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B3A6D] focus:border-[#1B3A6D]">
-                        <option value="ready" {{ $product->status == 'ready' ? 'selected' : '' }}>Ready</option>
-                        <option value="habis" {{ $product->status == 'habis' ? 'selected' : '' }}>Habis</option>
-                        <option value="preorder" {{ $product->status == 'preorder' ? 'selected' : '' }}>Pre-Order</option>
-                    </select>
+                    <label class="block mb-2 text-sm font-medium text-gray-700">Tipe Produk</label>
+                    <div class="flex gap-4">
+                        <label class="flex items-center">
+                            <input type="radio" name="type" value="produk" {{ old('type', $product->type) == 'produk' ? 'checked' : '' }}
+                                class="w-4 h-4 text-[#1B3A6D] bg-gray-100 border-gray-300 focus:ring-[#1B3A6D] focus:ring-2" />
+                            <span class="ml-2 text-sm font-medium text-gray-700">Produk</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="radio" name="type" value="event" {{ old('type', $product->type) == 'event' ? 'checked' : '' }}
+                                class="w-4 h-4 text-[#1B3A6D] bg-gray-100 border-gray-300 focus:ring-[#1B3A6D] focus:ring-2" />
+                            <span class="ml-2 text-sm font-medium text-gray-700">Event</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Event Date Fields (only shown for event type) -->
+                <div id="eventDateFields" class="space-y-4" style="{{ old('type', $product->type) == 'event' ? '' : 'display: none;' }}">
+                    <div>
+                        <label class="block mb-2 text-sm font-medium text-gray-700">Tanggal Mulai Event</label>
+                        <input type="date" name="event_start_date" value="{{ old('event_start_date', $product->event_start_date) }}"
+                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B3A6D] focus:border-[#1B3A6D]" />
+                    </div>
+                    <div>
+                        <label class="block mb-2 text-sm font-medium text-gray-700">Tanggal Akhir Event</label>
+                        <input type="date" name="event_end_date" value="{{ old('event_end_date', $product->event_end_date) }}"
+                            class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B3A6D] focus:border-[#1B3A6D]" />
+                    </div>
                 </div>
 
                 <!-- Tombol -->
@@ -141,6 +161,18 @@
   }
 </style>
 <script>
+  // Handle type radio button changes
+  document.querySelectorAll('input[name="type"]').forEach(radio => {
+    radio.addEventListener('change', function() {
+      const eventFields = document.getElementById('eventDateFields');
+      if (this.value === 'event') {
+        eventFields.style.display = 'block';
+      } else {
+        eventFields.style.display = 'none';
+      }
+    });
+  });
+
   const isEdit = true;
   const existingImages = @json($product->images->sortBy('order')->values()->toArray());
   
@@ -426,9 +458,11 @@
     const sellerName = document.getElementById("seller_name").value.trim();
     const contactPerson = document.getElementById("contact_person").value.trim();
     const deskripsi = document.getElementById("deskripsi").value.trim();
-    const status = document.getElementById("status").value;
+    const type = document.querySelector('input[name="type"]:checked')?.value;
+    const eventStartDate = document.querySelector('input[name="event_start_date"]')?.value;
+    const eventEndDate = document.querySelector('input[name="event_end_date"]')?.value;
 
-    if (!nama || !harga || !sellerName || !contactPerson || !deskripsi || !status) {
+    if (!nama || !harga || !sellerName || !contactPerson || !deskripsi || !type) {
         Swal.fire({
             icon: 'warning',
             title: 'Lengkapi Form',
@@ -462,7 +496,11 @@
     formData.append("seller_name", sellerName);
     formData.append("contact_person", contactPerson);
     formData.append("description", deskripsi);
-    formData.append("status", status);
+    formData.append("type", type);
+    if (type === 'event') {
+        formData.append("event_start_date", eventStartDate);
+        formData.append("event_end_date", eventEndDate);
+    }
     formData.append("id", document.getElementById('productId').value);
 
     // Add new images in the correct order

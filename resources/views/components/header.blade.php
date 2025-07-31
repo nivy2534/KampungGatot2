@@ -36,10 +36,10 @@
                    aria-current="{{ Request::is('galeri') ? 'page' : 'false' }}">
                     Galeri
                 </a>
-                <a href="{{ url('/event') }}"
-                   class="nav-link {{ Request::is('event') ? 'active' : '' }}"
-                   aria-current="{{ Request::is('event') ? 'page' : 'false' }}">
-                    Belanja
+                <a href="{{ url('/catalog') }}"
+                   class="nav-link {{ Request::is('catalog') ? 'active' : '' }}"
+                   aria-current="{{ Request::is('catalog') ? 'page' : 'false' }}">
+                    Katalog
                 </a>
             </nav>
 
@@ -159,10 +159,10 @@
                         <i class="fas fa-images text-lg"></i>
                         <span>Galeri</span>
                     </a>
-                    <a href="{{ url('/event') }}"
-                       class="mobile-nav-link {{ Request::is('event') ? 'active' : '' }}">
-                        <i class="fas fa-shopping-bag text-lg"></i>
-                        <span>Belanja</span>
+                    <a href="{{ url('/catalog') }}"
+                       class="mobile-nav-link {{ Request::is('catalog') ? 'active' : '' }}">
+                        <i class="fas fa-store text-lg"></i>
+                        <span>Katalog</span>
                     </a>
                 </div>
             </nav>

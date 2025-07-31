@@ -13,7 +13,7 @@
 
     <div class="relative z-10 max-w-3xl mx-auto">
       <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 leading-tight">
-        Event & Belanja Kampung Ngebruk
+        Katalog Kampung Ngebruk
       </h1>
       <p class="text-sm sm:text-base lg:text-lg text-blue-100 max-w-xl mx-auto leading-relaxed">
         Temukan event menarik dan produk unggulan dari Desa Ngebruk
@@ -58,12 +58,6 @@
             <button data-type="produk" class="filter-btn px-3 py-1.5 rounded-full text-xs font-medium border border-gray-300 text-gray-700 hover:bg-[#1B3A6D] hover:text-white hover:border-[#1B3A6D] transition-colors duration-200">
               Produk
             </button>
-            <button data-type="kuliner" class="filter-btn px-3 py-1.5 rounded-full text-xs font-medium border border-gray-300 text-gray-700 hover:bg-[#1B3A6D] hover:text-white hover:border-[#1B3A6D] transition-colors duration-200">
-              Kuliner
-            </button>
-            <button data-type="kerajinan" class="filter-btn px-3 py-1.5 rounded-full text-xs font-medium border border-gray-300 text-gray-700 hover:bg-[#1B3A6D] hover:text-white hover:border-[#1B3A6D] transition-colors duration-200">
-              Kerajinan
-            </button>
           </div>
         </div>
       </div>
@@ -71,13 +65,13 @@
       {{-- Products Grid --}}
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-8">
         @forelse($products as $product)
-          <div class="event-card transition-all duration-300" data-type="product">
+          <div class="event-card transition-all duration-300" data-type="{{ $product->type ?? 'produk' }}">
             <a href="{{ route('catalog.show', $product->slug) }}" class="block">
               @include('components.product-card', [
                 'title' => $product->name,
                 'image' => $product->image_url ? asset($product->image_url) : '/assets/img/belanja.png',
                 'price' => $product->price,
-                'type' => $product->type,
+                'type' => $product->type ?? 'produk',
                 'seller' => $product->seller_name ?: $product->author_name,
                 'description' => $product->description,
                 'buttonText' => 'Lihat Detail'
