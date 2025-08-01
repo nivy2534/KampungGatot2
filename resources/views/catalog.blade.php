@@ -7,13 +7,13 @@
   <section class="relative h-64 px-4 sm:px-6 lg:px-8 text-white text-center overflow-hidden flex items-center justify-center"
            style="background-image: url('{{ asset('assets/img/blogheader.png') }}'); background-size: cover; background-position: center;">
     <!-- Overlay Gradient -->
-    <div class="absolute inset-0 bg-gradient-to-br from-[#1B3A6D]/90 to-[#2563eb]/90"></div>
+    <div class="absolute inset-30 bg-gradient-to-br from-[#1B3A6D]/90 to-[#2563eb]/90"></div>
     <!-- Optional: extra dark overlay -->
     <div class="absolute inset-0 bg-black/30"></div>
 
     <div class="relative z-10 max-w-3xl mx-auto">
       <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 leading-tight">
-        Katalog Kampung Ngebruk
+        Katalog Kampung Gatot
       </h1>
       <p class="text-sm sm:text-base lg:text-lg text-blue-100 max-w-xl mx-auto leading-relaxed">
         Temukan event menarik dan produk unggulan dari Desa Ngebruk
