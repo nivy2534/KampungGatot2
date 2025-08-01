@@ -83,7 +83,7 @@
                 <div>
                     <label class="block mb-2 text-sm font-medium text-gray-700">Nomor WhatsApp</label>
                     <input id="contact_person" type="text" placeholder="08xxxx..."
-                        value="{{ old('contact_person', $product->contact_person) }}"
+                        value="{{ old('contact_person', $product->contact_person_display) }}"
                         class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B3A6D] focus:border-[#1B3A6D]" />
                 </div>
 

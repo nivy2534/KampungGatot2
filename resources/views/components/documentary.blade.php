@@ -6,7 +6,7 @@
         <div class="max-w-7xl mx-auto rounded-2xl overflow-hidden shadow-md relative" style="padding-top: 56.25%;">
             <iframe
                 class="absolute top-0 left-0 w-full h-full rounded-2xl"
-                src="https://www.youtube.com/embed/dQw4w9WgXcQ?si=hjEfAymMR0AhmhxQ"
+                src="https://www.youtube.com/embed/jd5dv1hIRzo?si=nea_E7i3uhDqaAaE"
                 title="Documentary"
                 frameborder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

@@ -49,7 +49,7 @@
 
           {{-- Filter Buttons --}}
           <div class="flex flex-wrap gap-2">
-            <button data-type="all" class="filter-btn px-3 py-1.5 rounded-full text-xs font-medium bg-[#1B3A6D] text-white hover:bg-[#0f2a4f] transition-colors duration-200">
+            <button data-type="all" class="filter-btn px-3 py-1.5 rounded-full text-xs font-medium bg-[#1B3A6D] text-white hover:bg-[#0f2a4f] hover:text-white transition-colors duration-200">
               Semua
             </button>
             <button data-type="event" class="filter-btn px-3 py-1.5 rounded-full text-xs font-medium border border-gray-300 text-gray-700 hover:bg-[#1B3A6D] hover:text-white hover:border-[#1B3A6D] transition-colors duration-200">

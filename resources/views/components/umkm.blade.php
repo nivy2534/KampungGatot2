@@ -20,12 +20,12 @@
                         Pengenalan UMKM yang ada di Kampung Gatot
                     </h2>
                 </div>
-                
+
                 <p class="text-base text-gray-600 leading-relaxed">
                     Temukan beragam produk berkualitas dari usaha mikro kecil dan menengah yang dikembangkan oleh masyarakat Kampung Gatot dengan kearifan lokal dan inovasi modern.
                 </p>
-                
-                <a href="/event" class="inline-flex items-center gap-2 bg-[#1B3A6D] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[#0f2a4f] transition-colors group">
+
+                <a href="/catalog" class="inline-flex items-center gap-2 bg-[#1B3A6D] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[#0f2a4f] transition-colors group">
                     <span>Belanja Sekarang</span>
                     <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>

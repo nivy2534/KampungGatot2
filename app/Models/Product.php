@@ -36,6 +36,31 @@ class Product extends Model
         });
     }
 
+    /**
+     * Set the contact person attribute with "62" prefix
+     */
+    public function setContactPersonAttribute($value)
+    {
+        // Remove any existing country code and whitespace
+        $cleaned = preg_replace('/^(\+?62|0)/', '', trim($value));
+        
+        // Add "62" prefix if value is not empty
+        $this->attributes['contact_person'] = !empty($cleaned) ? '62' . $cleaned : $value;
+    }
+
+    /**
+     * Get the contact person attribute for display (removes 62 prefix for forms)
+     */
+    public function getContactPersonDisplayAttribute()
+    {
+        if (empty($this->contact_person)) {
+            return '';
+        }
+        
+        // Remove "62" prefix for display in forms
+        return preg_replace('/^62/', '', $this->contact_person);
+    }
+
         /**
          * Get the formatted creation date.
          */

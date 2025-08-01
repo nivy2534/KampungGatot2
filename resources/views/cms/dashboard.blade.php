@@ -90,14 +90,6 @@
                         <p class="text-gray-400 text-xs mt-1">Aktivitas akan muncul setelah ada pembaruan konten</p>
                     </div>
                 @endif
-
-                @if($recentActivities && $recentActivities->count() > 0)
-                    <div class="mt-4 pt-3 border-t border-gray-100">
-                        <button class="text-[#1B3A6D] hover:text-[#1B3A6D]/80 text-sm font-medium transition-colors">
-                            Lihat semua aktivitas →
-                        </button>
-                    </div>
-                @endif
             </div>
         </div>
 
@@ -123,7 +115,7 @@
                         <span class="text-sm font-medium text-gray-900">Tambah Produk</span>
                     </a>
 
-                    <a href="{{ url('/dashboard/gallery') }}" 
+                    <a href="{{ url('/dashboard/gallery') }}"
                        class="flex items-center p-2 rounded-lg hover:bg-gray-50 transition-colors group">
                         <div class="w-7 h-7 bg-[#1B3A6D] rounded-lg flex items-center justify-center mr-3">
                             <i class="fas fa-images text-white text-xs"></i>
@@ -151,7 +143,7 @@
                             <span class="text-sm text-gray-700">Database</span>
                         </div>
                         <span class="text-xs {{ $dbStatus === 'connected' ? 'text-green-600' : 'text-red-600'  }} font-medium">
-                            
+
                             {{ ucfirst($dbStatus) }}
                         </span>
                     </div>
@@ -322,26 +314,26 @@ document.addEventListener('DOMContentLoaded', function() {
     const ctx = document.getElementById('visitorLocationChart');
     if (ctx) {
         const visitorLocationData = @json($visitorLocations);
-        
+
         // Check if there's data to display
         if (visitorLocationData && visitorLocationData.length > 0) {
             const chartCtx = ctx.getContext('2d');
-            
+
             // Prepare data for chart
             const labels = [];
             const data = [];
             const backgroundColors = [];
-            
+
             visitorLocationData.forEach((item, index) => {
                 // Create label with city and province
                 const label = item.city === item.province ? item.city : `${item.city}, ${item.province}`;
                 labels.push(label);
                 data.push(item.total);
-                
+
                 // Generate colors similar to the screenshot - various shades of blue
                 const colors = [
                     '#1B3A6D',  // Dark blue (main brand color)
-                    '#2563EB',  // Blue  
+                    '#2563EB',  // Blue
                     '#3B82F6',  // Light blue
                     '#1E40AF',  // Blue
                     '#1D4ED8',  // Blue

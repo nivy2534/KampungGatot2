@@ -8,11 +8,13 @@
                 <h1 class="text-3xl font-bold text-gray-900 mb-2">Kelola Galeri</h1>
                 <p class="text-gray-600">Create, edit, and manage village gallery</p>
             </div>
-            <a href="{{ route('gallery.create') }}"
-                class="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-6 py-3 rounded-lg flex items-center gap-2 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105">
-                <i class="fas fa-plus w-4 h-4"></i>
-                Tambah Gambar
-            </a>
+            <div class="flex-shrink-0">
+                <a href="{{ route('gallery.create') }}"
+                    class="w-full md:w-auto bg-primary text-white px-4 py-3 rounded-lg flex items-center justify-center gap-2 transition-colors hover:bg-primary/90 text-sm font-medium">
+                    <span>Tambah Gambar</span>
+                    <i class="fas fa-plus text-xs"></i>
+                </a>
+            </div>
         </div>
     </div>
 
@@ -169,20 +171,20 @@
                 ],
                 dom: 't<"flex justify-between items-center mt-4 px-6 pb-4"<"flex items-center gap-2"li><"flex items-center gap-2"p>>',
                 language: {
-                    emptyTable: `
-                    <div class="flex flex-col items-center justify-center py-12 text-center">
-                        <img src="/assets/img/empty_data.png" alt="Empty" class="w-60 h-40 mb-6" />
-                        <h3 class="text-lg font-semibold text-gray-700">Masih Kosong Nih!</h3>
-                        <p class="text-sm text-gray-500 mt-2">Belum ada data produk di sini.<br>
-                        Klik tombol di bawah untuk mulai menambahkan produk pertamamu.</p>
-                    </div>`,
-                    zeroRecords: `
-                    <div class="flex flex-col items-center justify-center py-12 text-center">
-                        <img src="/assets/img/empty_data.png" alt="Empty" class="w-60 h-40 mb-6" />
-                        <h3 class="text-lg font-semibold text-gray-700">Masih Kosong Nih!</h3>
-                        <p class="text-sm text-gray-500 mt-2">Belum ada data produk di sini.<br>
-                        Klik tombol di bawah untuk mulai menambahkan produk pertamamu.</p>
-                    </div>`,
+                  emptyTable: `
+                  <div class="flex flex-col items-center justify-center py-8 text-center">
+                      <img src="/assets/img/empty_data.png" alt="Empty" class="w-40 h-28 mb-4" />
+                      <h3 class="text-base font-semibold text-gray-700">Masih Kosong Nih!</h3>
+                      <p class="text-sm text-gray-500 mt-2">Belum ada data galeri di sini.<br>
+                      Klik tombol di atas untuk mulai menambahkan gambar pertamamu.</p>
+                  </div>`,
+                  zeroRecords: `
+                  <div class="flex flex-col items-center justify-center py-8 text-center">
+                      <img src="/assets/img/empty_data.png" alt="Empty" class="w-40 h-28 mb-4" />
+                      <h3 class="text-base font-semibold text-gray-700">Masih Kosong Nih!</h3>
+                      <p class="text-sm text-gray-500 mt-2">Belum ada data galeri di sini.<br>
+                      Klik tombol di atas untuk mulai menambahkan gambar pertamamu.</p>
+                  </div>`,
                     info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
                     infoEmpty: "Menampilkan 0 sampai 0 dari 0 entri",
                     infoFiltered: "(difilter dari _MAX_ total entri)",

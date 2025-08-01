@@ -8,7 +8,7 @@
   <section class="relative h-64 px-4 sm:px-6 lg:px-8 text-white text-center overflow-hidden flex items-center justify-center"
            style="background-image: url('{{ asset('assets/img/blogheader.png') }}'); background-size: cover; background-position: center;">
     <!-- Overlay Gradient -->
-    <div class="absolute inset-0 bg-gradient-to-br from-[#1B3A6D]/90 to-[#2563eb]/90"></div>
+    <div class="absolute inset-30 bg-gradient-to-br from-[#1B3A6D]/90 to-[#2563eb]/90"></div>
     <!-- Optional: extra dark overlay -->
     <div class="absolute inset-0 bg-black/30"></div>
 
@@ -51,7 +51,7 @@
 
           {{-- Filter Buttons --}}
           <div class="flex flex-wrap gap-2">
-            <button data-tag="all" class="filter-btn px-3 py-1.5 rounded-full text-xs font-medium bg-[#1B3A6D] text-white hover:bg-[#0f2a4f] transition-colors duration-200">
+            <button data-tag="all" class="filter-btn px-3 py-1.5 rounded-full text-xs font-medium bg-[#1B3A6D] text-white hover:bg-[#0f2a4f] hover:text-white transition-colors duration-200">
               Semua
             </button>
             <button data-tag="sejarah" class="filter-btn px-3 py-1.5 rounded-full text-xs font-medium border border-gray-300 text-gray-700 hover:bg-[#1B3A6D] hover:text-white hover:border-[#1B3A6D] transition-colors duration-200">

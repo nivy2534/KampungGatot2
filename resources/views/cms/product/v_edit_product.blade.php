@@ -166,7 +166,7 @@
                         <div class="relative">
                             <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 text-sm">+62</span>
                             <input id="contact_person" type="text" placeholder="8xxxx..."
-                                value="{{ old('contact_person', $product->contact_person) }}"
+                                value="{{ old('contact_person', $product->contact_person_display) }}"
                                 class="w-full border border-gray-300 rounded-lg pl-12 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B3A6D] focus:border-[#1B3A6D] transition-colors" />
                         </div>
                     </div>

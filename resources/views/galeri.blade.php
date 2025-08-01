@@ -4,7 +4,8 @@
     @include('components.header')
 
     {{-- Hero Section --}}
-    <section class="relative bg-gradient-to-br from-[#1B3A6D] to-[#2563eb] h-64 px-4 sm:px-6 lg:px-8 text-white text-center overflow-hidden flex items-center justify-center">
+    <section class="relative h-64 px-4 sm:px-6 lg:px-8 text-white text-center overflow-hidden flex items-center justify-center"
+           style="background-image: url('{{ asset('assets/img/blogheader.png') }}'); background-size: cover; background-position: center;">
         <div class="absolute inset-0 bg-black/20"></div>
         <div class="relative z-10 max-w-3xl mx-auto">
             <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 leading-tight">
@@ -44,7 +45,7 @@
 
                     {{-- Filter Buttons --}}
                     <div class="flex flex-wrap gap-2">
-                        <button data-category="all" class="filter-btn px-3 py-1.5 rounded-full text-xs font-medium bg-[#1B3A6D] text-white hover:bg-[#0f2a4f] transition-colors duration-200">
+                        <button data-category="all" class="filter-btn px-3 py-1.5 rounded-full text-xs font-medium bg-[#1B3A6D] text-white hover:bg-[#0f2a4f] hover:text-white transition-colors duration-200">
                             Semua
                         </button>
                         <button data-category="pemandangan_alam" class="filter-btn px-3 py-1.5 rounded-full text-xs font-medium border border-gray-300 text-gray-700 hover:bg-[#1B3A6D] hover:text-white hover:border-[#1B3A6D] transition-colors duration-200">
@@ -63,7 +64,7 @@
             {{-- Photos Grid --}}
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-8">
                 @forelse ($photos as $photo)
-                    <div class="photo-card transition-all duration-300 cursor-pointer" 
+                    <div class="photo-card transition-all duration-300 cursor-pointer"
                          data-category="{{ strtolower(str_replace(' ', '_', $photo->category ?? 'uncategorized')) }}"
                          onclick="openPhotoModal({{ json_encode([
                              'id' => $photo->id,
@@ -76,7 +77,7 @@
                          ]) }})">
                         <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 group">
                             <div class="relative h-48 bg-gray-200 overflow-hidden">
-                                <img src="{{ asset('storage/' . ($photo->image_path ?? '/assets/img/blogthumb.png')) }}" 
+                                <img src="{{ asset('storage/' . ($photo->image_path ?? '/assets/img/blogthumb.png')) }}"
                                      alt="{{ $photo->photo_description ?? 'Foto' }}"
                                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                                 <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300"></div>
@@ -180,14 +181,14 @@
                         </button>
                     </div>
                 </div>
-                
+
                 {{-- Details Section --}}
                 <div class="lg:w-1/3 p-6 flex flex-col">
                     <div class="flex-1">
                         <h3 id="modalTitle" class="text-xl font-bold text-gray-900 mb-4">
                             <!-- Photo title will be inserted here -->
                         </h3>
-                        
+
                         <div class="space-y-4">
                             <div>
                                 <h4 class="text-sm font-semibold text-gray-700 mb-1">Deskripsi</h4>
@@ -195,21 +196,21 @@
                                     <!-- Photo description will be inserted here -->
                                 </p>
                             </div>
-                            
+
                             <div>
                                 <h4 class="text-sm font-semibold text-gray-700 mb-1">Dipublikasikan oleh</h4>
                                 <p id="modalAuthor" class="text-sm text-gray-600">
                                     <!-- Author name will be inserted here -->
                                 </p>
                             </div>
-                            
+
                             <div>
                                 <h4 class="text-sm font-semibold text-gray-700 mb-1">Tanggal</h4>
                                 <p id="modalDate" class="text-sm text-gray-600">
                                     <!-- Photo date will be inserted here -->
                                 </p>
                             </div>
-                            
+
                             <div>
                                 <h4 class="text-sm font-semibold text-gray-700 mb-1">Kategori</h4>
                                 <span id="modalCategory" class="inline-block px-3 py-1 bg-[#1B3A6D] text-white text-xs rounded-full">
@@ -218,7 +219,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     {{-- Close Button --}}
                     <div class="mt-6 pt-4 border-t border-gray-200">
                         <button onclick="closePhotoModal()" class="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-lg transition-colors duration-200">

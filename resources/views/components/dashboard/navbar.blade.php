@@ -14,11 +14,6 @@
 
         <!-- Right side with user info and notifications -->
         <div class="flex items-center space-x-3 md:space-x-4">
-            <!-- Notifications bell -->
-            <button class="relative p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#1B3A6D]">
-                <i class="fas fa-bell text-lg"></i>
-                <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-            </button>
 
             <!-- User info section -->
             <div class="relative" id="user-dropdown">
@@ -44,11 +39,6 @@
                     <!-- User Info Header -->
                     <div class="px-4 py-3 border-b border-gray-100">
                         <div class="flex items-center space-x-3">
-                            <div class="w-10 h-10 bg-[#1B3A6D] rounded-full flex items-center justify-center">
-                                <span class="text-white font-semibold">
-                                    {{ substr(Auth::user()->name ?? 'A', 0, 1) }}
-                                </span>
-                            </div>
                             <div>
                                 <p class="text-sm font-medium text-gray-900">{{ Auth::user()->name ?? 'Administrator' }}</p>
                                 <p class="text-sm text-gray-500">{{ Auth::user()->email ?? '' }}</p>
@@ -61,7 +51,7 @@
                         <a href="{{ url('/') }}"
                            class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-200">
                             <i class="fas fa-home mr-3 text-[#1B3A6D]"></i>
-                            Kembali ke Halaman Utama
+                            Halaman Utama
                         </a>
                         <button id="logout-dropdown-btn"
                                 class="w-full flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors duration-200">
@@ -182,7 +172,7 @@ $(document).ready(function() {
             userDropdownMenu.classList.remove('dropdown-opening');
             userDropdownMenu.classList.add('dropdown-closing');
             if (dropdownArrow) dropdownArrow.classList.remove('rotate-180');
-            
+
             // Tunggu transisi selesai baru ubah visibility
             setTimeout(() => {
                 if (!isDropdownOpen) {

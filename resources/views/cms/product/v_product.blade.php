@@ -70,8 +70,8 @@
                             <td class="px-3 md:px-4 py-3 text-sm">
                                 <div class="flex items-center space-x-3">
                                     <div class="flex-shrink-0 w-10 h-10">
-                                        <img class="w-10 h-10 rounded-lg object-cover border border-gray-200" 
-                                             src="{{ $product->image_url ? asset($product->image_url) : '/assets/img/belanja.png' }}" 
+                                        <img class="w-10 h-10 rounded-lg object-cover border border-gray-200"
+                                             src="{{ $product->image_url ? asset($product->image_url) : '/assets/img/belanja.png' }}"
                                              alt="{{ $product->name }}">
                                     </div>
                                     <div class="flex-1 min-w-0">
@@ -118,7 +118,7 @@
                                     <img src="/assets/img/empty_data.png" alt="Empty" class="w-32 h-24 opacity-60 mb-4" />
                                     <h3 class="text-lg font-semibold text-gray-700 mb-2">Belum Ada Produk</h3>
                                     <p class="text-sm text-gray-500 mb-6">Mulai menambahkan produk pertama Anda untuk dipajang di website desa.</p>
-                                    <a href="{{ url('dashboard/products/create') }}" 
+                                    <a href="{{ url('dashboard/products/create') }}"
                                        class="inline-flex items-center gap-2 bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-lg transition-colors text-sm font-medium">
                                         <i class="fas fa-plus text-xs"></i>
                                         <span>Tambah Produk Pertama</span>
@@ -176,7 +176,7 @@
                             return `
                                 <div class="flex items-center space-x-3">
                                     <div class="flex-shrink-0 w-10 h-10">
-                                        <img class="w-10 h-10 rounded-lg object-cover border border-gray-200" 
+                                        <img class="w-10 h-10 rounded-lg object-cover border border-gray-200"
                                              src="${imageUrl}" alt="${data}">
                                     </div>
                                     <div class="flex-1 min-w-0">
@@ -236,18 +236,19 @@
                 ],
                 dom: 't<"flex justify-between items-center mt-3 px-3 md:px-4 pb-3"<"flex items-center gap-2"li><"flex items-center gap-2"p>>',
                 language: {
-                    emptyTable: `
-                    <div class="flex flex-col items-center justify-center py-12 text-center">
-                        <img src="/assets/img/empty_data.png" alt="Empty" class="w-32 h-24 opacity-60 mb-4" />
-                        <h3 class="text-lg font-semibold text-gray-700 mb-2">Belum Ada Produk</h3>
-                        <p class="text-sm text-gray-500 mb-6">Mulai menambahkan produk pertama Anda untuk dipajang di website desa.</p>
-                    </div>`,
-                    zeroRecords: `
-                    <div class="flex flex-col items-center justify-center py-8 text-center">
-                        <img src="/assets/img/empty_data.png" alt="Empty" class="w-32 h-24 opacity-60 mb-4" />
-                        <h3 class="text-base font-semibold text-gray-700">Tidak ditemukan</h3>
-                        <p class="text-sm text-gray-500 mt-2">Coba ubah kata kunci pencarian Anda.</p>
-                    </div>`,
+                  emptyTable: `
+                  <div class="flex flex-col items-center justify-center py-8 text-center">
+                      <img src="/assets/img/empty_data.png" alt="Empty" class="w-40 h-28 mb-4" />
+                      <h3 class="text-base font-semibold text-gray-700">Masih Kosong Nih!</h3>
+                      <p class="text-sm text-gray-500 mt-2">Mulai menambahkan produk pertama Anda untuk dipajang di website desa.</p>
+                  </div>`,
+                  zeroRecords: `
+                  <div class="flex flex-col items-center justify-center py-8 text-center">
+                      <img src="/assets/img/empty_data.png" alt="Empty" class="w-40 h-28 mb-4" />
+                      <h3 class="text-base font-semibold text-gray-700">Masih Kosong Nih!</h3>
+                      <p class="text-sm text-gray-500 mt-2">Belum ada data blog di sini.<br>
+                      Klik tombol di atas untuk mulai menambahkan blog pertamamu.</p>
+                  </div>`,
                     info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
                     infoEmpty: "Menampilkan 0 sampai 0 dari 0 entri",
                     infoFiltered: "(difilter dari _MAX_ total entri)",
@@ -266,7 +267,7 @@
                         'px-2 py-1 mx-0.5 border rounded text-sm hover:bg-gray-50 transition-colors');
                     $('.dataTables_paginate .paginate_button.current').addClass(
                         'bg-primary text-white border-primary hover:bg-primary');
-                    
+
                     $('.dataTables_info').addClass('text-xs text-gray-600');
                     $('.dataTables_length select').addClass('text-sm border border-gray-300 rounded px-2 py-1');
                 }

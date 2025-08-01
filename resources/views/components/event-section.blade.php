@@ -14,49 +14,120 @@
 
             {{-- Filters --}}
             <div class="flex flex-wrap justify-start gap-2">
-                <button class="px-4 py-2 bg-[#1B3A6D] text-white rounded-full text-sm font-semibold font-['Poppins'] hover:bg-[#0f2a4f] transition-colors">
+                <button
+                    class="event-filter-btn px-4 py-2 bg-[#1B3A6D] text-white rounded-full text-sm font-semibold font-['Poppins'] hover:bg-[#0f2a4f] hover:text-white transition-colors"
+                    data-filter="all"
+                >
                     Semua
                 </button>
-                @foreach (['Saat ini', 'Akan datang', 'Kemarin'] as $filter)
-                    <button class="px-4 py-2 border border-[#1B3A6D] text-[#1B3A6D] rounded-full text-sm font-medium font-['Poppins'] hover:bg-[#1B3A6D] hover:text-white transition-colors">
-                        {{ $filter }}
-                    </button>
-                @endforeach
+                <button
+                    class="event-filter-btn px-4 py-2 border border-[#1B3A6D] text-[#1B3A6D] rounded-full text-sm font-medium font-['Poppins'] hover:bg-[#1B3A6D] hover:text-white transition-colors"
+                    data-filter="current"
+                >
+                    Saat ini
+                </button>
+                <button
+                    class="event-filter-btn px-4 py-2 border border-[#1B3A6D] text-[#1B3A6D] rounded-full text-sm font-medium font-['Poppins'] hover:bg-[#1B3A6D] hover:text-white transition-colors"
+                    data-filter="upcoming"
+                >
+                    Akan datang
+                </button>
+                <button
+                    class="event-filter-btn px-4 py-2 border border-[#1B3A6D] text-[#1B3A6D] rounded-full text-sm font-medium font-['Poppins'] hover:bg-[#1B3A6D] hover:text-white transition-colors"
+                    data-filter="past"
+                >
+                    Kemarin
+                </button>
             </div>
         </div>
 
         {{-- Event Cards --}}
         <div class="px-2">
-            @php
-                $cards = [
-                    ['title' => 'Gatot basah', 'img' => 'assets/img/gal1.png', 'price' => 'Rp 20.000', 'date' => '24 - 28 Sep 2025', 'type' => 'Event'],
-                    ['title' => 'Pameran Produk UMKM Lokal', 'img' => 'assets/img/gal2.png', 'price' => 'Rp 20.000', 'date' => '24 - 28 Sep 2025', 'type' => 'Event'],
-                    ['title' => 'Keripik Singkong Pedas', 'img' => 'assets/img/gal3.png', 'price' => 'Rp 75.000', 'date' => 'Kadaluarsa dalam 1 hari', 'type' => 'Produk'],
-                    ['title' => 'Sambal Botol Homemade', 'img' => 'assets/img/gal4.png', 'price' => 'Rp 75.000', 'date' => 'Kadaluarsa dalam 1 hari', 'type' => 'Produk'],
-                ];
-            @endphp
-
-            <div class="flex flex-wrap gap-5">
-                @foreach ($cards as $card)
-                    <div class="w-full sm:w-[48%] lg:w-[23%] bg-white rounded-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
-                        {{-- Image + Badge --}}
-                        <div class="relative">
-                            <img src="{{ asset($card['img']) }}" alt="{{ $card['title'] }}" class="w-full h-40 object-cover">
-                            <div class="absolute top-2 left-2 bg-white px-2 py-1 rounded shadow text-green-600 text-xs font-bold">
-                                {{ $card['type'] }}
-                            </div>
+            {{-- All Events --}}
+            <div id="all-events" class="events-container">
+                <div class="flex flex-wrap gap-5">
+                    @forelse ($allEvents as $event)
+                        @include('components.event-card', ['event' => $event])
+                    @empty
+                        <div class="w-full text-center py-8">
+                            <p class="text-gray-500">Belum ada event tersedia.</p>
                         </div>
+                    @endforelse
+                </div>
+            </div>
 
-                        {{-- Info --}}
-                        <div class="px-4 py-3 space-y-1">
-                            <p class="text-sm text-gray-600 font-semibold">{{ $card['date'] }}</p>
-                            <h3 class="text-base font-bold text-gray-800">{{ $card['title'] }}</h3>
-                            <p class="text-lg font-bold text-blue-800">{{ $card['price'] }}</p>
+            {{-- Current Events --}}
+            <div id="current-events" class="events-container hidden">
+                <div class="flex flex-wrap gap-5">
+                    @forelse ($currentEvents as $event)
+                        @include('components.event-card', ['event' => $event])
+                    @empty
+                        <div class="w-full text-center py-8">
+                            <p class="text-gray-500">Tidak ada event pada waktu tersebut.</p>
                         </div>
-                    </div>
-                @endforeach
+                    @endforelse
+                </div>
+            </div>
+
+            {{-- Upcoming Events --}}
+            <div id="upcoming-events" class="events-container hidden">
+                <div class="flex flex-wrap gap-5">
+                    @forelse ($upcomingEvents as $event)
+                        @include('components.event-card', ['event' => $event])
+                    @empty
+                        <div class="w-full text-center py-8">
+                            <p class="text-gray-500">Tidak ada event pada waktu tersebut.</p>
+                        </div>
+                    @endforelse
+                </div>
+            </div>
+
+            {{-- Past Events --}}
+            <div id="past-events" class="events-container hidden">
+                <div class="flex flex-wrap gap-5">
+                    @forelse ($pastEvents as $event)
+                        @include('components.event-card', ['event' => $event])
+                    @empty
+                        <div class="w-full text-center py-8">
+                            <p class="text-gray-500">Tidak ada event pada waktu tersebut.</p>
+                        </div>
+                    @endforelse
+                </div>
             </div>
         </div>
-
     </div>
+
+    {{-- JavaScript for filtering --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterButtons = document.querySelectorAll('.event-filter-btn');
+            const eventContainers = document.querySelectorAll('.events-container');
+
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const filter = this.getAttribute('data-filter');
+
+                    // Update button states
+                    filterButtons.forEach(btn => {
+                        btn.classList.remove('bg-[#1B3A6D]', 'text-white');
+                        btn.classList.add('border', 'border-[#1B3A6D]', 'text-[#1B3A6D]');
+                    });
+
+                    this.classList.remove('border', 'border-[#1B3A6D]', 'text-[#1B3A6D]');
+                    this.classList.add('bg-[#1B3A6D]', 'text-white');
+
+                    // Hide all containers
+                    eventContainers.forEach(container => {
+                        container.classList.add('hidden');
+                    });
+
+                    // Show selected container
+                    const targetContainer = document.getElementById(filter + '-events');
+                    if (targetContainer) {
+                        targetContainer.classList.remove('hidden');
+                    }
+                });
+            });
+        });
+    </script>
 </section>

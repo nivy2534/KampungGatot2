@@ -71,9 +71,6 @@
                                 <!-- User Info Header -->
                                 <div class="px-4 py-3 border-b border-gray-100">
                                     <div class="flex items-center space-x-3">
-                                        <div class="w-10 h-10 bg-[#1B3A6D] rounded-full flex items-center justify-center">
-                                            <i class="fas fa-user text-white"></i>
-                                        </div>
                                         <div>
                                             <p class="text-sm font-medium text-gray-900">{{ Auth::user()->name }}</p>
                                             <p class="text-sm text-gray-500">{{ Auth::user()->email }}</p>
