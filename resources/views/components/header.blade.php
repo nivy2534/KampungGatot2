@@ -6,9 +6,12 @@
                 <img src="{{ asset('assets/img/logo_tutwuri.png') }}"
                      alt="Logo Desa Ngebruk"
                      class="w-10 h-10 lg:w-12 lg:h-12 object-contain flex-shrink-0" />
-                     <img src="{{ asset('assets/img/logo_unm.png') }}"
-                          alt="Logo Desa Ngebruk"
-                          class="w-10 h-10 lg:w-12 lg:h-12 object-contain flex-shrink-0" />
+                     <img src="{{ asset('assets/img/logo_berdampak.png') }}"
+                     alt="Logo Desa Ngebruk"
+                     class="w-10 h-10 lg:w-12 lg:h-12 object-contain flex-shrink-0" />
+                   <img src="{{ asset('assets/img/logo_unm.png') }}"
+                        alt="Logo Tersier Diktisaintek"
+                        class="w-10 h-10 lg:w-12 lg:h-12 object-contain flex-shrink-0" />
                 <div class="flex flex-col justify-center min-w-0">
                     <h1 class="text-gray-900 text-xs lg:text-sm font-bold font-['Inter'] leading-tight truncate">
                         Kampung Gatot

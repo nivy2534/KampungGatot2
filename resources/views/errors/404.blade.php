@@ -54,7 +54,7 @@
     </style>
 </head>
 <body>
-    <img src="{{ asset('assets/img/404.png') }}" alt="404 Not Found Illustration">
+    <img src="{{ asset('assets/img/404.png') }}" width="600" height="600" alt="404 Not Found Illustration">
     <h1>Ooops… 404!</h1>
     <p>Maaf, halaman yang Anda cari tidak ada.</p>
     <a href="{{ url('/') }}" class="btn-home">Kembali ke Beranda</a>

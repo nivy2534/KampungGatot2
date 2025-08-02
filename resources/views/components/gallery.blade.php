@@ -31,9 +31,6 @@
                     <img src="{{ asset($item['img']) }}" alt="{{ $item['title'] }}"
                          class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300" />
                     <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black/60"></div>
-                    <div class="absolute top-3 left-3">
-                        <span class="bg-white/90 text-[#33AD5C] text-xs font-bold px-2 py-1 rounded-full">BIG DEALS</span>
-                    </div>
                     <div class="absolute bottom-3 left-4 text-white font-semibold text-sm md:text-base">
                         {{ $item['title'] }}
                     </div>

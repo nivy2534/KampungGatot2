@@ -28,15 +28,13 @@
                         ])
                     </a>
                 @empty
-                    @for($i = 0; $i < 4; $i++)
-                        @include('components.article-card', [
-                            'title' => ['Inovasi Pertanian Organik di Kampung Gatot', 'Festival Kerajinan Tangan Kampung Gatot', 'Program Digitalisasi UMKM Lokal', 'Wisata Alam Tersembunyi Kampung Gatot'][$i],
-                            'image' => 'https://placehold.co/350x200/e2e8f0/1B3A6D?text=Article+' . ($i + 1),
-                            'category' => ['Pertanian', 'Budaya', 'Teknologi', 'Pariwisata'][$i],
-                            'excerpt' => ['Mengenal sistem pertanian organik yang dikembangkan warga untuk meningkatkan hasil panen.', 'Perayaan seni dan budaya lokal melalui pameran kerajinan tangan khas daerah.', 'Langkah revolusioner untuk membawa UMKM lokal ke era digital.', 'Jelajahi destinasi wisata alam yang menawan di sekitar Kampung Gatot.'][$i],
-                            'date' => now()->subDays($i)->translatedFormat('d F Y')
-                        ])
-                    @endfor
+                    <div class="col-span-1 sm:col-span-2 lg:col-span-3 xl:col-span-4 text-center py-12">
+                        <svg class="mx-auto h-12 w-12 text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2a4 4 0 014-4h2a4 4 0 014 4v2m-6 4h6a2 2 0 002-2v-6a2 2 0 00-2-2h-6a2 2 0 00-2 2v6a2 2 0 002 2z" />
+                        </svg>
+                        <h3 class="text-lg font-semibold text-gray-700 mb-2">Tidak ada artikel</h3>
+                        <p class="text-sm text-gray-500">Artikel akan tampil di sini ketika sudah tersedia.</p>
+                    </div>
                 @endforelse
             </div>
 

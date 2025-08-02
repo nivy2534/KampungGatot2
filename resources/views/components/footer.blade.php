@@ -5,11 +5,12 @@
       <div class="lg:col-span-2">
         <div class="flex items-center gap-3 mb-4">
           <img src="{{ asset('assets/img/logo_tutwuri.png') }}" alt="Logo" class="w-12 h-12" />
+          <img src="{{ asset('assets/img/logo_berdampak.png') }}" alt="Logo" class="w-12 h-12" />
           <img src="{{ asset('assets/img/logo_unm.png') }}" alt="Logo" class="w-12 h-12" />
-          <div>
+          <!-- <div>
             <h3 class="font-bold text-lg text-gray-900">Kampung Gatot</h3>
             <p class="text-sm text-gray-600">Kecamatan Sumberpucung</p>
-          </div>
+          </div> -->
         </div>
         <p class="text-sm text-gray-600 mb-4 max-w-sm">
           Jelajahi keindahan alam, kearifan lokal, dan produk UMKM berkualitas dari masyarakat Kampung Gatot yang penuh dengan keramahan dan tradisi.
@@ -80,10 +81,24 @@
       </div>
     </div>
 
-    <div class="border-t border-gray-300 mt-8 pt-8 text-center">
-      <p class="text-sm text-gray-500">
-        © {{ date('Y') }} Desa Ngebruk. Semua hak dilindungi undang-undang.
-      </p>
+    <!-- Bagian bawah -->
+    <div class="bg-[#0f1e34] py-4">
+      <div class="">
+        <div class="lg:col-span-2 flex flex-wrap items-center justify-start gap-4">
+          <!-- Logo-list -->
+          <div class="flex items-center gap-4">
+            <img src="{{ asset('assets/img/logo_tutwuri.png') }}" alt="Logo 1" class="h-10 w-10 rounded-full object-contain">
+            <img src="{{ asset('assets/img/logo_berdampak.png') }}" alt="Logo 2" class="h-10 w-10 rounded-full object-contain">
+            <img src="{{ asset('assets/img/logo_unm.png') }}" alt="Logo 3" class="h-10 w-10 rounded-full object-contain">
+            <img src="{{ asset('assets/img/logo_bima.png') }}" alt="Logo 4" class="h-10 w-10 rounded-full object-contain">
+            <img src="{{ asset('assets/img/logo_gatot.png') }}" alt="Logo 5" class="h-10 w-10 rounded-full object-contain">
+          </div>
+          <p class="text-black text-sm ml-4">
+            Dikembangkan oleh Tim MMD FILKOM 49 Tahun 2025
+          </p>
+        </div>
+      </div>
     </div>
+
   </div>
 </footer>
