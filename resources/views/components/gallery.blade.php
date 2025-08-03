@@ -21,7 +21,7 @@
                 $galleryItems = [
                     ['img' => 'assets/img/gal1.jpeg', 'title' => 'Sosialisasi UMKM'],
                     ['img' => 'assets/img/gal2.jpeg', 'title' => 'Foto Bersama UMKM'],
-                    ['img' => 'assets/img/gal3.jpeg', 'title' => 'Barsih Desa'],
+                    ['img' => 'assets/img/gal3.jpeg', 'title' => 'Bersih Desa'],
                     ['img' => 'assets/img/gal4.jpeg', 'title' => 'Praktik'],
                 ];
             @endphp
