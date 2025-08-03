@@ -19,6 +19,11 @@
             flex-direction: column;
             text-align: center;
             padding: 2rem;
+            overflow: hidden;
+        }
+
+        html {
+            overflow: hidden;
         }
 
         img {

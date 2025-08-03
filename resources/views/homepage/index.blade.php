@@ -16,27 +16,31 @@
                 </p>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-                @forelse($latestBlogs as $blog)
-                    <a href="{{ route('blog.show', $blog->slug) }}" class="block">
-                        @include('components.article-card', [
-                            'title' => $blog->name,
-                            'image' => $blog->image_url ? asset($blog->image_url) : 'https://placehold.co/350x200/e2e8f0/1B3A6D?text=Article',
-                            'category' => ucfirst(str_replace('_', ' ', $blog->tag)),
-                            'excerpt' => $blog->excerpt,
-                            'date' => $blog->created_at->translatedFormat('d F Y')
-                        ])
-                    </a>
-                @empty
-                    <div class="col-span-1 sm:col-span-2 lg:col-span-3 xl:col-span-4 text-center py-12">
-                        <svg class="mx-auto h-12 w-12 text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2a4 4 0 014-4h2a4 4 0 014 4v2m-6 4h6a2 2 0 002-2v-6a2 2 0 00-2-2h-6a2 2 0 00-2 2v6a2 2 0 002 2z" />
+            @if($latestBlogs && $latestBlogs->count() > 0)
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+                    @foreach($latestBlogs as $blog)
+                        <a href="{{ route('blog.show', $blog->slug) }}" class="block">
+                            @include('components.article-card', [
+                                'title' => $blog->name,
+                                'image' => $blog->image_url ? asset($blog->image_url) : 'https://placehold.co/350x200/e2e8f0/1B3A6D?text=Article',
+                                'category' => ucfirst(str_replace('_', ' ', $blog->tag)),
+                                'excerpt' => $blog->excerpt,
+                                'date' => $blog->created_at->translatedFormat('d F Y')
+                            ])
+                        </a>
+                    @endforeach
+                </div>
+            @else
+                <div class="text-center py-12">
+                    <div class="text-gray-400 mb-4">
+                        <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                         </svg>
-                        <h3 class="text-lg font-semibold text-gray-700 mb-2">Tidak ada artikel</h3>
-                        <p class="text-sm text-gray-500">Artikel akan tampil di sini ketika sudah tersedia.</p>
                     </div>
-                @endforelse
-            </div>
+                    <h3 class="text-lg font-medium text-gray-600 mb-2">Tidak ada artikel</h3>
+                    <p class="text-gray-500">Belum ada artikel yang dipublikasikan saat ini.</p>
+                </div>
+            @endif
 
             <div class="text-center mt-8">
                 <a href="/blog" class="inline-flex items-center gap-2 bg-[#1B3A6D] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[#0f2a4f] transition-colors">
