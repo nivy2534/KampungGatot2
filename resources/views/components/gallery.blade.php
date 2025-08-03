@@ -19,10 +19,10 @@
         <div class="w-full lg:w-[700px] grid grid-cols-2 gap-4">
             @php
                 $galleryItems = [
-                    ['img' => 'assets/img/gal1.png', 'title' => 'Event Bantengan'],
-                    ['img' => 'assets/img/gal4.png', 'title' => 'Event Bersih Desa'],
-                    ['img' => 'assets/img/gal2.png', 'title' => 'Indonesia'],
-                    ['img' => 'assets/img/gal7.png', 'title' => 'Kerja Bakti'],
+                    ['img' => 'assets/img/gal1.jpeg', 'title' => 'Sosialisasi UMKM'],
+                    ['img' => 'assets/img/gal2.jpeg', 'title' => 'Foto Bersama UMKM'],
+                    ['img' => 'assets/img/gal3.jpeg', 'title' => 'Barsih Desa'],
+                    ['img' => 'assets/img/gal4.jpeg', 'title' => 'Praktik'],
                 ];
             @endphp
 

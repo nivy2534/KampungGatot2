@@ -51,19 +51,19 @@
 
           {{-- Filter Buttons --}}
           <div class="flex flex-wrap gap-2">
-            <button data-tag="all" class="filter-btn px-3 py-1.5 rounded-full text-xs font-medium bg-[#1B3A6D] text-white hover:bg-[#0f2a4f] hover:text-white transition-colors duration-200">
+            <button data-tag="all" class="filter-btn px-3 py-1.5 rounded-full text-xs font-medium {{ !$activeTag ? 'bg-[#1B3A6D] text-white' : 'border border-gray-300 text-gray-700 hover:bg-[#1B3A6D] hover:text-white hover:border-[#1B3A6D]' }} transition-colors duration-200">
               Semua
             </button>
-            <button data-tag="sejarah" class="filter-btn px-3 py-1.5 rounded-full text-xs font-medium border border-gray-300 text-gray-700 hover:bg-[#1B3A6D] hover:text-white hover:border-[#1B3A6D] transition-colors duration-200">
+            <button data-tag="sejarah" class="filter-btn px-3 py-1.5 rounded-full text-xs font-medium {{ $activeTag === 'sejarah' ? 'bg-[#1B3A6D] text-white' : 'border border-gray-300 text-gray-700 hover:bg-[#1B3A6D] hover:text-white hover:border-[#1B3A6D]' }} transition-colors duration-200">
               Sejarah
             </button>
-            <button data-tag="potensi_desa" class="filter-btn px-3 py-1.5 rounded-full text-xs font-medium border border-gray-300 text-gray-700 hover:bg-[#1B3A6D] hover:text-white hover:border-[#1B3A6D] transition-colors duration-200">
+            <button data-tag="potensi_desa" class="filter-btn px-3 py-1.5 rounded-full text-xs font-medium {{ $activeTag === 'potensi_desa' ? 'bg-[#1B3A6D] text-white' : 'border border-gray-300 text-gray-700 hover:bg-[#1B3A6D] hover:text-white hover:border-[#1B3A6D]' }} transition-colors duration-200">
               Potensi Desa
             </button>
-            <button data-tag="kabar_warga" class="filter-btn px-3 py-1.5 rounded-full text-xs font-medium border border-gray-300 text-gray-700 hover:bg-[#1B3A6D] hover:text-white hover:border-[#1B3A6D] transition-colors duration-200">
+            <button data-tag="kabar_warga" class="filter-btn px-3 py-1.5 rounded-full text-xs font-medium {{ $activeTag === 'kabar_warga' ? 'bg-[#1B3A6D] text-white' : 'border border-gray-300 text-gray-700 hover:bg-[#1B3A6D] hover:text-white hover:border-[#1B3A6D]' }} transition-colors duration-200">
               Kabar Warga
             </button>
-            <button data-tag="umkm_lokal" class="filter-btn px-3 py-1.5 rounded-full text-xs font-medium border border-gray-300 text-gray-700 hover:bg-[#1B3A6D] hover:text-white hover:border-[#1B3A6D] transition-colors duration-200">
+            <button data-tag="umkm_lokal" class="filter-btn px-3 py-1.5 rounded-full text-xs font-medium {{ $activeTag === 'umkm_lokal' ? 'bg-[#1B3A6D] text-white' : 'border border-gray-300 text-gray-700 hover:bg-[#1B3A6D] hover:text-white hover:border-[#1B3A6D]' }} transition-colors duration-200">
               UMKM Lokal
             </button>
           </div>
@@ -126,7 +126,8 @@ document.addEventListener("DOMContentLoaded", function () {
   const searchInput = document.getElementById("search-blog");
   const noResultsMessage = document.getElementById("no-results");
 
-  let currentFilter = "all";
+  // Initialize current filter based on active tag from server
+  let currentFilter = "{{ $activeTag ?? 'all' }}";
   let currentSearch = "";
 
   // Filter functionality
@@ -169,13 +170,22 @@ document.addEventListener("DOMContentLoaded", function () {
     btn.addEventListener("click", () => {
       currentFilter = btn.getAttribute("data-tag");
 
+      // Update URL based on filter
+      const url = new URL(window.location);
+      if (currentFilter === "all") {
+        url.searchParams.delete("tag");
+      } else {
+        url.searchParams.set("tag", currentFilter);
+      }
+      window.history.pushState({}, "", url);
+
       // Update button states
       filterButtons.forEach(b => {
         b.classList.remove("bg-[#1B3A6D]", "text-white");
-        b.classList.add("border-gray-300", "text-gray-700");
+        b.classList.add("border", "border-gray-300", "text-gray-700");
       });
 
-      btn.classList.remove("border-gray-300", "text-gray-700");
+      btn.classList.remove("border", "border-gray-300", "text-gray-700");
       btn.classList.add("bg-[#1B3A6D]", "text-white");
 
       filterCards();
@@ -241,6 +251,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   `;
   document.head.appendChild(style);
+
+  // Initial filter on page load
+  filterCards();
 });
 </script>
 @endsection

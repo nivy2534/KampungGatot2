@@ -1,5 +1,5 @@
 <section class="relative w-full h-[85vh] overflow-hidden">
-    <img src="{{ asset('assets/img/hero1.png') }}" alt="Hero Background" class="absolute inset-0 w-full h-full object-cover" />
+    <img src="{{ asset('assets/img/landing.jpg') }}" alt="Hero Background" class="absolute inset-0 w-full h-full object-cover" />
     <div class="absolute inset-0 bg-black bg-opacity-40"></div>
 
     <div class="relative z-10 container mx-auto px-6 h-full flex items-center">

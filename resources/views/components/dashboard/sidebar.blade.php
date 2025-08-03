@@ -6,6 +6,9 @@
                 <img src="{{ asset('assets/img/logo_tutwuri.png') }}" class="h-6 w-6 md:h-7 md:w-7" alt="Logo Tutwuri">
             </div>
             <div class="h-8 w-8 md:h-9 md:w-9 bg-white/10 rounded-lg flex items-center justify-center backdrop-blur-sm">
+                <img src="{{ asset('assets/img/logo_berdampak.png') }}" class="h-6 w-6 md:h-7 md:w-7" alt="Logo Tutwuri">
+            </div>
+            <div class="h-8 w-8 md:h-9 md:w-9 bg-white/10 rounded-lg flex items-center justify-center backdrop-blur-sm">
                 <img src="{{ asset('assets/img/logo_unm.png') }}" class="h-6 w-6 md:h-7 md:w-7" alt="Logo UNM">
             </div>
         </div>

@@ -5,38 +5,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'Desa Ngebruk')</title>
-    
+    <title>@yield('title', 'Kampung Gatot')</title>
+
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
-    
+
     <!-- Preload critical resources -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
-    
+
     <!-- Fonts -->
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
         rel="stylesheet">
-    
+
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-    
+
     <!-- SweetAlert2 for enhanced modals -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
+
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    
+
     <!-- Page-specific styles -->
     @stack('styles')
 
     @stack('scripts')
-    
+
     <!-- Page loading indicator -->
     <style>
         .page-loading {
@@ -52,24 +52,24 @@
             opacity: 0;
             transition: opacity 0.3s;
         }
-        
+
         .page-loading.active {
             opacity: 1;
         }
-        
+
         @keyframes loading {
             0% { background-position: 200% 0; }
             100% { background-position: -200% 0; }
         }
-        
+
         .smooth-transition {
             transition: all 0.3s ease-in-out;
         }
-        
+
         .fade-in {
             animation: fadeIn 0.6s ease-out;
         }
-        
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -80,7 +80,7 @@
 <body class="font-sans text-gray-800 bg-gray-50 smooth-transition">
     <!-- Page loading indicator -->
     <div id="page-loading-bar" class="page-loading"></div>
-    
+
     <!-- Main content with fade-in animation -->
     <div id="main-content" class="fade-in">
         @yield('content')
@@ -88,10 +88,10 @@
 
     <!-- Scripts -->
     @stack('prepend-script')
-    
+
     <!-- UX Manager -->
     <script src="{{ asset('resources/js/ux-manager.js') }}"></script>
-    
+
     <!-- Global JavaScript Setup -->
     <script>
         // Configure AJAX globally
@@ -113,7 +113,7 @@
             error: function(xhr, status, error) {
                 // Global error handler
                 let message = 'Terjadi kesalahan. Silakan coba lagi.';
-                
+
                 if (xhr.responseJSON && xhr.responseJSON.message) {
                     message = xhr.responseJSON.message;
                 } else if (xhr.status === 500) {
@@ -123,7 +123,7 @@
                 } else if (xhr.status === 403) {
                     message = 'Anda tidak memiliki akses untuk melakukan tindakan ini.';
                 }
-                
+
                 UX.showToast(message, 'error');
             }
         });
@@ -131,14 +131,14 @@
         // Enhanced form submission handling
         $(document).on('submit', 'form[data-ajax="true"]', function(e) {
             e.preventDefault();
-            
+
             const form = $(this);
             const submitBtn = form.find('[type="submit"]');
             const formData = new FormData(this);
-            
+
             // Show loading state
             UX.setButtonLoading(submitBtn[0], true);
-            
+
             $.ajax({
                 url: form.attr('action') || window.location.href,
                 method: form.attr('method') || 'POST',
@@ -148,14 +148,14 @@
                 success: function(response) {
                     if (response.success) {
                         UX.showToast(response.message || 'Berhasil!', 'success');
-                        
+
                         // Handle redirects
                         if (response.redirect) {
                             setTimeout(() => {
                                 window.location.href = response.redirect;
                             }, 1000);
                         }
-                        
+
                         // Reset form if needed
                         if (response.reset_form) {
                             form[0].reset();
@@ -217,18 +217,18 @@
         $(document).ready(function() {
             // Add smooth transitions to elements
             $('.card, .btn, .form-control').addClass('smooth-transition');
-            
+
             // Initialize counters if present
             $('.counter').each(function() {
                 const target = parseInt($(this).data('target')) || 0;
                 UX.animateCounter(this, target);
             });
-            
+
             // Auto-focus first input on forms
             $('form .form-control:first').focus();
         });
     </script>
-    
+
     @stack('addon-script')
 
     <!-- Back to top button -->

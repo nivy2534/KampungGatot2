@@ -4,11 +4,11 @@
             <!-- Images Grid -->
             <div class="grid grid-cols-2 gap-3">
                 <div class="space-y-3">
-                    <img class="w-full h-48 object-cover rounded-lg shadow-lg" src="https://placehold.co/300x192/e2e8f0/1B3A6D?text=UMKM+1" alt="UMKM Kampung Gatot" />
-                    <img class="w-full h-36 object-cover rounded-lg shadow-lg" src="https://placehold.co/300x144/f1f5f9/1B3A6D?text=UMKM+2" alt="UMKM Kampung Gatot" />
+                    <img class="w-full h-48 object-cover rounded-lg shadow-lg" src="{{ asset('assets/img/umkm1.jpeg') }}" alt="UMKM Kampung Gatot" />
+                    <img class="w-full h-36 object-cover rounded-lg shadow-lg" src="{{ asset('assets/img/umkm2.jpeg') }}" alt="UMKM Kampung Gatot" />
                 </div>
                 <div class="pt-6">
-                    <img class="w-full h-56 object-cover rounded-lg shadow-lg" src="https://placehold.co/300x224/f8fafc/1B3A6D?text=UMKM+3" alt="UMKM Kampung Gatot" />
+                    <img class="w-full h-56 object-cover rounded-lg shadow-lg" src="{{ asset('assets/img/umkm3.jpeg') }}" alt="UMKM Kampung Gatot" />
                 </div>
             </div>
 

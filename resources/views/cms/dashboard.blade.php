@@ -270,20 +270,6 @@ document.addEventListener('DOMContentLoaded', function() {
         card.classList.add('fade-in', `fade-in-delay-${Math.min(index + 1, 4)}`);
     });
 
-    // Real-time clock update
-    function updateClock() {
-        const now = new Date();
-        const timeElement = document.querySelector('.text-xs.text-gray-400');
-        if (timeElement) {
-            const hours = now.getHours().toString().padStart(2, '0');
-            const minutes = now.getMinutes().toString().padStart(2, '0');
-            timeElement.textContent = `${hours}:${minutes} WIB`;
-        }
-    }
-
-    // Update clock every minute
-    setInterval(updateClock, 60000);
-
     // Add subtle hover effects
     const quickActions = document.querySelectorAll('a[href*="dashboard"]');
     quickActions.forEach(action => {
@@ -444,8 +430,14 @@ document.addEventListener('DOMContentLoaded', function() {
                         }
                     },
                     interaction: {
-                        intersect: false,
-                        mode: 'index'
+                        intersect: true,
+                        mode: 'nearest',
+                        axis: 'xy'
+                    },
+                    hover: {
+                        animationDuration: 200,
+                        intersect: true,
+                        mode: 'nearest'
                     },
                     animation: {
                         duration: 1000,
