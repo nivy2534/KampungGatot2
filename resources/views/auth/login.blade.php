@@ -22,7 +22,7 @@
                             class="w-10 h-10 object-contain" />
                     </div>
                     <div class="flex flex-col ml-2">
-                        <h1 class="text-2xl font-bold text-white tracking-wide">Desa Ngebruk</h1>
+                        <h1 class="text-2xl font-bold text-white tracking-wide">Kampung Gatot</h1>
                         <p class="text-sm text-white/90 font-medium">Panel Admin</p>
                     </div>
                 </div>
@@ -33,7 +33,7 @@
                         Kelola Website Desa dengan Mudah
                     </h2>
                     <p class="text-lg text-white/90 leading-relaxed font-light">
-                        Mulai mengelola dan mengembangkan website Desa Ngebruk melalui panel admin yang modern dan user-friendly
+                        Mulai mengelola dan mengembangkan website Kampung Gatot melalui panel admin yang modern dan user-friendly
                     </p>
                 </div>
             </div>
@@ -119,8 +119,8 @@
                             </a>
                         </p>
                         <p class="text-xs text-gray-500 border-t border-gray-100 pt-3">
-                            Dengan masuk, Anda menyetujui 
-                            <a href="#" class="text-[#1B3A6D] hover:underline font-medium">Kebijakan Privasi</a> dan 
+                            Dengan masuk, Anda menyetujui
+                            <a href="#" class="text-[#1B3A6D] hover:underline font-medium">Kebijakan Privasi</a> dan
                             <a href="#" class="text-[#1B3A6D] hover:underline font-medium">Ketentuan Penggunaan</a> kami.
                         </p>
                     </div>
@@ -129,7 +129,7 @@
                 <!-- Footer -->
                 <div class="text-center mt-8">
                     <p class="text-xs text-gray-500">
-                        © 2024 Desa Ngebruk. Semua hak dilindungi.
+                        © 2024 Kampung Gatot. Semua hak dilindungi.
                     </p>
                 </div>
             </div>
@@ -151,7 +151,7 @@
                     warning: 'fas fa-exclamation-triangle text-yellow-500',
                     info: 'fas fa-info-circle text-[#1B3A6D]/80'
                 };
-                
+
                 const bgMap = {
                     success: 'bg-green-50 border-green-200',
                     error: 'bg-red-50 border-red-200',
@@ -180,7 +180,7 @@
                 `);
 
                 $('#toast-container').append(toast);
-                
+
                 // Animate in
                 setTimeout(() => {
                     $(`#${toastId}`).removeClass('translate-x-full opacity-0');
@@ -240,7 +240,7 @@
             $('#email').on('input', function() {
                 clearFieldErrors();
                 const email = $(this).val().trim();
-                
+
                 if (email && !isValidEmail(email)) {
                     showFieldError('email', 'Format email tidak valid');
                 }
@@ -249,7 +249,7 @@
             $('#password').on('input', function() {
                 clearFieldErrors();
                 const password = $(this).val();
-                
+
                 if (password && password.length < 6) {
                     showFieldError('password', 'Kata sandi minimal 6 karakter');
                 }
@@ -259,7 +259,7 @@
             function togglePassword() {
                 const $passwordField = $('#password');
                 const $toggleIcon = $('#toggleIcon');
-                
+
                 if ($passwordField.attr('type') === 'password') {
                     $passwordField.attr('type', 'text');
                     $toggleIcon.removeClass('fa-eye').addClass('fa-eye-slash');
@@ -317,7 +317,7 @@
                     success: function(response) {
                         if (response.success) {
                             showToast('Login berhasil! Mengalihkan...', 'success');
-                            
+
                             // Smooth transition to dashboard
                             setTimeout(() => {
                                 window.location.href = '/dashboard';
@@ -329,18 +329,18 @@
                     },
                     error: function(jqXHR) {
                         setLoadingState(false);
-                        
+
                         if (jqXHR.status === 422) {
                             // Validation errors
                             const errors = jqXHR.responseJSON?.errors || {};
-                            
+
                             if (errors.email) {
                                 showFieldError('email', errors.email[0]);
                             }
                             if (errors.password) {
                                 showFieldError('password', errors.password[0]);
                             }
-                            
+
                             showToast('Silakan perbaiki kesalahan pada form', 'error');
                         } else if (jqXHR.status === 401) {
                             showToast('Email atau kata sandi salah', 'error');
@@ -348,7 +348,7 @@
                             // Handle approval status errors
                             const response = jqXHR.responseJSON;
                             const approvalStatus = response?.approval_status;
-                            
+
                             if (approvalStatus === 'pending') {
                                 Swal.fire({
                                     icon: 'warning',

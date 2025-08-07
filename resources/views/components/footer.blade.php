@@ -61,7 +61,7 @@
     </div>
 
     <!-- Bagian bawah -->
-    <div class="bg-[#0F203C] py-4">
+    <div class="bg-[#13294D] py-4">
       <div class="">
         <div class="lg:col-span-2 flex flex-wrap items-center justify-start gap-4">
           <div class="flex items-center gap-4">

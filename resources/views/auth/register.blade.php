@@ -22,7 +22,7 @@
                             class="w-10 h-10 object-contain" />
                     </div>
                     <div class="flex flex-col ml-2">
-                        <h1 class="text-2xl font-bold text-white tracking-wide">Desa Ngebruk</h1>
+                        <h1 class="text-2xl font-bold text-white tracking-wide">Kampung Gatot</h1>
                         <p class="text-sm text-white/90 font-medium">Panel Admin</p>
                     </div>
                 </div>
@@ -33,7 +33,7 @@
                         Bergabung dengan Sistem Kami
                     </h2>
                     <p class="text-lg text-white/90 leading-relaxed font-light">
-                        Daftar sekarang untuk mendapatkan akses ke panel admin dan mulai mengelola website Desa Ngebruk
+                        Daftar sekarang untuk mendapatkan akses ke panel admin dan mulai mengelola website Kampung Gatot
                     </p>
                 </div>
             </div>
@@ -66,7 +66,7 @@
                                 placeholder="Masukkan nama lengkap...">
                             <div id="name-error" class="hidden mt-1 text-sm text-red-600"></div>
                         </div>
-                        
+
                         <!-- Email Field -->
                         <div>
                             <label for="email" class="block text-sm font-medium text-gray-700 mb-1">
@@ -106,8 +106,8 @@
                             <input id="agree" name="agree" type="checkbox"
                                 class="h-4 w-4 mt-1 text-[#1B3A6D] focus:ring-[#1B3A6D] border-gray-300 rounded transition duration-200">
                             <label for="agree" class="ml-2 block text-gray-700 leading-5">
-                                Saya setuju dengan 
-                                <a href="#" class="text-[#1B3A6D] hover:underline font-medium">Ketentuan Penggunaan</a> dan 
+                                Saya setuju dengan
+                                <a href="#" class="text-[#1B3A6D] hover:underline font-medium">Ketentuan Penggunaan</a> dan
                                 <a href="#" class="text-[#1B3A6D] hover:underline font-medium">Kebijakan Privasi</a>
                             </label>
                         </div>
@@ -123,7 +123,7 @@
                             <span id="submit-text">Daftar</span>
                         </button>
                     </form>
-                    
+
                     <!-- Login Link -->
                     <div class="mt-4 text-center space-y-3">
                         <p class="text-sm text-gray-600">
@@ -134,8 +134,8 @@
                             </a>
                         </p>
                         <p class="text-xs text-gray-500 border-t border-gray-100 pt-3">
-                            Dengan mendaftar, Anda menyetujui 
-                            <a href="#" class="text-[#1B3A6D] hover:underline font-medium">Kebijakan Privasi</a> dan 
+                            Dengan mendaftar, Anda menyetujui
+                            <a href="#" class="text-[#1B3A6D] hover:underline font-medium">Kebijakan Privasi</a> dan
                             <a href="#" class="text-[#1B3A6D] hover:underline font-medium">Ketentuan Penggunaan</a> kami.
                         </p>
                     </div>
@@ -166,7 +166,7 @@
                     warning: 'fas fa-exclamation-triangle text-yellow-500',
                     info: 'fas fa-info-circle text-[#1B3A6D]/80'
                 };
-                
+
                 const bgMap = {
                     success: 'bg-green-50 border-green-200',
                     error: 'bg-red-50 border-red-200',
@@ -195,7 +195,7 @@
                 `);
 
                 $('#toast-container').append(toast);
-                
+
                 setTimeout(() => {
                     $(`#${toastId}`).removeClass('translate-x-full opacity-0');
                 }, 10);
@@ -236,7 +236,7 @@
                 const minLength = password.length >= 8;
                 const hasLetter = /[a-zA-Z]/.test(password);
                 const hasNumber = /\d/.test(password);
-                
+
                 return {
                     isValid: minLength && hasLetter && hasNumber,
                     minLength,
@@ -281,7 +281,7 @@
             $('#name').on('input', function() {
                 clearFieldErrors();
                 const name = $(this).val().trim();
-                
+
                 if (name && name.length < 2) {
                     showFieldError('name', 'Nama minimal 2 karakter');
                 }
@@ -290,7 +290,7 @@
             $('#email').on('input', function() {
                 clearFieldErrors();
                 const email = $(this).val().trim();
-                
+
                 if (email && !isValidEmail(email)) {
                     showFieldError('email', 'Format email tidak valid');
                 }
@@ -300,15 +300,15 @@
                 clearFieldErrors();
                 const password = $(this).val();
                 const validation = validatePassword(password);
-                
+
                 if (password && !validation.isValid) {
                     let message = 'Kata sandi harus: ';
                     const requirements = [];
-                    
+
                     if (!validation.minLength) requirements.push('minimal 8 karakter');
                     if (!validation.hasLetter) requirements.push('mengandung huruf');
                     if (!validation.hasNumber) requirements.push('mengandung angka');
-                    
+
                     message += requirements.join(', ');
                     showFieldError('password', message);
                 }
@@ -318,7 +318,7 @@
             function togglePassword() {
                 const $passwordField = $('#password');
                 const $toggleIcon = $('#toggleIcon');
-                
+
                 if ($passwordField.attr('type') === 'password') {
                     $passwordField.attr('type', 'text');
                     $toggleIcon.removeClass('fa-eye').addClass('fa-eye-slash');
@@ -373,11 +373,11 @@
                     if (!validation.isValid) {
                         let message = 'Kata sandi harus: ';
                         const requirements = [];
-                        
+
                         if (!validation.minLength) requirements.push('minimal 8 karakter');
                         if (!validation.hasLetter) requirements.push('mengandung huruf');
                         if (!validation.hasNumber) requirements.push('mengandung angka');
-                        
+
                         message += requirements.join(', ');
                         showFieldError('password', message);
                         hasError = true;
@@ -408,7 +408,7 @@
                     success: function(response) {
                         if (response.success) {
                             showToast('Pendaftaran berhasil! Akun Anda akan diaktifkan setelah mendapat persetujuan dari administrator.', 'success');
-                            
+
                             // Show additional info about approval process
                             setTimeout(() => {
                                 Swal.fire({
@@ -444,10 +444,10 @@
                     },
                     error: function(jqXHR) {
                         setLoadingState(false);
-                        
+
                         if (jqXHR.status === 422) {
                             const errors = jqXHR.responseJSON?.errors || {};
-                            
+
                             if (errors.name) {
                                 showFieldError('name', errors.name[0]);
                             }
@@ -457,7 +457,7 @@
                             if (errors.password) {
                                 showFieldError('password', errors.password[0]);
                             }
-                            
+
                             showToast('Silakan perbaiki kesalahan pada form', 'error');
                         } else if (jqXHR.status === 409) {
                             showToast('Email sudah terdaftar, silakan gunakan email lain', 'warning');

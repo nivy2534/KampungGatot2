@@ -16,7 +16,7 @@
         Katalog Kampung Gatot
       </h1>
       <p class="text-sm sm:text-base lg:text-lg text-blue-100 max-w-xl mx-auto leading-relaxed">
-        Temukan event menarik dan produk unggulan dari Desa Ngebruk
+        Temukan event menarik dan produk unggulan dari Kampung Gatot
       </p>
     </div>
   </section>
